@@ -32,5 +32,8 @@
     <ClCompile Include="Crypt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Binary.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

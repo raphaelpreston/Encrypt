@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include <stdio.h>
-#include <stdbool.h>
 
 #define BUFFER_SIZE 256
 
@@ -22,17 +21,34 @@ int main()
 	c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt);
 	if (ferror(body) || ferror(crypt)) return 2;
 
+
 	printf("Body: ");
+	int bit;
+	char c;
+
 	for (int i = 0; i < b_bytes_read; i++) {
-		printf("%c", b_buffer[i]);
+		char c = b_buffer[i];
+		for (int k = 7; k >= 0; k--) {	//for every bit
+			if ((c & 1 << k) == 0) printf("0");	//print its equivalent bit value
+			else printf("1");
+			
+
+		}
+		printf(" ");
 	}
 	printf("\n");
 
 	printf("Crypt: ");
 	for (int i = 0; i < c_bytes_read; i++) {
-		printf("%c", c_buffer[i]);
-	}
+		c = c_buffer[i];
+		for (int k = 7; k >= 0; k--) {	//for every bit
+			if ((c & 1 << k) == 0) printf("0");	//print its equivalent bit value
+			else printf("1");
 
+
+		}
+		printf(" ");
+	}
 	printf("\n");
 	
 	
