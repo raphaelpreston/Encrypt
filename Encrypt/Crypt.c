@@ -15,50 +15,36 @@ int main()
 		/* read files in */
 	unsigned char b_buffer[BUFFER_SIZE];
 	unsigned char c_buffer[BUFFER_SIZE];
-	size_t b_bytes_read = 0;
-	size_t c_bytes_read = 0;
+	int b_bytes_read = 0;
+	int c_bytes_read = 0;
 	b_bytes_read = fread(b_buffer, sizeof(unsigned char), BUFFER_SIZE, body);
 	c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt);
-	if (ferror(body) || ferror(crypt)) return 2;
+	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
 
+		/* convert char buffer to int array */
+	int * b_binary;
+	int * c_binary;
+	b_binary = (int *)malloc(8*b_bytes_read*sizeof(int));
+	c_binary = (int *)malloc(8*c_bytes_read*sizeof(int));
+
+	bufferToBinary(b_binary, b_buffer, b_bytes_read);
+	bufferToBinary(c_binary, c_buffer, c_bytes_read);
+
+
+		/* print binary */
 	printf("Body: ");
-	int bit;
-	char c;
-
-	for (int i = 0; i < b_bytes_read; i++) {
-		char c = b_buffer[i];
-		for (int k = 7; k >= 0; k--) {	//for every bit
-			if ((c & 1 << k) == 0) printf("0");	//print its equivalent bit value
-			else printf("1");
-			
-
-		}
-		printf(" ");
-	}
+	printBinary(b_binary, b_bytes_read);
 	printf("\n");
-
 	printf("Crypt: ");
-	for (int i = 0; i < c_bytes_read; i++) {
-		c = c_buffer[i];
-		for (int k = 7; k >= 0; k--) {	//for every bit
-			if ((c & 1 << k) == 0) printf("0");	//print its equivalent bit value
-			else printf("1");
-
-
-		}
-		printf(" ");
-	}
+	printBinary(c_binary, c_bytes_read);
 	printf("\n");
-	
-	
 
 
+		/* close files and free memory */
+	free(b_binary);
+	free(c_binary);
 
-
-	
-
-		/* close files */
 	fclose(body);
 	fclose(crypt);
 
