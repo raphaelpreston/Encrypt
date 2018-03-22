@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "Matchings.h"
 
-match * newMatch(int b, int c, int l) {
+Match * newMatch(int b, int c, int l) {
 	
 	/* allocate space for match boye */
-	match * m;
-	m = (match *)malloc(sizeof(match));
+	Match * m;
+	m = (Match *)malloc(sizeof(Match));
 	if (m) {
 		
 		/* fill boye */
@@ -22,22 +22,23 @@ match * newMatch(int b, int c, int l) {
 	}
 }
 
-matches * newMatches(int num_bits) {
+Matches * newMatches(int num_bits) {
 	
 	/* allocate space */
-	matches * m = (matches *)malloc(sizeof(matches));
+	Matches * m = (Matches *)malloc(sizeof(Matches));
 	if (m) {
 
 		/* make both arrays */
-		match ** start;
-		match ** end;
-		start = (match **)calloc(num_bits, sizeof(match *));	//technically we can remove 1 because there are no endings at 0 
-		end = (match **)calloc(num_bits, sizeof(match *));	// use calloc to initialize each match * to 0
+		Match ** start;
+		Match ** end;
+		start = (Match **)calloc(num_bits, sizeof(Match *));	//technically we can remove 1 because there are no endings at 0 
+		end = (Match **)calloc(num_bits, sizeof(Match *));	// use calloc to initialize each match * to 0
 		if (start && end) {
 			
 			/* fill m */
 			m->start_arr = start;
 			m->end_arr = end;
+			m->size = num_bits;
 		}
 		else {
 			printf("Failed to calloc space for begin and end array with %i bits each", num_bits);
@@ -52,10 +53,11 @@ matches * newMatches(int num_bits) {
 }
 
 
-void addMatch(matches * matches , match * m) {
+void addMatch(Matches * matches , Match * m) {
 	int length = m->end - m->start;
+	Match * curr;
 
-	/* add to arrays */
+	/* add to start_arr */
 	int start = m->start;
 	if (matches->start_arr[start] == 0) {	//first match * in this linked list
 		matches->start_arr[start] = m;
@@ -63,14 +65,48 @@ void addMatch(matches * matches , match * m) {
 	else {
 		
 		/* keep max length in front */
-		match * curr = matches->start_arr[start];
+		curr = matches->start_arr[start];
 		while (curr->next != NULL && (curr->next->end - curr->next->start) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
-			match * next = curr->next;
+			Match * next = curr->next;
+			curr->next = m;
+			m->next = next;	//will point to null, should be ok
+		}
+	}
+
+	/* repeat with end_arr*/
+	int end = m->end;
+	if (matches->end_arr[end] == 0) {	//first match * in this linked list
+		matches->end_arr[end] = m;
+	}
+	else {
+
+		/* keep max length in front */
+		curr = matches->end_arr[end];
+		while (curr->next != NULL && (curr->next->end - curr->next->start) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
+			Match * next = curr->next;
 			curr->next = m;
 			m->next = next;	//will point to null, should be ok
 		}
 	}
 }
+
+void printMatches(Matches * m) {
+	Match ** start = m->start_arr;
+	Match ** end = m->end_arr;
+	Match * curr;
+
+	int length;
+	for (int i = 0; i < m->size; i++) {
+		printf("%i\n", i);
+		if (start[i] != NULL) {
+			while (start[i]->next != NULL) {
+				length = start[i]->end - start[i]->start;
+				printf("\t(%i-%i,%i-%i)\n", start[i]->start, start[i]->end, start[i]->cindex, start[i]->cindex + length);
+			}
+		}
+	}
+}
+
 
 
 //void deleteMatches(matches * m, int num_bits) {

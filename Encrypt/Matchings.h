@@ -8,16 +8,23 @@ typedef struct Match {
 	int end;
 	int cindex;
 	struct Match * next;
-} match;
+} Match;
 
 
 typedef struct Matches {
-	match ** start_arr;
-	match ** end_arr;
-} matches;
+	Match ** start_arr;
+	Match ** end_arr;
+	int size;
+} Matches;
 
 /* returns a new match object */
-match * newMatch(int body_begin, int crypt_begin, int length);
+Match * newMatch(int body_begin, int crypt_begin, int length);
 
 /* returns a new matches object */
-matches * newMatches(int num_bits);
+Matches * newMatches(int num_bits);
+
+/* adds the match to a matches */
+void addMatch(Matches * matches, Match * m);
+
+/* prints matches */
+void printMatches(Matches * m);

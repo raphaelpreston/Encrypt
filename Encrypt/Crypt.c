@@ -43,8 +43,13 @@ int main()
 
 
 	 /* find matchings */
-	matches * matches = newMatches(8 * b_bytes_read);
-	
+	//Matches * matches = newMatches(8 * b_bytes_read);
+	Matches * matches = newMatches(21);
+	Match * m1 = newMatch(0, 5, 10);
+	//Match * m2 = newMatch(0, 10, 2);
+	addMatch(matches, m1);
+	//addMatch(matches, m2);
+	printMatches(matches);
 
 
 
