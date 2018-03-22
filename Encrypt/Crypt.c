@@ -7,12 +7,12 @@
 int main()
 {
 	 /* create file pointers for body and crypt */
-	char body_loc[] = "C:/Users/IAMFRANK/Documents/Visual Studio 2017/Projects/Encrypter/git/gitclone/Encrypt/body";
-	char crypt_loc[] = "C:/Users/IAMFRANK/Documents/Visual Studio 2017/Projects/Encrypter/git/gitclone/Encrypt/crypt";
+	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/body";
+	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/crypt";
 	FILE * body = fopen(body_loc, "rb");
 	FILE * crypt = fopen(crypt_loc, "rb");
 	if (body == NULL || crypt == NULL) return 1;
-
+	
 	 /* read files in */
 	unsigned char b_buffer[BUFFER_SIZE];
 	unsigned char c_buffer[BUFFER_SIZE];
@@ -32,7 +32,7 @@ int main()
 	bufferToBinary(b_binary, b_buffer, b_bytes_read);
 	bufferToBinary(c_binary, c_buffer, c_bytes_read);
 
-
+	printf("hello");
 	 /* print binary */
 	printf("Body: ");
 	printBinary(b_binary, b_bytes_read);

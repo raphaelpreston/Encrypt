@@ -23,7 +23,7 @@
     <ProjectGuid>{8E58D046-FB82-49AC-ADF6-BD3E6AA38125}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Encrypt</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
