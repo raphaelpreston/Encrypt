@@ -52,14 +52,26 @@ matches * newMatches(int num_bits) {
 }
 
 
-void addMatch(matches * matches , match * match) {
-	
+void addMatch(matches * matches , match * m) {
+	int length = m->end - m->start;
+
 	/* add to arrays */
-	matches->start_arr[match->start] = match;
-
-
-
+	int start = m->start;
+	if (matches->start_arr[start] == 0) {	//first match * in this linked list
+		matches->start_arr[start] = m;
+	}
+	else {
+		
+		/* keep max length in front */
+		match * curr = matches->start_arr[start];
+		while (curr->next != NULL && (curr->next->end - curr->next->start) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
+			match * next = curr->next;
+			curr->next = m;
+			m->next = next;	//will point to null, should be ok
+		}
+	}
 }
+
 
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {
