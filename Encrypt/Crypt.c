@@ -38,16 +38,26 @@ int main()
 	printf("\n");
 	printf("Crypt: ");
 	printBinary(c_binary, c_bytes_read);
-	printf("\n");
+	printf("\n\n");
 
 
 	 /* find matchings */
-	//Matches * matches = newMatches(8 * b_bytes_read);
-	Matches * matches = newMatches(21);
+	int matches_size = 21;
+	Matches * matches = newMatches(matches_size);
 
-	/* edge cases */
-	for (int i = 0; i < 5; i++){
+	/* testing */
+	srand(time(NULL));
+	int bindex;
+	int cindex;
+	int length;
+	
 
+	for (int i = 0; i < 30; i++){
+		bindex = rand() % 20;
+		cindex = rand() % 51;
+		length = (rand() % (matches_size - bindex - 2)) + 2;
+		Match * m = newMatch(bindex, cindex, length);
+		addMatch(matches, m);
 	}
 	
 

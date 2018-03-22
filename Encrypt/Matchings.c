@@ -2,7 +2,7 @@
 #include "Matchings.h"
 
 Match * newMatch(int b, int c, int l) {
-	
+
 	/* allocate space for match boye */
 	Match * m;
 	m = (Match *)malloc(sizeof(Match));
@@ -13,6 +13,10 @@ Match * newMatch(int b, int c, int l) {
 		m->end = b + l - 1;
 		m->cindex = c;
 		m->next = NULL;
+
+		if (l < 2) {
+			printf("\nWarning: length of match "); printMatch(m); printf(" is %i\n", l);
+		}
 
 		return m;
 	}
@@ -61,9 +65,7 @@ void addMatch(Matches * matches , Match * m) {
 	if (m->end >= matches->size || m->start < 0) {
 		printf("\nMatch "); printMatch(m); printf(" out of bounds of matches arrays.\n");
 	}
-	if (length < 2) {
-		printf("\nWarning: length of match "); printMatch(m); printf(" is %i\n", length);
-	}
+
 
 	/* add to start_arr */
 	int start = m->start;
@@ -99,7 +101,7 @@ void addMatch(Matches * matches , Match * m) {
 }
 
 void printMatch(Match * m) {
-	printf("(%i<>%i,%i<>%i)", m->start, m->end, m->cindex, m->cindex + m->end - m->start);
+	printf("(%i-%i,%i-%i [%i])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, m->end - m->start);
 }
 
 void printMatches(Matches * m) {
