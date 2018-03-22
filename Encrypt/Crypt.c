@@ -32,7 +32,6 @@ int main()
 	bufferToBinary(b_binary, b_buffer, b_bytes_read);
 	bufferToBinary(c_binary, c_buffer, c_bytes_read);
 
-	printf("hello");
 	 /* print binary */
 	printf("Body: ");
 	printBinary(b_binary, b_bytes_read);
@@ -45,14 +44,11 @@ int main()
 	 /* find matchings */
 	//Matches * matches = newMatches(8 * b_bytes_read);
 	Matches * matches = newMatches(21);
-	Match * m1 = newMatch(0, 5, 10);
+	Match * m1 = newMatch(3, 5, 10);
 	//Match * m2 = newMatch(0, 10, 2);
 	addMatch(matches, m1);
 	//addMatch(matches, m2);
 	printMatches(matches);
-
-
-
 
 
 	 /* close files and free memory */

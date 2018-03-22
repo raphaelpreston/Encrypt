@@ -95,15 +95,14 @@ void printMatches(Matches * m) {
 	Match ** end = m->end_arr;
 	Match * curr;
 
-	int length;
 	for (int i = 0; i < m->size; i++) {
 		printf("%i\n", i);
 		if (start[i] != NULL) {
-			while (start[i]->next != NULL) {
-				length = start[i]->end - start[i]->start;
-				printf("\t(%i-%i,%i-%i)\n", start[i]->start, start[i]->end, start[i]->cindex, start[i]->cindex + length);
-			}
+			do {
+				printf(" (%i-%i,%i-%i)\n", start[i]->start, start[i]->end, start[i]->cindex, start[i]->cindex + start[i]->end - start[i]->start);
+			} while (start[i]->next != NULL);
 		}
+		else printf("It's null lol\n");
 	}
 }
 
