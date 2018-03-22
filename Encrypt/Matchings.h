@@ -28,3 +28,6 @@ void addMatch(Matches * matches, Match * m);
 
 /* prints matches */
 void printMatches(Matches * m);
+
+/* prints a specific match */
+void printMatch(Match * m);

@@ -44,9 +44,13 @@ int main()
 	 /* find matchings */
 	//Matches * matches = newMatches(8 * b_bytes_read);
 	Matches * matches = newMatches(21);
-	Match * m1 = newMatch(3, 5, 10);
-	//Match * m2 = newMatch(0, 10, 2);
-	addMatch(matches, m1);
+
+	/* edge cases */
+	for (int i = 0; i < 5; i++){
+
+	}
+	
+
 	//addMatch(matches, m2);
 	printMatches(matches);
 

@@ -54,8 +54,16 @@ Matches * newMatches(int num_bits) {
 
 
 void addMatch(Matches * matches , Match * m) {
-	int length = m->end - m->start;
+	int length = m->end - m->start + 1;
 	Match * curr;
+	
+	/* error check for exceeding limit of arrays */
+	if (m->end >= matches->size || m->start < 0) {
+		printf("\nMatch "); printMatch(m); printf(" out of bounds of matches arrays.\n");
+	}
+	if (length < 2) {
+		printf("\nWarning: length of match "); printMatch(m); printf(" is %i\n", length);
+	}
 
 	/* add to start_arr */
 	int start = m->start;
@@ -90,6 +98,10 @@ void addMatch(Matches * matches , Match * m) {
 	}
 }
 
+void printMatch(Match * m) {
+	printf("(%i<>%i,%i<>%i)", m->start, m->end, m->cindex, m->cindex + m->end - m->start);
+}
+
 void printMatches(Matches * m) {
 	Match ** start = m->start_arr;
 	Match ** end = m->end_arr;
@@ -99,10 +111,9 @@ void printMatches(Matches * m) {
 		printf("%i\n", i);
 		if (start[i] != NULL) {
 			do {
-				printf(" (%i-%i,%i-%i)\n", start[i]->start, start[i]->end, start[i]->cindex, start[i]->cindex + start[i]->end - start[i]->start);
+				printf(" "); printMatch(start[i]); printf("\n");
 			} while (start[i]->next != NULL);
 		}
-		else printf("It's null lol\n");
 	}
 }
 
