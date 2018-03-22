@@ -24,6 +24,9 @@
     <ClInclude Include="Binary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Matchings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -33,6 +36,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Binary.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matchings.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
