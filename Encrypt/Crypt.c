@@ -55,7 +55,7 @@ int main()
 	for (int i = 0; i < 30; i++){
 		bindex = rand() % 20;
 		cindex = rand() % 51;
-		length = (rand() % (matches_size - bindex - 2)) + 2;
+		length = ((matches_size - bindex - 2)==0?0:rand() % (matches_size - bindex - 2)) + 2;
 		Match * m = newMatch(bindex, cindex, length);
 		addMatch(matches, m);
 	}
