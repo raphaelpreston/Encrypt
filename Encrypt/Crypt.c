@@ -42,7 +42,7 @@ int main()
 
 
 	 /* find matchings */
-	int matches_size = 501;
+	int matches_size = 21;
 	Matches * matches = newMatches(matches_size);
 
 	/* testing */
@@ -51,16 +51,11 @@ int main()
 	int cindex;
 	int length;
 
+	addMatch(matches, newMatch(5, 10, 6));
+	addMatch(matches, newMatch(3, 6, 4));
 	
-	for (int i = 0; i < 2000000000; i++){
-		bindex = rand() % (matches_size - 1);
-		cindex = rand() % 1000;
-		length = ((matches_size - bindex - 2)==0?0:rand() % (matches_size - bindex - 2)) + 2;
-		Match * m = newMatch(bindex, cindex, length);
-		addMatch(matches, m);
-	}
 	
-	// printMatches(matches);
+	printMatches(matches);
 
 
 	 /* close files and free memory */

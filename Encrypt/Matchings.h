@@ -32,3 +32,6 @@ void printMatches(Matches * m);
 
 /* prints a specific match */
 void printMatch(Match * m);
+
+/* returns length of match */
+int matchLength(Match *);

@@ -56,10 +56,11 @@ Matches * newMatches(int num_bits) {
 		return NULL;
 	}
 }
-
-
+int matchLength(Match * m) {
+	return m->end - m->start + 1;
+}
 void addMatch(Matches * matches , Match * m) {
-	int length = m->end - m->start + 1;
+	int length = matchLength(m);
 	Match * temp;
 	Match * curr;
 	
@@ -67,6 +68,24 @@ void addMatch(Matches * matches , Match * m) {
 	if (m->end >= matches->size || m->start < 0) {
 		printf("\nMatch "); printMatch(m); printf(" out of bounds of matches arrays.\n");
 	}
+
+	/* get all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end */
+	Match * max_start;
+	max_start = matches->start_arr[m->start];
+
+	for (int i = m->start; i <= m->end + 1; i++) {
+		curr = matches->start_arr[i];
+		if (curr != NULL && max_start) {
+			printf("Comparing current: "); printMatch(curr); printf(" against max: "); printMatch(max_start); printf("\n");
+			printf("Is %i > %i ", curr->end - m->start, max_start->end - m->start);
+		}
+
+		if (curr == NULL || curr->end - m->start > max_start->end - m->start) max_start = curr;	//exception being thrown here
+	}
+	if (max_start != NULL) {
+		printf("The max matching found in range [%i,%i] was ", m->start + 1, m->end); printMatch(max_start); printf("\n");
+	}
+
 
 
 	/* add to start_arr */
