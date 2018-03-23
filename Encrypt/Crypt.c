@@ -52,19 +52,19 @@ int main()
 	int length;
 	
 
-	Match * m = newMatch(0,10,5);
-	Match * m1 = newMatch(0, 1, 3);
-	addMatch(matches, m);
-	addMatch(matches, m1);
-	addMatch(matches, newMatch(0, 3, 4));
+	/* edge cases */
+	addMatch(matches, newMatch(0, 14, 19));
+	addMatch(matches, newMatch(0, 0, 2));
+	addMatch(matches, newMatch(10, 0, 9));
+	addMatch(matches, newMatch(19, 0, 2));
 	
-	/*for (int i = 0; i < 100; i++){
+	for (int i = 0; i < 2000; i++){
 		bindex = rand() % 20;
 		cindex = rand() % 51;
 		length = ((matches_size - bindex - 2)==0?0:rand() % (matches_size - bindex - 2)) + 2;
 		Match * m = newMatch(bindex, cindex, length);
 		addMatch(matches, m);
-	}*/
+	}
 	
 
 	//addMatch(matches, m2);

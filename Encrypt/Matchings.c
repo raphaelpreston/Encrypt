@@ -60,6 +60,7 @@ Matches * newMatches(int num_bits) {
 
 void addMatch(Matches * matches , Match * m) {
 	int length = m->end - m->start + 1;
+	Match * temp;
 	Match * curr;
 	
 	/* error check for exceeding limit of arrays */
@@ -77,30 +78,41 @@ void addMatch(Matches * matches , Match * m) {
 		
 		/* keep max length in front */
 		curr = matches->start_arr[start];
-		while (curr->start_next != NULL && (curr->start_next->end - curr->start_next->start + 1) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
-			curr = curr->start_next;
+		if((curr->end - curr->start + 1) < length){	//if the match to add is bigger than the first one, make it the head 
+			m->start_next = curr;
+			matches->start_arr[start] = m;
 		}
-		Match * next = curr->start_next;	//either null or <=
-		curr->start_next = m;
-		m->start_next = next;	//will point to null, should be ok
+		else {	//loop through until we find appropriate spot
+			while (curr->start_next != NULL && (curr->start_next->end - curr->start_next->start + 1) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
+				curr = curr->start_next;
+			}
+			temp = curr->start_next;	//either null or <=
+			curr->start_next = m;
+			m->start_next = temp;	//will point to null, should be ok
+		}
 	}
 
 	/* repeat with end_arr*/
 	int end = m->end;
 	if (matches->end_arr[end] == NULL) {	//first match * in this linked list
-		//printf("End array[%i] was null for match ", end); printMatch(m); printf("\n");
 		matches->end_arr[end] = m;
 	}
 	else {
 
 		/* keep max length in front */
 		curr = matches->end_arr[end];
-		while (curr->end_next != NULL && (curr->end_next->end - curr->end_next->start + 1) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
-			curr = curr->end_next;
+		if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, make it the head 
+			m->end_next = curr;
+			matches->end_arr[end] = m;
 		}
-		Match * next = curr->end_next;	//either null or <=
-		curr->end_next = m;
-		m->end_next = next;	//will point to null, should be ok
+		else {	//loop through until we find appropriate spot
+			while (curr->end_next != NULL && (curr->end_next->end - curr->end_next->start + 1) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
+				curr = curr->end_next;
+			}
+			temp = curr->end_next;	//either null or <=
+			curr->end_next = m;
+			m->end_next = temp;	//will point to null, should be ok
+		}
 	}
 }
 
