@@ -12,7 +12,8 @@ Match * newMatch(int b, int c, int l) {
 		m->start = b;
 		m->end = b + l - 1;
 		m->cindex = c;
-		m->next = NULL;
+		m->start_next = NULL;
+		m->end_next = NULL;
 
 		if (l < 2) {
 			printf("\nWarning: length of match "); printMatch(m); printf(" is %i\n", l);
@@ -69,39 +70,42 @@ void addMatch(Matches * matches , Match * m) {
 
 	/* add to start_arr */
 	int start = m->start;
-	if (matches->start_arr[start] == 0) {	//first match * in this linked list
+	if (matches->start_arr[start] == NULL) {	//first match * in this linked list
 		matches->start_arr[start] = m;
 	}
 	else {
 		
 		/* keep max length in front */
 		curr = matches->start_arr[start];
-		while (curr->next != NULL && (curr->next->end - curr->next->start) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
-			Match * next = curr->next;
-			curr->next = m;
-			m->next = next;	//will point to null, should be ok
+		while (curr->start_next != NULL && (curr->start_next->end - curr->start_next->start + 1) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
+			curr = curr->start_next;
 		}
+		Match * next = curr->start_next;	//either null or <=
+		curr->start_next = m;
+		m->start_next = next;	//will point to null, should be ok
 	}
 
 	/* repeat with end_arr*/
 	int end = m->end;
-	if (matches->end_arr[end] == 0) {	//first match * in this linked list
+	if (matches->end_arr[end] == NULL) {	//first match * in this linked list
+		//printf("End array[%i] was null for match ", end); printMatch(m); printf("\n");
 		matches->end_arr[end] = m;
 	}
 	else {
 
 		/* keep max length in front */
 		curr = matches->end_arr[end];
-		while (curr->next != NULL && (curr->next->end - curr->next->start) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
-			Match * next = curr->next;
-			curr->next = m;
-			m->next = next;	//will point to null, should be ok
+		while (curr->end_next != NULL && (curr->end_next->end - curr->end_next->start + 1) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
+			curr = curr->end_next;
 		}
+		Match * next = curr->end_next;	//either null or <=
+		curr->end_next = m;
+		m->end_next = next;	//will point to null, should be ok
 	}
 }
 
 void printMatch(Match * m) {
-	printf("(%i-%i,%i-%i [%i])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, m->end - m->start);
+	printf("(%i-%i,%i-%i [%i])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, m->end - m->start + 1);
 }
 
 void printMatches(Matches * m) {
@@ -109,12 +113,29 @@ void printMatches(Matches * m) {
 	Match ** end = m->end_arr;
 	Match * curr;
 
+	printf("Start Array:\n");
 	for (int i = 0; i < m->size; i++) {
 		printf("%i\n", i);
 		if (start[i] != NULL) {
-			do {
-				printf(" "); printMatch(start[i]); printf("\n");
-			} while (start[i]->next != NULL);
+			printf(" "); printMatch(start[i]); printf("\n");
+			curr = start[i];
+			while (curr->start_next != NULL) {
+				printf(" "); printMatch(curr->start_next); printf("\n");
+				curr = curr->start_next;
+			}
+		}
+	}
+
+	printf("End Array:\n");
+	for (int i = 0; i < m->size; i++) {
+		printf("%i\n", i);
+		if (end[i] != NULL) {
+			printf(" "); printMatch(end[i]); printf("\n");
+			curr = end[i];
+			while (curr->end_next != NULL) {
+				printf(" "); printMatch(curr->end_next); printf("\n");
+				curr = curr->end_next;
+			}
 		}
 	}
 }

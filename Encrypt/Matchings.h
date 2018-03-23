@@ -7,7 +7,8 @@ typedef struct Match {
 	int start;
 	int end;
 	int cindex;
-	struct Match * next;
+	struct Match * start_next;	//next match in the start array
+	struct Match * end_next;	//next match in the end array
 } Match;
 
 
