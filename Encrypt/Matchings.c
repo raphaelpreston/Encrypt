@@ -56,9 +56,11 @@ Matches * newMatches(int num_bits) {
 		return NULL;
 	}
 }
+
 int matchLength(Match * m) {
 	return m->end - m->start + 1;
 }
+
 void addMatch(Matches * matches , Match * m) {
 	int length = matchLength(m);
 	Match * temp;
@@ -182,7 +184,7 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 			if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
 			if (max == NULL) {
 
-				if (max == NULL || curr->end - m->start > max->end - m->start) {	//no point in adding 1 to both sides
+				if (max == NULL || testMerge(curr, m) > testMerge(max, m)) {
 					max = curr;
 					printf("Yes, assigned.\n");
 				}
