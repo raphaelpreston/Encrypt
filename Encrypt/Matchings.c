@@ -68,23 +68,22 @@ void addMatch(Matches * matches , Match * m) {
 	if (m->end >= matches->size || m->start < 0) {
 		printf("\nMatch "); printMatch(m); printf(" out of bounds of matches arrays.\n");
 	}
+	
+	/* get the max match from all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end */
+	printf("\nStart_arr: ");
+	Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1);
+	printf("\nEnd arr:");
+	Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1, m->end);
 
-	/* get all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end */
-	Match * max_start;
-	max_start = matches->start_arr[m->start];
-
-	for (int i = m->start; i <= m->end + 1; i++) {
-		curr = matches->start_arr[i];
-		if (curr != NULL && max_start) {
-			printf("Comparing current: "); printMatch(curr); printf(" against max: "); printMatch(max_start); printf("\n");
-			printf("Is %i > %i ", curr->end - m->start, max_start->end - m->start);
-		}
-
-		if (curr == NULL || curr->end - m->start > max_start->end - m->start) max_start = curr;	//exception being thrown here
-	}
 	if (max_start != NULL) {
-		printf("The max matching found in range [%i,%i] was ", m->start + 1, m->end); printMatch(max_start); printf("\n");
+		printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1); printMatch(max_start); printf("\n");
 	}
+	else printf("No max start match found in range [%i,%i]", m->start, m->end + 1); printf("\n");
+
+	if (max_end != NULL) {
+		printf("The max end matching found in range [%i,%i] was ", m->start - 1, m->end); printMatch(max_end); printf("\n");
+	}
+	else printf("No max end match found in range [%i,%i]", m->start - 1, m->end); printf("\n");
 
 
 
@@ -171,7 +170,53 @@ void printMatches(Matches * m) {
 	}
 }
 
+Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
+	Match * max;
+	Match * curr;
+	max = arr[m->start];
+	printf("\n");
+	for (int i = start + 1; i <= end; i++) {
+		curr = arr[i];	//current max match
+		if (curr != NULL) {
+			printf("Comparing current: "); printMatch(curr); printf(" against max: "); if (max == NULL)printf("NULL"); else printMatch(max); printf("\n");
+			if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
+			if (max == NULL) {
 
+				if (max == NULL || curr->end - m->start > max->end - m->start) {	//no point in adding 1 to both sides
+					max = curr;
+					printf("Yes, assigned.\n");
+				}
+			}
+			else printf("No, skipped.\n");
+		}
+		else {
+			printf("Didn't execute because curr is %s and max_start is %s\n", curr == NULL ? "NULL" : "NOT NULL", max == NULL ? "NULL" : "NOT NULL");
+		}
+	}
+	return max;
+}
+
+int * testMerge(Match * a, Match * b) {
+	Match * m1;
+	Match * m2;
+	if (a->start <= b->start) {	//sort them accordingly
+		m1 = a;
+		m2 = b;
+	}
+	else {
+		m1 = b;
+		m2 = a;
+	}
+
+	/* must be within 1 of eachother */
+	if (m2->start - m1->end > 1) return 0;
+
+	/* test to see if one completely envelopes the other */
+	if (m2->start >= m1->start && m2->end <= m1->end) return matchLength(m1);  //m2 in m1
+	if (m1->start >= m2->start && m1->end <= m2->end) return matchLength(m2); //m1 in m2
+
+	return m2->end - m1->start + 1;
+}
 
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {

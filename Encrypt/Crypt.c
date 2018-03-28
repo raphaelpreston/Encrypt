@@ -46,15 +46,30 @@ int main()
 	Matches * matches = newMatches(matches_size);
 
 	/* testing */
-	srand(time(NULL));
+	/*srand(time(NULL));
 	int bindex;
 	int cindex;
-	int length;
+	int length;*/
 
-	addMatch(matches, newMatch(5, 10, 6));
+	/* addMatch(matches, newMatch(5, 10, 6));
 	addMatch(matches, newMatch(3, 6, 4));
-	
-	
+	addMatch(matches, newMatch(2, 12, 5));
+	*/
+	/*
+	1 2 3 4 5 6 7 8 9 1 1 2
+	  x x x x x x x x x x x (m)
+			x x x x x x (curr) (8)
+		x x x x (max) (4)
+	*/
+	Match * m = newMatch(4, 7, 4);
+	Match * curr;
+	for (int i = 3; i <= 10; i++) {
+		for (int k = 2; k <= 6; k++) {
+			curr = newMatch(i, 0, k);
+			printf("The combined length of %i->%i and %i->%i is %i\n", m->start, m->end, curr->start, curr->end, testMerge(m, curr));
+		}
+	}
+
 	printMatches(matches);
 
 
