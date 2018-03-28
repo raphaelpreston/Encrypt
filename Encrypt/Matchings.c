@@ -71,7 +71,7 @@ void addMatch(Matches * matches , Match * m) {
 		printf("\nMatch "); printMatch(m); printf(" out of bounds of matches arrays.\n");
 	}
 	
-	/* get the max match from all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end */
+	/* get the max compatable match from all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end (that match in both crypt and body)*/
 	printf("\nStart_arr: ");
 	Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1);
 	printf("\nEnd arr:");
@@ -87,6 +87,10 @@ void addMatch(Matches * matches , Match * m) {
 	}
 	else printf("No max end match found in range [%i,%i]", m->start - 1, m->end); printf("\n");
 
+
+	// merge the 0/2/3 to get a supermatch
+	// delete the 1/2 out of both arrays
+	// now we are adding the supermatch, so m = supermatch
 
 
 	/* add to start_arr */
@@ -175,24 +179,26 @@ void printMatches(Matches * m) {
 Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 	Match * max;
 	Match * curr;
-	max = arr[m->start];
+	max = compatable(m, arr[m->start])?arr[m->start]:NULL;	//we are trying to find the max compatable pair to merge
 	printf("\n");
 	for (int i = start + 1; i <= end; i++) {
 		curr = arr[i];	//current max match
-		if (curr != NULL) {
-			printf("Comparing current: "); printMatch(curr); printf(" against max: "); if (max == NULL)printf("NULL"); else printMatch(max); printf("\n");
-			if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
-			if (max == NULL) {
+		if (compatable(m, curr)) {
+			if (curr != NULL) {
+				printf("Comparing current: "); printMatch(curr); printf(" against max: "); if (max == NULL)printf("NULL"); else printMatch(max); printf("\n");
+				if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
+				if (max == NULL) {
 
-				if (max == NULL || testMerge(curr, m) > testMerge(max, m)) {
-					max = curr;
-					printf("Yes, assigned.\n");
+					if (max == NULL || (testMerge(curr, m) > testMerge(max, m))) {
+						max = curr;
+						printf("Yes, assigned.\n");
+					}
 				}
+				else printf("No, skipped.\n");
 			}
-			else printf("No, skipped.\n");
-		}
-		else {
-			printf("Didn't execute because curr is %s and max_start is %s\n", curr == NULL ? "NULL" : "NOT NULL", max == NULL ? "NULL" : "NOT NULL");
+			else {
+				printf("Didn't execute because curr is %s and max_start is %s\n", curr == NULL ? "NULL" : "NOT NULL", max == NULL ? "NULL" : "NOT NULL");
+			}
 		}
 	}
 	return max;
@@ -218,6 +224,18 @@ int * testMerge(Match * a, Match * b) {
 	if (m1->start >= m2->start && m1->end <= m2->end) return matchLength(m2); //m1 in m2
 
 	return m2->end - m1->start + 1;
+}
+
+Match * merge(Match ** matches, int size) {
+	Match * newMatch;
+	Match * min_start = matches[0];
+	Match * max_end = matches[0];
+
+	for (int i = 0; i < size; i++) {	//take the least start and the greatest end
+		if (matches[i] != NULL) {
+			if(matches[i]->start < min_start)
+		}
+	}
 }
 
 //void deleteMatches(matches * m, int num_bits) {

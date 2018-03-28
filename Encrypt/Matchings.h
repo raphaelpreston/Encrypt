@@ -41,3 +41,6 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
 
 /* returns the length of what a merged matching between m1 and m2 would look like */
 int * testMerge(Match * m1, Match * m2);
+
+/* returns a match that is the merged match of a, b, c.  Set any to NULL */
+Match * merge(Match * a, Match * b, Match * c);
