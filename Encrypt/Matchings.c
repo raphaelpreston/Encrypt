@@ -189,7 +189,7 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 				if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
 				if (max == NULL) {
 
-					if (max == NULL || (testMerge(curr, m) > testMerge(max, m))) {
+					if (max == NULL || testMerge(curr, m) > testMerge(max, m)) {
 						max = curr;
 						printf("Yes, assigned.\n");
 					}
@@ -200,10 +200,12 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 				printf("Didn't execute because curr is %s and max_start is %s\n", curr == NULL ? "NULL" : "NOT NULL", max == NULL ? "NULL" : "NOT NULL");
 			}
 		}
+		else printf("The two matches weren't compatable.");
 	}
 	return max;
 }
 
+bool compatable()
 int * testMerge(Match * a, Match * b) {
 	Match * m1;
 	Match * m2;
@@ -227,13 +229,14 @@ int * testMerge(Match * a, Match * b) {
 }
 
 Match * merge(Match ** matches, int size) {
+	// IF THEY AREN'T COMPATABLE U MESSED UP
 	Match * newMatch;
 	Match * min_start = matches[0];
 	Match * max_end = matches[0];
 
 	for (int i = 0; i < size; i++) {	//take the least start and the greatest end
 		if (matches[i] != NULL) {
-			if(matches[i]->start < min_start)
+			if (matches[i]->start < min_start);
 		}
 	}
 }
