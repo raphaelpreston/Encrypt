@@ -179,11 +179,11 @@ void printMatches(Matches * m) {
 Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 	Match * max;
 	Match * curr;
-	max = compatable(m, arr[m->start])?arr[m->start]:NULL;	//we are trying to find the max compatable pair to merge
+	max = cryptCompatable(m, arr[m->start])?arr[m->start]:NULL;	//we are trying to find the max compatable pair to merge
 	printf("\n");
 	for (int i = start + 1; i <= end; i++) {
 		curr = arr[i];	//current max match
-		if (compatable(m, curr)) {
+		if (cryptCompatable(m, curr)) {
 			if (curr != NULL) {
 				printf("Comparing current: "); printMatch(curr); printf(" against max: "); if (max == NULL)printf("NULL"); else printMatch(max); printf("\n");
 				if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
@@ -205,7 +205,28 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 	return max;
 }
 
-bool compatable()
+bool cryptCompatable(Match * a, Match * b) {
+	/* compatable means that the crypt portions can be merged */
+	Match * m1;
+	Match * m2;
+	if (a->cindex <= b->cindex) {	//sort them accordingly
+		m1 = a;
+		m2 = b;
+	}
+	else {
+		m1 = b;
+		m2 = a;
+	}
+
+	int m1_end = m1->cindex + matchLength(m1) - 1;
+	int m2_end = m2->cindex + matchLength(m2) - 1;
+
+	/* the crypt portions can be merged if there is no more than 1 difference between them */
+	if (m2->cindex - m1_end > 1) return false;
+	return true;
+}
+
+
 int * testMerge(Match * a, Match * b) {
 	Match * m1;
 	Match * m2;
@@ -228,18 +249,18 @@ int * testMerge(Match * a, Match * b) {
 	return m2->end - m1->start + 1;
 }
 
-Match * merge(Match ** matches, int size) {
-	// IF THEY AREN'T COMPATABLE U MESSED UP
-	Match * newMatch;
-	Match * min_start = matches[0];
-	Match * max_end = matches[0];
-
-	for (int i = 0; i < size; i++) {	//take the least start and the greatest end
-		if (matches[i] != NULL) {
-			if (matches[i]->start < min_start);
-		}
-	}
-}
+//Match * merge(Match ** matches, int size) {
+//	// IF THEY AREN'T COMPATABLE U MESSED UP
+//	Match * newMatch;
+//	Match * min_start = matches[0];
+//	Match * max_end = matches[0];
+//
+//	for (int i = 0; i < size; i++) {	//take the least start and the greatest end
+//		if (matches[i] != NULL) {
+//			if (matches[i]->start < min_start);
+//		}
+//	}
+//}
 
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {

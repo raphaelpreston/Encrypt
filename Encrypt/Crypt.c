@@ -51,9 +51,18 @@ int main()
 	int cindex;
 	int length;*/
 
-	addMatch(matches, newMatch(5, 10, 6));
+	Match * m = newMatch(5, 10, 5);
+	Match * curr;
+	for (int i = 0; i < 20; i++) {
+		for (int k = 2; k < 20; k++) {
+			curr = newMatch(3, i, k);
+			printMatch(m); printf(" %s compatable with ", cryptCompatable(m, curr) ? "IS" : "IS NOT"); printMatch(curr); printf("\n");
+		}
+	}
+
+	/*addMatch(matches, newMatch(5, 10, 6));
 	addMatch(matches, newMatch(3, 6, 4));
-	addMatch(matches, newMatch(2, 12, 5));
+	addMatch(matches, newMatch(2, 12, 5));*/
 	printMatches(matches);
 
 
