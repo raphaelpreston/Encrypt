@@ -226,7 +226,6 @@ bool cryptCompatable(Match * a, Match * b) {
 	return true;
 }
 
-
 int * testMerge(Match * a, Match * b) {
 	Match * m1;
 	Match * m2;
@@ -249,18 +248,34 @@ int * testMerge(Match * a, Match * b) {
 	return m2->end - m1->start + 1;
 }
 
-//Match * merge(Match ** matches, int size) {
-//	// IF THEY AREN'T COMPATABLE U MESSED UP
-//	Match * newMatch;
-//	Match * min_start = matches[0];
-//	Match * max_end = matches[0];
-//
-//	for (int i = 0; i < size; i++) {	//take the least start and the greatest end
-//		if (matches[i] != NULL) {
-//			if (matches[i]->start < min_start);
-//		}
-//	}
-//}
+Match * merge(Match * matches[], int size) {
+	// IF THEY AREN'T COMPATABLE U MESSED UP
+	Match * match;
+	int min_b_start = matches[0]->start;
+	int max_b_end = matches[0]->end;
+	int min_c_start = matches[0]->cindex;
+	int max_c_end = matches[0]->cindex + matchLength(matches[0]) - 1;	//matches[0] can't be NULL
+
+	for (int i = 1; i < size; i++) {	//take the least start and the greatest end
+		if (matches[i] != NULL) {
+			// min/max for body
+			if (matches[i]->start < min_b_start) min_b_start = matches[i]->start;
+			if (matches[i]->end > max_b_end) max_b_end = matches[i]->end;
+
+			//min/max for crypt
+			if (matches[i]->cindex < min_c_start) min_c_start = matches[i]->cindex;
+			if (matches[i]->cindex + matchLength(matches[i]) - 1 > max_c_end) max_c_end = matches[i]->cindex + matchLength(matches[i]) - 1;
+		}
+	}
+	
+	/* do the real merging */
+	// printf("\n(%i, %i, %i)", matches[1]->start, matches[1]->cindex, matches[1]->end - matches[1]->start + 1);
+	// printf("\nmin_b_start: %i\nmax_b_end: %i\nmin_c_start: %i\nmax_c_end:%i",  min_b_start, max_b_end, min_c_start, max_c_end);
+	if (max_b_end - min_b_start != max_c_end - min_c_start) return NULL;	//when all merged together, the length of the body match must be equal to the length of the crypt match
+	
+	match = newMatch(min_b_start, min_c_start, max_b_end - min_b_start + 1);
+	return match;
+}
 
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {

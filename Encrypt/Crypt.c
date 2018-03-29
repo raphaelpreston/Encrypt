@@ -53,10 +53,20 @@ int main()
 
 	Match * m = newMatch(5, 10, 5);
 	Match * curr;
+	Match * ms[3];
+	Match * med;
+	ms[0] = m;
 	for (int i = 0; i < 20; i++) {
 		for (int k = 2; k < 20; k++) {
 			curr = newMatch(3, i, k);
-			printMatch(m); printf(" %s compatable with ", cryptCompatable(m, curr) ? "IS" : "IS NOT"); printMatch(curr); printf("\n");
+			printMatch(m); printf(" %s compatable with ", cryptCompatable(m, curr) ? "IS    " : "IS NOT"); printMatch(curr); printf("\n");
+			if (cryptCompatable(m, curr)) {
+				ms[1] = curr;
+				med = merge(ms, 2);
+				printf("\t --> "); if (med != NULL) { printMatch(med); printf("\n"); }
+				else { printf(" merge resulted in different lengths.\n"); }
+			}
+
 		}
 	}
 

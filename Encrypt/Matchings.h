@@ -43,7 +43,7 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
 int * testMerge(Match * m1, Match * m2);
 
 /* returns a match that is the merged match of a, b, c.  Set any to NULL */
-Match * merge(Match * a, Match * b, Match * c);
+Match * merge(Match ** matches, int size);
 
 /* tests to see whether or not two matches are compatible: that is to say that the crypt parts of the matching can be merged */
 bool cryptCompatable(Match * m1, Match * m2);
