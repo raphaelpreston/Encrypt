@@ -50,10 +50,19 @@ int main()
 	int bindex;
 	int cindex;
 	int length;*/
-
-	addMatch(matches, newMatch(5, 10, 6));
+	
+	Match * m = newMatch(0, 0, 2);
+	Match * m1 = newMatch(19, 0, 2);
+	addMatch(matches, m);
+	deleteMatch(matches, m);
+	addMatch(matches, m1);
+	
 	printMatches(matches);
-	addMatch(matches, newMatch(3, 8, 4));
+	//deleteMatch(matches, m1);
+	//addMatch(matches, newMatch(5, 10, 6));
+	//printMatches(matches);
+
+	//addMatch(matches, newMatch(3, 8, 4));
 	//addMatch(matches, newMatch(2, 12, 5));
 	//printMatches(matches);
 

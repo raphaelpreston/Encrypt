@@ -96,6 +96,10 @@ void addMatch(Matches * matches, Match * m) {
 			Match * merged = merge(max_matches, 3);
 			if (merged != NULL) {
 				printf("New merged baby match: "); printMatch(merged); printf(" \n");
+				// delete the 1/2 out of both arrays
+				// to do this: just perform a search at the array index that the match resides at, no better way to do it
+				// now we are adding the supermatch, so m = supermatch
+				printf("Max_start: %p, Max_end: %p\n", max_start, max_end);
 			}
 			else {
 				printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
@@ -106,10 +110,6 @@ void addMatch(Matches * matches, Match * m) {
 
 
 		//printf("Attempting to merge:\n");
-
-
-		// delete the 1/2 out of both arrays				working here
-		// now we are adding the supermatch, so m = supermatch
 	}
 	else {
 		printf("Matches were empty so no merging was attempted.\n");
@@ -166,7 +166,7 @@ void addMatch(Matches * matches, Match * m) {
 }
 
 void printMatch(Match * m) {
-	printf("(%i-%i,%i-%i [%i])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, m->end - m->start + 1);
+	printf("(%i-%i,%i-%i [%i] - %p)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, m->end - m->start + 1, m);
 }
 
 void printMatches(Matches * m) {
@@ -301,6 +301,54 @@ Match * merge(Match * matches[], int size) {	//will return NULL if merge made un
 	match = newMatch(min_b_start, min_c_start, max_b_end - min_b_start + 1);
 	return match;
 }
+
+bool deleteMatch(Matches * matches, Match * match) {
+	if (matches->size == 0) return false;
+	Match * curr;
+	Match * temp;
+
+	//delete from start_arr by finding index of start
+	curr = matches->start_arr[match->start];
+	if (curr == match) {	//simply reassign head
+		temp = matches->start_arr[match->start];
+		matches->start_arr[match->start] = matches->start_arr[match->start]->start_next;
+	}
+	else {
+		while (curr->start_next != NULL && curr->start_next != match) {	//ends when curr->next is NULL or curr == match to delete
+			curr = curr->start_next;
+		}
+		// delete it
+		if (curr->start_next != NULL) {
+			temp = curr->start_next;
+			curr->start_next = temp->start_next;
+			return true;
+		}
+		else return false;		//looped all the way through without reaching it
+	}
+
+	//repeat with end_arr
+	curr = matches->end_arr[match->end];
+	if (curr == match) {	//simply reassign head
+		temp = matches->end_arr[match->end];
+		matches->end_arr[match->end] = matches->end_arr[match->end]->end_next;
+		free(temp);
+	}
+	else {
+		while (curr->end_next != NULL && curr->end_next != match) {	//ends when curr->next is NULL or curr == match to delete
+			curr = curr->end_next;
+		}
+		// delete it
+		if (curr->end_next != NULL) {
+			temp = curr->end_next;
+			curr->end_next = temp->end_next;
+			free(temp);
+			return true;
+		}
+		else return false;		//looped all the way through without reaching it
+	}
+
+}
+
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {
 //
@@ -308,3 +356,6 @@ Match * merge(Match * matches[], int size) {	//will return NULL if merge made un
 //	free(m->begin_arr);
 //	free(m->end_arr);
 //}
+
+
+

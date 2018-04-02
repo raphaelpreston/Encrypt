@@ -1,6 +1,9 @@
 #pragma once
 #include "stdafx.h"
 
+
+//a lot of lag is going to come from deleting not being optimized
+
 /* structs */
 
 typedef struct Match {
@@ -38,7 +41,7 @@ void printMatch(Match * m);
 int matchLength(Match *);
 
 /* returns index of max matching within a range for either of the matches array */
-int maxMatchInRange(Match ** arr, Match * m, int start, int end);
+Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
 
 /* returns the length of what a merged matching between m1 and m2 would look like */
 int * testMerge(Match * m1, Match * m2);
@@ -48,3 +51,6 @@ Match * merge(Match * matches[], int size);
 
 /* tests to see whether or not two matches are compatible: that is to say that the crypt parts of the matching can be merged */
 bool cryptCompatable(Match * m1, Match * m2);
+
+/* deletes the exact match object given from the matches (both arrays).  Returns 1 on success 0 on failure. */
+bool deleteMatch(Matches * matches, Match * m);
