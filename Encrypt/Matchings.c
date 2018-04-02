@@ -7,7 +7,7 @@ Match * newMatch(int b, int c, int l) {
 	Match * m;
 	m = (Match *)malloc(sizeof(Match));
 	if (m) {
-		
+
 		/* fill boye */
 		m->start = b;
 		m->end = b + l - 1;
@@ -28,7 +28,7 @@ Match * newMatch(int b, int c, int l) {
 }
 
 Matches * newMatches(int num_bits) {
-	
+
 	/* allocate space */
 	Matches * m = (Matches *)malloc(sizeof(Matches));
 	if (m) {
@@ -39,7 +39,7 @@ Matches * newMatches(int num_bits) {
 		start = (Match **)calloc(num_bits, sizeof(Match *));	//technically we can remove 1 because there are no endings at 0 
 		end = (Match **)calloc(num_bits, sizeof(Match *));	// use calloc to initialize each match * to 0
 		if (start && end) {
-			
+
 			/* fill m */
 			m->start_arr = start;
 			m->end_arr = end;
@@ -62,25 +62,23 @@ int matchLength(Match * m) {
 	return m->end - m->start + 1;
 }
 
-void addMatch(Matches * matches , Match * m) {
+void addMatch(Matches * matches, Match * m) {
 	int length = matchLength(m);
 	Match * temp;
 	Match * curr;
-	
+
 	/* error check for exceeding limit of arrays */
 	if (m->end >= matches->size || m->start < 0) {
 		printf("\nMatch "); printMatch(m); printf(" out of bounds of matches arrays.\n");
 	}
-	
+
 	/* get the max compatable match from all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end (that match in both crypt and body)*/
-	
+
 	if (!matches->num_matches == 0) {	//only look for max matches if the arrays are not empty
 		printf("\nStart_arr: ");
-		int max_start_index = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1);		//need the index to delete it later
-		Match * max_start = max_start_index == -1 ? NULL : matches->start_arr[max_start_index];
+		Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1);
 		printf("\nEnd arr:");
-		int max_end_index = maxMatchInRange(matches->end_arr, m, m->start - 1, m->end);
-		Match * max_end = max_end_index == -1 ? NULL : matches->end_arr[max_end_index];
+		Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1, m->end);
 
 		if (max_start != NULL) {
 			printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1); printMatch(max_start); printf("\n");
@@ -98,28 +96,25 @@ void addMatch(Matches * matches , Match * m) {
 			Match * merged = merge(max_matches, 3);
 			if (merged != NULL) {
 				printf("New merged baby match: "); printMatch(merged); printf(" \n");
-
-				// delete the 1/2 out of both arrays
-				if (max_start) {
-					//delete max_start because it got merged
-					//reassign the head of the linked list of the start_arr at index max_start_index
-					matches->start_arr[max_start_index] = matches->start_arr[max_start_index]->start_next;
-					matches->num_matches--;
-				}
-				if (max_end) {
-					//delete max_end because it got merged
-				}
-
-				// now we are adding the supermatch, so m = supermatch
 			}
-			else printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
+			else {
+				printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
+			}
+
 		}
 		else printf("No attempt to merge because max start and max end were both NULL.\n");
+
+
+		//printf("Attempting to merge:\n");
+
+
+		// delete the 1/2 out of both arrays				working here
+		// now we are adding the supermatch, so m = supermatch
 	}
 	else {
 		printf("Matches were empty so no merging was attempted.\n");
 	}
-	
+
 
 
 	/* add to start_arr */
@@ -128,10 +123,10 @@ void addMatch(Matches * matches , Match * m) {
 		matches->start_arr[start] = m;
 	}
 	else {
-		
+
 		/* keep max length in front */
 		curr = matches->start_arr[start];
-		if((curr->end - curr->start + 1) < length){	//if the match to add is bigger than the first one, make it the head 
+		if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, make it the head 
 			m->start_next = curr;
 			matches->start_arr[start] = m;
 		}
@@ -206,17 +201,13 @@ void printMatches(Matches * m) {
 	}
 }
 
-int maxMatchInRange(Match ** arr, Match * m, int start, int end) {
-	int max_index;
+Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 	Match * max;
 	Match * curr;
-
-	max_index = arr[m->start] == NULL ||  !cryptCompatable(m, arr[m->start]) ? -1 : m->start;	//we are trying to find the max compatable pair to merge (must test to make sure it's not NULL first
-	max = max_index == -1 ? NULL : arr[max_index];
+	max = arr[m->start] == NULL || !cryptCompatable(m, arr[m->start]) ? NULL : arr[m->start];	//we are trying to find the max compatable pair to merge (must test to make sure it's not NULL first
 	printf("\n");
 	for (int i = start + 1; i <= end; i++) {
 		curr = arr[i];	//current max match
-		max = max_index == -1 ? NULL : arr[max_index];
 		if (curr != NULL && cryptCompatable(m, curr)) {	//have to test to make sure it's not null otherwise cryptComp will throw an error
 			if (curr != NULL) {
 				printf("Comparing current: "); printMatch(curr); printf(" against max: "); if (max == NULL)printf("NULL"); else printMatch(max); printf("\n");
@@ -224,7 +215,7 @@ int maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 				if (max == NULL) {
 
 					if (max == NULL || testMerge(curr, m) > testMerge(max, m)) {
-						max_index = i;
+						max = curr;
 						printf("Yes, assigned.\n");
 					}
 				}
@@ -236,7 +227,7 @@ int maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 		}
 		else printf("The two matches weren't compatable or one was NULL.\n");
 	}
-	return max_index;
+	return max;
 }
 
 bool cryptCompatable(Match * a, Match * b) {
@@ -283,7 +274,7 @@ int * testMerge(Match * a, Match * b) {
 }
 
 Match * merge(Match * matches[], int size) {	//will return NULL if merge made unequal body/crypt match.
-	// IF THEY AREN'T COMPATABLE U MESSED UP
+												// IF THEY AREN'T COMPATABLE U MESSED UP
 	Match * match;
 	int min_b_start = matches[0]->start;
 	int max_b_end = matches[0]->end;
@@ -301,12 +292,12 @@ Match * merge(Match * matches[], int size) {	//will return NULL if merge made un
 			if (matches[i]->cindex + matchLength(matches[i]) - 1 > max_c_end) max_c_end = matches[i]->cindex + matchLength(matches[i]) - 1;
 		}
 	}
-	
+
 	/* do the real merging */
 	// printf("\n(%i, %i, %i)", matches[1]->start, matches[1]->cindex, matches[1]->end - matches[1]->start + 1);
 	// printf("\nmin_b_start: %i\nmax_b_end: %i\nmin_c_start: %i\nmax_c_end:%i",  min_b_start, max_b_end, min_c_start, max_c_end);
 	if (max_b_end - min_b_start != max_c_end - min_c_start) return NULL;	//when all merged together, the length of the body match must be equal to the length of the crypt match
-	
+
 	match = newMatch(min_b_start, min_c_start, max_b_end - min_b_start + 1);
 	return match;
 }
