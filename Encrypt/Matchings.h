@@ -37,8 +37,8 @@ void printMatch(Match * m);
 /* returns length of match */
 int matchLength(Match *);
 
-/* returns max matching within a range for either of the matches array */
-Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
+/* returns index of max matching within a range for either of the matches array */
+int maxMatchInRange(Match ** arr, Match * m, int start, int end);
 
 /* returns the length of what a merged matching between m1 and m2 would look like */
 int * testMerge(Match * m1, Match * m2);
