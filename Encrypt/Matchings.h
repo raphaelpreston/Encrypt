@@ -53,4 +53,4 @@ Match * merge(Match * matches[], int size);
 bool cryptCompatable(Match * m1, Match * m2);
 
 /* deletes the exact match object given from the matches (both arrays).  Returns 1 on success 0 on failure. */
-bool deleteMatch(Matches * matches, Match * m);
+bool deleteMatch(Matches * matches, Match * m);		//doesn't actually free cus it doesn't work but it frees some stuff :DD

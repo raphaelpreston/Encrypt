@@ -68,7 +68,6 @@ void addMatch(Matches * matches, Match * m) {
 	Match * curr;
 
 	/* error check for exceeding limit of arrays */
-	printf("M->end: %i, matches->size: %i, m->start: %i", m->end, matches->size, m->start);
 	if (m->end >= matches->size || m->start < 0) {
 		printf("\nMatch "); printMatch(m); printf(" out of bounds of matches arrays.\n");
 	}
@@ -97,10 +96,22 @@ void addMatch(Matches * matches, Match * m) {
 			Match * merged = merge(max_matches, 3);
 			if (merged != NULL) {
 				printf("New merged baby match: "); printMatch(merged); printf(" \n");
+				
 				// delete the 1/2 out of both arrays
-				// to do this: just perform a search at the array index that the match resides at, no better way to do it
+				if (max_start) { //delete it because it got merged
+					printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
+					deleteMatch(matches, max_start);
+					printf("It's now: %p\n", max_start);
+				}
+				if (max_end) {
+					printf("Attempting to delete the max_end: "); printMatch(max_end); printf("\n");
+					deleteMatch(matches, max_end);
+					printf("It's now: %p\n", max_end);
+				}
+				
 				// now we are adding the supermatch, so m = supermatch
-				printf("Max_start: %p, Max_end: %p\n", max_start, max_end);
+				m = merged;
+				printf("Now adding merged match: "); printMatch(m); printf("\n");
 			}
 			else {
 				printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
@@ -347,6 +358,7 @@ bool deleteMatch(Matches * matches, Match * match) {
 		}
 		else return false;		//looped all the way through without reaching it
 	}
+	// free(match); doesn't work lol
 
 }
 
