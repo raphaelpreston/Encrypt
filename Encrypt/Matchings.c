@@ -213,7 +213,6 @@ void printMatches(Matches * m) {
 }
 
 Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
-	printf("Max match called with %p, start: %i, end: %i\n", m, start, end);
 	Match * max;
 	Match * curr;
 	max = arr[m->start] == NULL || !cryptCompatable(m, arr[m->start]) ? NULL : arr[m->start];	//we are trying to find the max compatable pair to merge (must test to make sure it's not NULL first

@@ -51,26 +51,12 @@ int main()
 	int cindex;
 	int length;*/
 	
-	Match * m1 = newMatch(0, 4, 5);
-	Match * m = newMatch(5, 9, 16);
-	addMatch(matches, m1);
-	printMatches(matches);
-	addMatch(matches, m);
-	Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1 < 0 ? m->start : m->start - 1, m->end);
-	if (max_end != NULL) {
-		printf("The max end matching found in range [%i,%i] was ", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printMatch(max_end); printf("\n");
-	}
-	else printf("No max end match found in range [%i,%i]", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printf("\n");
-	//addMatch(matches, newMatch(5, 9, 16));
-	printMatches(matches);
 
-	//reverse 
-	/*addMatch(matches, newMatch(5, 9, 16));
+	addMatch(matches, newMatch(6, 3, 3));
+	addMatch(matches, newMatch(7, 4, 3));
+	addMatch(matches, newMatch(10, 7, 5));
+	addMatch(matches, newMatch(7, 7, 2));
 	printMatches(matches);
-
-	addMatch(matches, newMatch(0, 4, 5));
-	printMatches(matches);*/
-
 	//addMatch(matches, newMatch(2, 12, 5));
 	//printMatches(matches);
 
