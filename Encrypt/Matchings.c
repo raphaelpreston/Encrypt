@@ -102,7 +102,9 @@ void addMatch(Matches * matches , Match * m) {
 				// delete the 1/2 out of both arrays
 				if (max_start) {
 					//delete max_start because it got merged
-
+					//reassign the head of the linked list of the start_arr at index max_start_index
+					matches->start_arr[max_start_index] = matches->start_arr[max_start_index]->start_next;
+					matches->num_matches--;
 				}
 				if (max_end) {
 					//delete max_end because it got merged
