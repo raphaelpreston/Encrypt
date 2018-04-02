@@ -54,9 +54,11 @@ int main()
 	Match * m = newMatch(0, 0, 2);
 	Match * m1 = newMatch(19, 0, 2);
 	addMatch(matches, m);
+	printMatches(matches);
 	deleteMatch(matches, m);
 	addMatch(matches, m1);
-	
+	printMatches(matches);
+	deleteMatch(matches, m1);
 	printMatches(matches);
 	//deleteMatch(matches, m1);
 	//addMatch(matches, newMatch(5, 10, 6));

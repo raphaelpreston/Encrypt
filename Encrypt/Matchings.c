@@ -68,6 +68,7 @@ void addMatch(Matches * matches, Match * m) {
 	Match * curr;
 
 	/* error check for exceeding limit of arrays */
+	printf("M->end: %i, matches->size: %i, m->start: %i", m->end, matches->size, m->start);
 	if (m->end >= matches->size || m->start < 0) {
 		printf("\nMatch "); printMatch(m); printf(" out of bounds of matches arrays.\n");
 	}
@@ -76,9 +77,9 @@ void addMatch(Matches * matches, Match * m) {
 
 	if (!matches->num_matches == 0) {	//only look for max matches if the arrays are not empty
 		printf("\nStart_arr: ");
-		Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1);
+		Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1 >= matches->size ? m->end : m->end + 1);	//make sure the upper limit is in bounds
 		printf("\nEnd arr:");
-		Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1, m->end);
+		Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1 < 0 ? m->start : m->start - 1, m->end);		//make sure the lower limit is in bounds
 
 		if (max_start != NULL) {
 			printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1); printMatch(max_start); printf("\n");
