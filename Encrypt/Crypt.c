@@ -52,10 +52,10 @@ int main()
 	int length;*/
 	
 	
-	addMatch(matches, newMatch(5, 10, 6));
+	addMatch(matches, newMatch(0, 4, 5));
 	printMatches(matches);
 
-	addMatch(matches, newMatch(3, 8, 4));
+	addMatch(matches, newMatch(5, 9, 16));
 	printMatches(matches);
 	//addMatch(matches, newMatch(2, 12, 5));
 	//printMatches(matches);
