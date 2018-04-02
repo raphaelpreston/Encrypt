@@ -44,6 +44,7 @@ Matches * newMatches(int num_bits) {
 			m->start_arr = start;
 			m->end_arr = end;
 			m->size = num_bits;
+			m->num_matches = 0;
 		}
 		else {
 			printf("Failed to calloc space for begin and end array with %i bits each", num_bits);
@@ -72,25 +73,48 @@ void addMatch(Matches * matches , Match * m) {
 	}
 	
 	/* get the max compatable match from all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end (that match in both crypt and body)*/
-	printf("\nStart_arr: ");
-	Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1);
-	printf("\nEnd arr:");
-	Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1, m->end);
+	
+	if (!matches->num_matches == 0) {	//only look for max matches if the arrays are not empty
+		printf("\nStart_arr: ");
+		Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1);
+		printf("\nEnd arr:");
+		Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1, m->end);
 
-	if (max_start != NULL) {
-		printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1); printMatch(max_start); printf("\n");
+		if (max_start != NULL) {
+			printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1); printMatch(max_start); printf("\n");
+		}
+		else printf("No max start match found in range [%i,%i]", m->start, m->end + 1); printf("\n");
+
+		if (max_end != NULL) {
+			printf("The max end matching found in range [%i,%i] was ", m->start - 1, m->end); printMatch(max_end); printf("\n");
+		}
+		else printf("No max end match found in range [%i,%i]", m->start - 1, m->end); printf("\n");
+
+		// merge the 0/2/3 to get a supermatch
+		if (max_start || max_end) {	//merge() can handle if one is NULL but no reason to call if they both are
+			Match * max_matches[] = { m, max_start, max_end };
+			Match * merged = merge(max_matches, 3);
+			if (merged != NULL) {
+				printf("New merged baby match: "); printMatch(merged); printf(" \n");
+			}
+			else {
+				printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
+			}
+			
+		}
+		else printf("No attempt to merge because max start and max end were both NULL.\n");
+		
+		
+		//printf("Attempting to merge:\n");
+		
+
+		// delete the 1/2 out of both arrays				working here
+		// now we are adding the supermatch, so m = supermatch
 	}
-	else printf("No max start match found in range [%i,%i]", m->start, m->end + 1); printf("\n");
-
-	if (max_end != NULL) {
-		printf("The max end matching found in range [%i,%i] was ", m->start - 1, m->end); printMatch(max_end); printf("\n");
+	else {
+		printf("Matches were empty so no merging was attempted.\n");
 	}
-	else printf("No max end match found in range [%i,%i]", m->start - 1, m->end); printf("\n");
-
-
-	// merge the 0/2/3 to get a supermatch
-	// delete the 1/2 out of both arrays
-	// now we are adding the supermatch, so m = supermatch
+	
 
 
 	/* add to start_arr */
@@ -138,6 +162,7 @@ void addMatch(Matches * matches , Match * m) {
 			m->end_next = temp;	//will point to null, should be ok
 		}
 	}
+	matches->num_matches++;			//added one match to the matches
 }
 
 void printMatch(Match * m) {
@@ -179,11 +204,11 @@ void printMatches(Matches * m) {
 Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 	Match * max;
 	Match * curr;
-	max = cryptCompatable(m, arr[m->start])?arr[m->start]:NULL;	//we are trying to find the max compatable pair to merge
+	max = arr[m->start] == NULL ||  !cryptCompatable(m, arr[m->start]) ? NULL : arr[m->start];	//we are trying to find the max compatable pair to merge (must test to make sure it's not NULL first
 	printf("\n");
 	for (int i = start + 1; i <= end; i++) {
 		curr = arr[i];	//current max match
-		if (cryptCompatable(m, curr)) {
+		if (curr != NULL && cryptCompatable(m, curr)) {	//have to test to make sure it's not null otherwise cryptComp will throw an error
 			if (curr != NULL) {
 				printf("Comparing current: "); printMatch(curr); printf(" against max: "); if (max == NULL)printf("NULL"); else printMatch(max); printf("\n");
 				if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
@@ -200,7 +225,7 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 				printf("Didn't execute because curr is %s and max_start is %s\n", curr == NULL ? "NULL" : "NOT NULL", max == NULL ? "NULL" : "NOT NULL");
 			}
 		}
-		else printf("The two matches weren't compatable.");
+		else printf("The two matches weren't compatable or one was NULL.\n");
 	}
 	return max;
 }
@@ -248,7 +273,7 @@ int * testMerge(Match * a, Match * b) {
 	return m2->end - m1->start + 1;
 }
 
-Match * merge(Match * matches[], int size) {
+Match * merge(Match * matches[], int size) {	//will return NULL if merge made unequal body/crypt match.
 	// IF THEY AREN'T COMPATABLE U MESSED UP
 	Match * match;
 	int min_b_start = matches[0]->start;
@@ -276,7 +301,6 @@ Match * merge(Match * matches[], int size) {
 	match = newMatch(min_b_start, min_c_start, max_b_end - min_b_start + 1);
 	return match;
 }
-
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {
 //

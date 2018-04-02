@@ -50,44 +50,11 @@ int main()
 	int bindex;
 	int cindex;
 	int length;*/
-	Match * ms[3];
-	ms[0] = newMatch(2, 1, 3);
-	ms[1] = newMatch(3, 2, 4);
-	ms[2] = newMatch(1, 5, 2);
-	printMatch(merge(ms, 3)); printf("\n");
-	ms[0] = newMatch(2, 1, 3);
-	ms[2] = newMatch(3, 2, 4);
-	ms[1] = newMatch(1, 5, 2);
-	printMatch(merge(ms, 3)); printf("\n");
-	ms[1] = newMatch(2, 1, 3);
-	ms[2] = newMatch(3, 2, 4);
-	ms[0] = newMatch(1, 5, 2);
-	printMatch(merge(ms, 3)); printf("\n");
-	ms[1] = newMatch(2, 1, 3);
-	ms[0] = newMatch(3, 2, 4);
-	ms[2] = newMatch(1, 5, 2);
-	printMatch(merge(ms, 3)); printf("\n");
-	ms[2] = newMatch(2, 1, 3);
-	ms[0] = newMatch(3, 2, 4);
-	ms[1] = newMatch(1, 5, 2);
-	printMatch(merge(ms, 3)); printf("\n");
-	ms[2] = newMatch(2, 1, 3);
-	ms[1] = newMatch(3, 2, 4);
-	ms[0] = newMatch(1, 5, 2);
-	printMatch(merge(ms, 3)); printf("\n\n\n");
 
-	ms[0] = newMatch(1, 15, 2);
-	ms[1] = newMatch(3, 12, 3);
-	ms[2] = newMatch(6, 8, 4);
-	printMatch(merge(ms, 3)); printf("\n");
-
-
-
-	printf(" \n");
-
-	/*addMatch(matches, newMatch(5, 10, 6));
-	addMatch(matches, newMatch(3, 6, 4));
-	addMatch(matches, newMatch(2, 12, 5));*/
+	addMatch(matches, newMatch(5, 10, 6));
+	printMatches(matches);
+	addMatch(matches, newMatch(3, 8, 4));
+	//addMatch(matches, newMatch(2, 12, 5));
 	//printMatches(matches);
 
 
