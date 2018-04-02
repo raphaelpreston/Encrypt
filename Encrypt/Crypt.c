@@ -46,7 +46,7 @@ int main()
 	Matches * matches = newMatches(matches_size);
 
 	/* testing */
-	/*srand(time(NULL));
+	/*srand(time(NULL))
 	int bindex;
 	int cindex;
 	int length;*/
