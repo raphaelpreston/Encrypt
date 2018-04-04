@@ -50,6 +50,12 @@ int * testMerge(Match * m1, Match * m2);
 /* returns a match that is the merged match of all match objects in matches[]. Size is how many objects there are. Set any to NULL */
 Match * merge(Match * matches[], int size);
 
+/* returns true if all bits in match m are already matched by other bits in the matches object */
+bool enveloped(Matches * matches, Match * m);
+
+/* sets the bits in a matches object as used */
+void set_bits_used(Matches * matches, Match * match);
+
 /* tests to see whether or not two matches are compatible: that is to say that the crypt parts of the matching can be merged */
 bool cryptCompatable(Match * m1, Match * m2);
 

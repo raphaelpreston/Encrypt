@@ -45,16 +45,20 @@ int main()
 	int matches_size = 21;
 	Matches * matches = newMatches(matches_size);
 
-	for (int i = 1; i < 20; i++) {
-		printf("%i: %s\n", i, matches->used[i] ? "true" : "false");
-	}
-
 	/* testing */
-	/*srand(time(NULL))
+	/*srand(time(NULL));
 	int bindex;
 	int cindex;
 	int length;*/
+
 	
+	//addMatch(matches, newMatch(5, 10, 6));
+	//addMatch(matches, newMatch(5, 10, 6));
+
+
+	
+
+	printMatches(matches);
 
 	//addMatch(matches, newMatch(6, 3, 3));
 	//addMatch(matches, newMatch(7, 4, 3));
