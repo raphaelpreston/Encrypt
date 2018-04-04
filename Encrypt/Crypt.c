@@ -45,6 +45,10 @@ int main()
 	int matches_size = 21;
 	Matches * matches = newMatches(matches_size);
 
+	for (int i = 1; i < 20; i++) {
+		printf("%i: %s\n", i, matches->used[i] ? "true" : "false");
+	}
+
 	/* testing */
 	/*srand(time(NULL))
 	int bindex;
@@ -52,11 +56,11 @@ int main()
 	int length;*/
 	
 
-	addMatch(matches, newMatch(6, 3, 3));
-	addMatch(matches, newMatch(7, 4, 3));
-	addMatch(matches, newMatch(10, 7, 5));
-	addMatch(matches, newMatch(7, 7, 2));
-	printMatches(matches);
+	//addMatch(matches, newMatch(6, 3, 3));
+	//addMatch(matches, newMatch(7, 4, 3));
+	//addMatch(matches, newMatch(10, 7, 5));
+	//addMatch(matches, newMatch(7, 7, 2));				//won't merge if it's completely enveloped
+	//printMatches(matches);
 	//addMatch(matches, newMatch(2, 12, 5));
 	//printMatches(matches);
 

@@ -20,6 +20,7 @@ typedef struct Matches {
 	Match ** end_arr;	//array of match objects indexed by where the match ends
 	int size;			//size of each array, (designates upper and lower limits of matches), set to the number of bits that are read
 	int num_matches;
+	bool * used;		//1 if the bit is already matched, 0 if the bit is not
 } Matches;
 
 /* returns a new match object */

@@ -38,6 +38,10 @@ Matches * newMatches(int num_bits) {
 		Match ** end;
 		start = (Match **)calloc(num_bits, sizeof(Match *));	//technically we can remove 1 because there are no endings at 0 
 		end = (Match **)calloc(num_bits, sizeof(Match *));	// use calloc to initialize each match * to 0
+
+		/* make the array to keep track of matched bits */
+		bool * used = (bool *)calloc(num_bits, sizeof(bool));
+
 		if (start && end) {
 
 			/* fill m */
@@ -45,6 +49,7 @@ Matches * newMatches(int num_bits) {
 			m->end_arr = end;
 			m->size = num_bits;
 			m->num_matches = 0;
+			m->used = used;
 		}
 		else {
 			printf("Failed to calloc space for begin and end array with %i bits each", num_bits);
