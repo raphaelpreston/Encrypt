@@ -50,7 +50,7 @@ int * testMerge(Match * m1, Match * m2);
 /* returns a match that is the merged match of all match objects in matches[]. Size is how many objects there are. Set any to NULL */
 Match * merge(Match * matches[], int size);
 
-/* returns true if all bits in match m are already matched by other bits in the matches object */
+/* returns true if all bits in match m are already matched by other bits in the matches object (note:  it only checks if body is enveloped when adding, crypt being enveloped is fine) */
 bool enveloped(Matches * matches, Match * m);
 
 /* sets the bits in a matches object as used */

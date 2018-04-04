@@ -240,6 +240,7 @@ void printMatches(Matches * m) {
 			}
 		}
 	}
+	printf("Num matches: %i\n", m->num_matches);
 }
 
 Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
