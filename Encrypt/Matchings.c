@@ -109,14 +109,21 @@ void addMatch(Matches * matches, Match * m) {
 					printf("New merged baby match: "); printMatch(merged); printf(" \n");
 
 					// delete the 1/2 out of both arrays
-					if (max_start) { //delete it because it got merged
-						printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
-						deleteMatch(matches, max_start);
-
+					if (max_start == max_end) {	//protect against double delete
+						if (max_start) {
+							printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
+							deleteMatch(matches, max_start);
+						}
 					}
-					if (max_end) {
-						printf("Attempting to delete the max_end: "); printMatch(max_end); printf("\n");
-						deleteMatch(matches, max_end);
+					else {
+						if (max_start) {
+							printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
+							deleteMatch(matches, max_start);
+						}
+						if (max_end) {
+							printf("Attempting to delete the max_end: "); printMatch(max_end); printf("\n");
+							deleteMatch(matches, max_end);
+						}
 					}
 
 					// now we are adding the supermatch, so m = supermatch
