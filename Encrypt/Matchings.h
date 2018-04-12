@@ -29,26 +29,11 @@ Match * newMatch(int body_begin, int crypt_begin, int length);
 /* returns a new matches object */
 Matches * newMatches(int num_bits);
 
-/* adds the match to a matches */
-void addMatch(Matches * matches, Match * m);
-
-/* prints matches */
-void printMatches(Matches * m);
-
-/* prints a specific match */
-void printMatch(Match * m);
-
 /* returns length of match */
 int matchLength(Match *);
 
-/* returns index of max matching within a range for either of the matches array */
-Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
-
-/* returns the length of what a merged matching between m1 and m2 would look like */
-int * testMerge(Match * m1, Match * m2);
-
-/* returns a match that is the merged match of all match objects in matches[]. Size is how many objects there are. Set any to NULL */
-Match * merge(Match * matches[], int size);
+/* adds the match to a matches */
+void addMatch(Matches * matches, Match * m);
 
 /* returns true if all bits in match m are already matched by other bits in the matches object (note:  it only checks if body is enveloped when adding, crypt being enveloped is fine) */
 bool enveloped(Matches * matches, Match * m);
@@ -56,8 +41,23 @@ bool enveloped(Matches * matches, Match * m);
 /* sets the bits in a matches object as used */
 void set_bits_used(Matches * matches, Match * match);
 
+/* prints a specific match */
+void printMatch(Match * m);
+
+/* prints matches */
+void printMatches(Matches * m);
+
+/* returns index of max matching within a range for either of the matches array */
+Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
+
 /* tests to see whether or not two matches are compatible: that is to say that the crypt parts of the matching can be merged */
 bool cryptCompatable(Match * m1, Match * m2);
+
+/* returns the length of what a merged matching between m1 and m2 would look like */
+int * testMerge(Match * m1, Match * m2);
+
+/* returns a match that is the merged match of all match objects in matches[]. Size is how many objects there are. Set any to NULL */
+Match * merge(Match * matches[], int size);
 
 /* deletes the exact match object given from the matches (both arrays).  Returns 1 on success 0 on failure. */
 bool deleteMatch(Matches * matches, Match * m);		//doesn't actually free cus it doesn't work but it frees some stuff :DD

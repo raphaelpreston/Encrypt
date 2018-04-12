@@ -45,24 +45,6 @@ int main()
 	int matches_size = 21;
 	Matches * matches = newMatches(matches_size);
 
-	/* testing */
-	/*srand(time(NULL));
-	int bindex;
-	int cindex;
-	int length;*/
-
-	//addMatch(matches, newMatch(6, 3, 3));
-	//addMatch(matches, newMatch(7, 4, 3));
-	//addMatch(matches, newMatch(10, 7, 5));
-	//addMatch(matches, newMatch(7, 7, 2));				//won't merge if it's completely enveloped
-	//addMatch(matches, newMatch(0, 0, 20));
-	addMatch(matches, newMatch(5, 5, 2));
-	addMatch(matches, newMatch(4, 4, 3));
-
-	//addMatch(matches, newMatch(2, 12, 5));
-	// have to test adding something that envelopes all matches
-	printMatches(matches);
-
 
 
 	 /* close files and free memory */
