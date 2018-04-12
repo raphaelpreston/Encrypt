@@ -22,6 +22,9 @@ int main()
 	c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt);
 	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
+	/* create a binary object */
+	Binary * binary = newBinary(b_buffer, c_buffer, b_bytes_read, c_bytes_read);
+
 
 	 /* convert char buffer to int array */
 	int * b_binary;
@@ -33,17 +36,19 @@ int main()
 	bufferToBinary(c_binary, c_buffer, c_bytes_read);
 
 	 /* print binary */
-	printf("Body: ");
+	printf("B: ");
 	printBinary(b_binary, b_bytes_read);
 	printf("\n");
-	printf("Crypt: ");
+	printf("C: ");
 	printBinary(c_binary, c_bytes_read);
 	printf("\n\n");
 
 
 	 /* find matchings */
-	int matches_size = 21;
+	int matches_size = 1000;
 	Matches * matches = newMatches(matches_size);
+
+	compareRange(b_binary, 
 
 
 
