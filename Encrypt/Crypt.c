@@ -23,8 +23,8 @@ int main()
 	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
 	/* create a binary object */
-	Binary * binary = newBinary(b_buffer, c_buffer, b_bytes_read, c_bytes_read);
-
+	Binary * binary = newBinary();
+	readInBinary(binary, b_buffer, c_buffer, b_bytes_read, c_bytes_read);
 
 	 /* convert char buffer to int array */
 	int * b_binary;
@@ -47,8 +47,6 @@ int main()
 	 /* find matchings */
 	int matches_size = 1000;
 	Matches * matches = newMatches(matches_size);
-
-	compareRange(b_binary, 
 
 
 
