@@ -12,8 +12,12 @@ int main()
 	FILE * body = fopen(body_loc, "rb");
 	FILE * crypt = fopen(crypt_loc, "rb");
 	if (body == NULL || crypt == NULL) return 1;
+
+	/* create a binary handle object */
+	Binary * binary = newBinary();
 	
-	 /* read files in */
+
+	 /* read files in buffer by buffer */		//only does one buffer, need to add more and also the ability for the binary int array to grow in the handle
 	unsigned char b_buffer[BUFFER_SIZE];
 	unsigned char c_buffer[BUFFER_SIZE];
 	int b_bytes_read = 0;
@@ -22,8 +26,6 @@ int main()
 	c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt);
 	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
-	/* create a binary object */
-	Binary * binary = newBinary();
 	readInBinary(binary, b_buffer, c_buffer, b_bytes_read, c_bytes_read);
 
 	 /* print binary */
