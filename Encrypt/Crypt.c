@@ -26,22 +26,8 @@ int main()
 	Binary * binary = newBinary();
 	readInBinary(binary, b_buffer, c_buffer, b_bytes_read, c_bytes_read);
 
-	 /* convert char buffer to int array */
-	int * b_binary;
-	int * c_binary;
-	b_binary = (int *)malloc(8*b_bytes_read*sizeof(int));
-	c_binary = (int *)malloc(8*c_bytes_read*sizeof(int));
-
-	bufferToBinary(b_binary, b_buffer, b_bytes_read);
-	bufferToBinary(c_binary, c_buffer, c_bytes_read);
-
 	 /* print binary */
-	printf("B: ");
-	printBinary(b_binary, b_bytes_read);
-	printf("\n");
-	printf("C: ");
-	printBinary(c_binary, c_bytes_read);
-	printf("\n\n");
+	printBinaryHandle(binary);
 
 
 	 /* find matchings */
@@ -51,8 +37,7 @@ int main()
 
 
 	 /* close files and free memory */
-	free(b_binary);
-	free(c_binary);
+	//deleteBinaryHandle(binary);
 	//deleteMatches(matches)
 	fclose(body);
 	fclose(crypt);

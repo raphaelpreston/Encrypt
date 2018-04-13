@@ -18,17 +18,26 @@ Binary * newBinary() {
 	}
 }
 
-void readInBinary(Binary * b, unsigned char b_buffer, unsigned char c_buffer, int b_bytes_read, int c_bytes_read) {
-	
+void readInBinary(Binary * b, unsigned char b_buffer[], unsigned char c_buffer[], int b_bytes_read, int c_bytes_read) {
+	if (!b->body && !b->crypt) {	//first time, make some space
+		int * b_binary;
+		int * c_binary;
+		b_binary = (int *)malloc(8 * b_bytes_read * sizeof(int));
+		c_binary = (int *)malloc(8 * c_bytes_read * sizeof(int));
+		if (!b_binary || !c_binary) printf("Failed to malloc for b_binary or c_binary.\n\n");
+		b->body = b_binary;
+		b->crypt = c_binary;
+	}
+	else if ((b->body && !b->crypt) || (!b->body && b->crypt)) printf("You messed up lol\n");
 
-	 /* convert unsigned char buffers to int arrays */
+	/* convert unsigned char buffers to int arrays */
+	printf("Attempting to convert at size %i\n", b->b_size);
 	bufferToBinary(b->body, b_buffer, b_bytes_read, b->b_size);	//the starting point is the current size
 	bufferToBinary(b->crypt, c_buffer, c_bytes_read, b->c_size);
 
 	/* update the size */
 	b->b_size += b_bytes_read;
 	b->c_size += c_bytes_read;
-	
 }
 
 void bufferToBinary(int * binary, unsigned char buffer[], int bytes_read, int startingIndex) {
@@ -39,6 +48,15 @@ void bufferToBinary(int * binary, unsigned char buffer[], int bytes_read, int st
 	}
 }
 
+void printBinaryHandle(Binary * b) {
+	printf("B: ");
+	printBinary(b->body, b->b_size);
+	printf("\n");
+	printf("C: ");
+	printBinary(b->crypt, b->c_size);
+	printf("\n\n");
+}
+
 void printBinary(int * binary_array, int length) {
 	int l = length * 8;
 	for (int i = 0; i < l; i++) {
@@ -46,5 +64,8 @@ void printBinary(int * binary_array, int length) {
 	}
 }
 
-
+//void deleteBinaryHandle(Binary * b) {
+//	free(b_binary);
+//	free(c_binary);
+//}
 
