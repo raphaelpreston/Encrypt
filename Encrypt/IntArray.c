@@ -62,7 +62,7 @@ void IntArr_readInBuffer(IntArr * intArr, unsigned char buffer[], int bytes_read
 		memcpy(buffer, intArr->arr, intArr->size * sizeof(int));
 
 		//free old memory, reasign buffer
-		free(intArr->arr);
+		//free(intArr->arr);
 		intArr->arr = buffer;
 
 		//update max
