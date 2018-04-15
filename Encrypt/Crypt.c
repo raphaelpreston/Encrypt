@@ -26,10 +26,9 @@ int main()
 	while (b_bytes_read = fread(b_buffer, sizeof(unsigned char), BUFFER_SIZE, body)) {	//for the body
 		readInBody(binary, b_buffer, b_bytes_read);
 	}
-	//while (c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt)) {	//for the crypt
-	//	printf("%s\n", c_buffer);
-	//	readInCrypt(binary, c_buffer, c_bytes_read);
-	//}
+	while (c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt)) {	//for the crypt
+		readInCrypt(binary, c_buffer, c_bytes_read);
+	}
 
 	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
