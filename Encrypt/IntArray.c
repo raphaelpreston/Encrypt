@@ -26,8 +26,8 @@ void IntArr_readInBuffer(IntArr * intArr, unsigned char buffer[], int bytes_read
 		 //numInts is new number of ints to hold
 		int * buffer;
 		buffer = malloc(numInts * sizeof(int));
-		if (!buffer) perror("Error mallocing new buffer for reading in buffer.\n\n\n");
-
+		if (!buffer) printf("Error mallocing %i for ints (%i bytes) buffer for reading in buffer.\n", numInts, numInts*sizeof(int));
+		else printf("Malloc successful for %i ints (%i bytes) buffer for reading in buffer.\n", numInts, numInts * sizeof(int));
 		//fill it with old content
 		if (intArr->size != 0) memcpy(buffer, intArr->arr, intArr->size * sizeof(int)); 
 
