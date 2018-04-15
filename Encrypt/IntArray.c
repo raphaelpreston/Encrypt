@@ -18,47 +18,18 @@ IntArr * newIntArr(int max) {
 
 }
 
-//void IntArr_append(IntArr * intArr, int num) {
-//	if (intArr->size == intArr->max) {	//no room, double the memory
-//		int * buffer;
-//		buffer = malloc(intArr->max * sizeof(int) * 2);
-//		if (!buffer) perror("Error mallocing new buffer for appending.\n\n\n");
-//		
-//		//fill it with old content
-//		memcpy(buffer, intArr->arr, intArr->size * sizeof(int));
-//
-//		//free old memory, reasign buffer
-//		free(intArr->arr);
-//		intArr->arr = buffer;
-//
-//		//update max
-//		intArr->max *= 2;
-//	}
-//	else if (intArr->size > intArr->max) printf("U messed up!!\n\n\n");
-//
-//	//guaranteed enough memory, time to add it
-//
-//	intArr->arr[intArr->size] = num;
-//	intArr->size++;
-//}
-
 void IntArr_readInBuffer(IntArr * intArr, unsigned char buffer[], int bytes_read) {
 	if (intArr->size + bytes_read * 8 > intArr->max) {	//not enough memory
-		printf("NOT ENOUGH MEMORY...\n");
 
 		int numInts = intArr->max;
-		while (numInts < intArr->size + bytes_read * 8) {
-			printf("Upling memory by %i to get %i\n", UPLE_CONSTANT, numInts*2);
-			numInts *= UPLE_CONSTANT;
-		}
-
-		//numInts is new number of ints to hold
+		while (numInts < intArr->size + bytes_read * 8) numInts *= UPLE_CONSTANT;
+		 //numInts is new number of ints to hold
 		int * buffer;
 		buffer = malloc(numInts * sizeof(int));
 		if (!buffer) perror("Error mallocing new buffer for reading in buffer.\n\n\n");
 
 		//fill it with old content
-		if (intArr->size != 0) { memcpy(buffer, intArr->arr, intArr->size * sizeof(int)); printf("Copying over from buffer %i bytes which is %i integers\n", intArr->size * sizeof(int), intArr->size); }
+		if (intArr->size != 0) memcpy(buffer, intArr->arr, intArr->size * sizeof(int)); 
 
 		//free old memory, reasign buffer
 		free(intArr->arr);
