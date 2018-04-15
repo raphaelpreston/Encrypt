@@ -29,6 +29,9 @@ void readInBody(Binary * b, unsigned char b_buffer[], int b_bytes_read) {
 	}
 	else if (b->b_size + b_bytes_read > b->b_max) {	//out of memory, double the size and copy string
 		//make a new buffer with 2x as much space
+
+		//just realized this will fail if the bytes read + size is more than 2x the max
+
 		char * buffer;
 		buffer = malloc(8 * sizeof(int) * b->b_max * 2);
 		if (buffer == NULL) {

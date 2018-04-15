@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Matchings.h"
 #include "Binary.h"
+#include "IntArray.h"
 
 #define BUFFER_SIZE 1
 
@@ -42,7 +43,17 @@ int main()
 	Matches * matches = newMatches(matches_size);
 
 	//testing compareRange
-	compareRange(binary, matches, 0, 8);
+	// compareRange(binary, matches, 0, 8);
+
+	//testing IntArr
+
+	IntArr * intArr = newIntArr(199);
+	for (int i = 0; i < 200; i++) {
+		IntArr_append(intArr, i);
+	}
+
+	printIntArr(intArr);
+
 
 	 /* close files and free memory */
 	//deleteBinaryHandle(binary);
