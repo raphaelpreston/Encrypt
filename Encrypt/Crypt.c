@@ -37,10 +37,12 @@ int main()
 
 
 	 /* find matchings */
+	printf("Finding matches...\n");
 	int matches_size = 1000;
 	Matches * matches = newMatches(matches_size);
 
-
+	//testing compareRange
+	compareRange(binary, matches, 0, 8);
 
 	 /* close files and free memory */
 	//deleteBinaryHandle(binary);

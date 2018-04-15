@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Binary.h"
+#include "Matchings.h"
 
 //working here
 Binary * newBinary() {
@@ -108,6 +109,33 @@ void printBinary(int * binary_array, int length) {
 	int l = length * 8;
 	for (int i = 0; i < l; i++) {
 		printf("%i%s", binary_array[i], i%8==7?" ":"");
+	}
+}
+
+// matching functions
+
+void compareRange(Binary * binary, Matches * matches, int b_start, int c_start, int l) {
+	int mode = 0;  //mode 0 for neg match, 1 for null, 2 for pos match
+	int b;
+	int c;
+	int m;
+	int dur = 0;
+
+	for (int i = 0; i < l; i++) {	//run l times
+		b = binary->body[b_start + i];
+		c = binary->crypt[c_start + i];
+		m = b + c;
+
+		if (m == mode) {	//continuation
+			dur++;	//increase duration of match
+		}
+		else {	//mode is switching, determine if match should be added
+			if (dur >= 2) {	//match size of at least two
+
+
+			}
+		}
+
 	}
 }
 

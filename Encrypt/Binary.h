@@ -13,8 +13,13 @@ typedef struct Binary_Handler{
 /* returns a new binary object */
 Binary * newBinary();
 
-/* reads in a buffer of body and crypt into the binary object (converts to integer array) */
-void readInBinary(Binary * b, unsigned char b_buffer[], unsigned char c_buffer[], int b_bytes_read, int c_bytes_read);
+/* reads in a buffer of body into the binary object (converts to integer array) */
+void readInBody(Binary * b, unsigned char b_buffer[], int b_bytes_read);
+
+void readInCrypt(Binary * b, unsigned char c_buffer[], int c_bytes_read);
+
+/* adds matchings from a binary object in the given range to the matches object */
+void compareRange(Binary * b, Matches * matches, int b_start, int c_start, int l);
 
 /* Converts an array of characters to an array of binary */
 void bufferToBinary(int * binary_array, unsigned char buffer[], int bytes_read, int startingIndex);
