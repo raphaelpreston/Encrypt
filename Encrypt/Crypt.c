@@ -34,16 +34,17 @@ int main()
 	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
 	 /* print binary */
+	binary->crypt->arr[6] = 0;
 	printBinaryHandle(binary);
 
-
+	
 	 /* find matchings */
 	printf("Finding matches...\n");
 	int matches_size = 30;
 	Matches * matches = newMatches(matches_size);
 	
 	//testing compareRange
-	compareRange(binary, matches, 0, 0, 8);
+	compareRange(binary, matches, 0, 0, 8);//    <-- seems to work but there's no distinction between pos and neg matches yet (maybe test more ranges)?
 
 	printMatches(matches);
 
