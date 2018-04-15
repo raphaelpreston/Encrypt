@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 
-
 //a lot of lag is going to come from deleting not being optimized
 
 /* structs */
