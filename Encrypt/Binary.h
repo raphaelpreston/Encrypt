@@ -4,8 +4,10 @@
 typedef struct Binary_Handler{
 	int * body;
 	int * crypt;
-	int b_size;
-	int c_size;
+	int b_size;	//size in bytes
+	int c_size;	
+	int b_max;	//max size in bytes
+	int c_max;
 } Binary;
 
 /* returns a new binary object */

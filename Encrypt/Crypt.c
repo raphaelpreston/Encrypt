@@ -2,7 +2,7 @@
 #include "Matchings.h"
 #include "Binary.h"
 
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 1
 
 int main()
 {
@@ -17,16 +17,21 @@ int main()
 	Binary * binary = newBinary();
 	
 
-	 /* read files in buffer by buffer */		//only does one buffer, need to add more and also the ability for the binary int array to grow in the handle
-	unsigned char b_buffer[BUFFER_SIZE];
-	unsigned char c_buffer[BUFFER_SIZE];
-	int b_bytes_read = 0;
-	int c_bytes_read = 0;
-	b_bytes_read = fread(b_buffer, sizeof(unsigned char), BUFFER_SIZE, body);
-	c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt);
-	if (ferror(body) || ferror(crypt)) return 2;	//error checking
+	 /* read files in buffer by buffer */
+	unsigned char b_buffer[BUFFER_SIZE * sizeof(unsigned char)];
+	unsigned char c_buffer[BUFFER_SIZE * sizeof(unsigned char)];
+	int b_bytes_read;
+	int c_bytes_read;
+	
+	while (b_bytes_read = fread(b_buffer, sizeof(unsigned char), BUFFER_SIZE, body)) {	//for the body
+		readInBody(binary, b_buffer, b_bytes_read);
+	}
+	//while (c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt)) {	//for the crypt
+	//	printf("%s\n", c_buffer);
+	//	readInCrypt(binary, c_buffer, c_bytes_read);
+	//}
 
-	readInBinary(binary, b_buffer, c_buffer, b_bytes_read, c_bytes_read);
+	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
 	 /* print binary */
 	printBinaryHandle(binary);
