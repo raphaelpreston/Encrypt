@@ -83,5 +83,5 @@ void printIntArr(IntArr * intArr) {
 	for (int i = 0; i < intArr->size; i++) {
 		printf("%s%i", i%8==0 && i!=0?" ":"", intArr->arr[i]);
 	}
-	printf("\nSize: %i\nMax: %i\n", intArr->size, intArr->max);
+	printf(" (Size: %i, Max: %i)", intArr->size, intArr->max);
 }

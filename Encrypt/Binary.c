@@ -25,14 +25,6 @@ void readInCrypt(Binary * b, unsigned char c_buffer[], int c_bytes_read) {
 	IntArr_readInBuffer(b->crypt, c_buffer, c_bytes_read);
 }
 
-//void bufferToBinary(int * binary, unsigned char buffer[], int bytes_read, int startingIndex) {
-//	for (int i = 0; i < bytes_read; i++) {	//for all chars(bytes) read
-//		for (int k = 7; k >= 0; k--) {	//for every bit in the char(byte)
-//			binary[i * 8 + (7 - k) + (startingIndex) * 8] = ((buffer[i] & 1 << k) == 0) ? 0 : 1;	//assign the appropriate index the appropriate bit value
-//		}
-//	}
-//}
-
 void printBinaryHandle(Binary * b) {
 	printf("B: ");
 	printIntArr(b->body);

@@ -8,7 +8,7 @@ typedef struct Binary_Handler{
 } Binary;
 
 /* returns a new binary object */
-Binary * newBinary();
+Binary * newBinary(int max);
 
 /* reads in a buffer of body into the binary object (converts to integer array) */
 void readInBody(Binary * b, unsigned char b_buffer[], int b_bytes_read);
@@ -23,6 +23,3 @@ void readInCrypt(Binary * b, unsigned char c_buffer[], int c_bytes_read);
 
 /* prints an entire Binary Handle object */
 void printBinaryHandle(Binary * b);
-
-/* Prints a binary array to stdout */
-void printBinary(int * binary_array, int length_in_bytes);
