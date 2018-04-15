@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "IntArray.h"
+#include "Matchings.h"
 
 typedef struct Binary_Handler{
 	IntArr * body;
@@ -16,10 +17,7 @@ void readInBody(Binary * b, unsigned char b_buffer[], int b_bytes_read);
 void readInCrypt(Binary * b, unsigned char c_buffer[], int c_bytes_read);
 
 /* adds matchings from a binary object in the given range to the matches object */
-//void compareRange(Binary * b, Matches * matches, int b_start, int c_start, int l);
-
-/* Converts an array of characters to an array of binary */
-// void bufferToBinary(int * binary_array, unsigned char buffer[], int bytes_read, int startingIndex);
+void compareRange(Binary * b, Matches * matches, int b_start, int c_start, int l);
 
 /* prints an entire Binary Handle object */
 void printBinaryHandle(Binary * b);

@@ -8,7 +8,7 @@
 int main()
 {
 	 /* create file pointers for body and crypt */
-	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longtest";
+	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/body";
 	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/crypt";
 	FILE * body = fopen(body_loc, "rb");
 	FILE * crypt = fopen(crypt_loc, "rb");
@@ -34,23 +34,18 @@ int main()
 	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
 	 /* print binary */
-	//printBinaryHandle(binary);
+	printBinaryHandle(binary);
 
 
 	 /* find matchings */
-	printf("Finding matches...%i\n", sizeof(int));
-	int matches_size = 1000;
+	printf("Finding matches...\n");
+	int matches_size = 30;
 	Matches * matches = newMatches(matches_size);
 	
 	//testing compareRange
-	// compareRange(binary, matches, 0, 8);
+	compareRange(binary, matches, 0, 0, 8);
 
-	//testing IntArr
-	//IntArr * intArr = newIntArr(100);	//works with 1 but not > 2
-	//unsigned char buffer[2] = {'a', 'b'};
-	//IntArr_readInBuffer(intArr, buffer, 2);
-
-	//printIntArr(intArr);
+	printMatches(matches);
 
 	 /* close files and free memory */
 	//deleteBinaryHandle(binary);
