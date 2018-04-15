@@ -46,6 +46,11 @@ int main()
 	// compareRange(binary, matches, 0, 8);
 
 	//testing IntArr
+	//IntArr * intArr = newIntArr(100);	//works with 1 but not > 2
+	//unsigned char buffer[2] = {'a', 'b'};
+	//IntArr_readInBuffer(intArr, buffer, 2);
+
+	//printIntArr(intArr);
 
 	 /* close files and free memory */
 	//deleteBinaryHandle(binary);

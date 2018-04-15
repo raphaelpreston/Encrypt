@@ -43,7 +43,7 @@ IntArr * newIntArr(int max) {
 //}
 
 void IntArr_readInBuffer(IntArr * intArr, unsigned char buffer[], int bytes_read) {
-	if (intArr->size + bytes_read > intArr->max) {	//not enough memory
+	if (intArr->size + bytes_read * 8 > intArr->max) {	//not enough memory
 		printf("NOT ENOUGH MEMORY...\n");
 
 		int numInts = intArr->max;
@@ -51,7 +51,6 @@ void IntArr_readInBuffer(IntArr * intArr, unsigned char buffer[], int bytes_read
 			printf("Upling memory by %i to get %i\n", UPLE_CONSTANT, numInts*2);
 			numInts *= UPLE_CONSTANT;
 		}
-		printf("New memory is %i...\n", numInts);
 
 		//numInts is new number of ints to hold
 		int * buffer;
@@ -59,10 +58,10 @@ void IntArr_readInBuffer(IntArr * intArr, unsigned char buffer[], int bytes_read
 		if (!buffer) perror("Error mallocing new buffer for reading in buffer.\n\n\n");
 
 		//fill it with old content
-		memcpy(buffer, intArr->arr, intArr->size * sizeof(int));
+		if (intArr->size != 0) { memcpy(buffer, intArr->arr, intArr->size * sizeof(int)); printf("Copying over from buffer %i bytes which is %i integers\n", intArr->size * sizeof(int), intArr->size); }
 
 		//free old memory, reasign buffer
-		//free(intArr->arr);
+		free(intArr->arr);
 		intArr->arr = buffer;
 
 		//update max
@@ -72,7 +71,7 @@ void IntArr_readInBuffer(IntArr * intArr, unsigned char buffer[], int bytes_read
 	/* now guaranteed enough memory, time to convert and add */
 	for (int i = 0; i < bytes_read; i++) {	//for all chars(bytes) read
 		for (int k = 7; k >= 0; k--) {	//for every bit in the char(byte)
-			intArr->arr[i * 8 + (7 - k) + (intArr->size) * 8] = ((buffer[i] & 1 << k) == 0) ? 0 : 1;	//assign the appropriate index the appropriate bit value
+			intArr->arr[i * 8 + (7 - k) + (intArr->size)] = ((buffer[i] & 1 << k) == 0) ? 0 : 1;	//assign the appropriate index the appropriate bit value
 		}
 	}
 	
