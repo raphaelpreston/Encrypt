@@ -50,7 +50,7 @@ void compareRange(Binary * binary, Matches * matches, int b_start, int c_start, 
 		}
 		else {	//mode is switching, determine if match should be added
 			if (i-m_start >= 2) {	//add match
-				Match * match = newMatch(b_start + m_start, c_start + m_start, i-m_start);
+				Match * match = newMatch(b_start + m_start, c_start + m_start, i-m_start, mode);
 				printf(" Adding new %s match: ", mode==0?"NULL":mode==1?"POS":"NEG"); printMatch(match); printf("\n");
 				addMatch(matches, match);
 			}
@@ -61,7 +61,7 @@ void compareRange(Binary * binary, Matches * matches, int b_start, int c_start, 
 	}
 	//check last one
 	if (l - m_start >= 2) {	//add match
-		Match * match = newMatch(b_start + m_start, c_start + m_start, l - m_start);
+		Match * match = newMatch(b_start + m_start, c_start + m_start, l - m_start, m);
 		printf(" Adding new %s match: ", mode == 0 ? "NULL" : mode == 1 ? "POS" : "NEG"); printMatch(match); printf("\n");
 		addMatch(matches, match);
 	}

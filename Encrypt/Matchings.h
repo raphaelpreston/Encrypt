@@ -48,7 +48,7 @@ void printMatch(Match * m);
 void printMatches(Matches * m);
 
 /* returns index of max matching within a range (for a specified pos/neg type) for either of the matches array */
-Match * maxMatchInRange(Match ** arr, Match * m, int start, int end, bool type);
+Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
 
 /* tests to see whether or not two matches are compatible: that is to say that the crypt parts of the matching can be merged */
 bool cryptCompatable(Match * m1, Match * m2);

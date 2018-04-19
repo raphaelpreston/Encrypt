@@ -8,7 +8,7 @@
 int main()
 {
 	 /* create file pointers for body and crypt */
-	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longtest";
+	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/body";
 	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/crypt";
 	FILE * body = fopen(body_loc, "rb");
 	FILE * crypt = fopen(crypt_loc, "rb");
@@ -25,7 +25,7 @@ int main()
 	int c_bytes_read;
 	
 	while (b_bytes_read = fread(b_buffer, sizeof(unsigned char), BUFFER_SIZE, body)) {	//for the body
-		readInBody(binary, b_buffer, b_bytes_read);
+		readInBody(binary, b_buffer, b_bytes_read);	//this finds the matchings too
 	}
 	while (c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt)) {	//for the crypt
 		readInCrypt(binary, c_buffer, c_bytes_read);
@@ -34,8 +34,14 @@ int main()
 	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
 	 /* print binary */
-	binary->crypt->arr[6] = 0;
-	//printBinaryHandle(binary);
+	binary->body->arr[0] = 0;
+	binary->body->arr[1] = 0;
+	binary->body->arr[4] = 1;
+	binary->body->arr[6] = 0;			//WORKING HERE, JUST TESTED ALL OF THESE, COMPARERANGE SEEMS TO WORK NOW WITH + AND -
+
+	binary->body->arr[7] = 1;
+
+	printBinaryHandle(binary);
 
 	
 	 /* find matchings */
