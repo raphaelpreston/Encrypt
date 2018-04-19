@@ -34,13 +34,6 @@ int main()
 	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
 	 /* print binary */
-	binary->body->arr[0] = 0;
-	binary->body->arr[1] = 0;
-	binary->body->arr[4] = 1;
-	binary->body->arr[6] = 0;			//WORKING HERE, JUST TESTED ALL OF THESE, COMPARERANGE SEEMS TO WORK NOW WITH + AND -
-
-	binary->body->arr[7] = 1;
-
 	printBinaryHandle(binary);
 
 	
@@ -49,10 +42,31 @@ int main()
 	int matches_size = 30;
 	Matches * matches = newMatches(matches_size);
 	
-	//testing compareRange
-	compareRange(binary, matches, 0, 0, 8);
+	int bodySize = 3;//binary->body->size;
+	int cryptSize = 3;// binary->crypt->size;
 
+	//works but only if bodySize is smaller than or equal to cryptsize
+
+	//first for loop
+	printf("Comparing ranges: \n");
+	for (int b = 0; b < bodySize - 2; b++) {
+		printf("%i->%i\n", bodySize - 2 - b, bodySize - 1);
+		printf("%i->%i\n\n", 0, 1 + b);
+	}
+	
+	//second for loop
+	for (int b = 0; b <= cryptSize - bodySize; b++) {
+		printf("%i->%i\n", 0, bodySize - 1);
+		printf("%i->%i\n\n", 0 + b, bodySize - 1 + b);
+	}
+
+	//third for loop
+	for (int b = 0; b < bodySize - 2; b++) {
+		printf("%i->%i\n", 0, bodySize - 2 - b);
+		printf("%i->%i\n\n", bodySize - 3 + b, cryptSize - 1);
+	}
 	printMatches(matches);
+
 	 /* close files and free memory */
 	//deleteBinaryHandle(binary);
 	//deleteMatches(matches)
