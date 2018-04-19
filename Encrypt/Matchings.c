@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Matchings.h"
 
-Match * newMatch(int b, int c, int l) {
+Match * newMatch(int b, int c, int l, bool type) {
 
 	/* allocate space for match boye */
 	Match * m;
@@ -14,6 +14,7 @@ Match * newMatch(int b, int c, int l) {
 		m->cindex = c;
 		m->start_next = NULL;
 		m->end_next = NULL;
+		m->type = type;
 
 		if (l < 2) {
 			printf("\nWarning: length of match "); printMatch(m); printf(" is %i\n", l);
@@ -214,7 +215,7 @@ void set_bits_used(Matches * matches, Match * match) {
 }
 
 void printMatch(Match * m) {
-	printf("(%i-%i,%i-%i [%i] - %p)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, m->end - m->start + 1, m);
+	printf("(%i-%i,%i-%i [%i,%s] - %p)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, m->end - m->start + 1, m->type==1?"+":"-", m);
 }
 
 void printMatches(Matches * m) {
@@ -253,11 +254,11 @@ void printMatches(Matches * m) {
 Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 	Match * max;
 	Match * curr;
-	max = arr[m->start] == NULL || !cryptCompatable(m, arr[m->start]) ? NULL : arr[m->start];	//we are trying to find the max compatable pair to merge (must test to make sure it's not NULL first
+	max = arr[m->start] == NULL || arr[m->start] != m->type || !cryptCompatable(m, arr[m->start]) ? NULL : arr[m->start];	//we are trying to find the max compatable pair to merge (must test to make sure it's not NULL first and that its the same type
 	printf("\n");
 	for (int i = start; i <= end; i++) {		//must retest for some reason i dunno why lol
 		curr = arr[i];	//current max match
-		if (curr != NULL && cryptCompatable(m, curr)) {	//have to test to make sure it's not null otherwise cryptComp will throw an error
+		if (curr != NULL && m->type == curr->type && cryptCompatable(m, curr)) {	//have to test to make sure it's not null otherwise cryptComp will throw an error (also make sure it's crypt comp and same type)
 			if (curr != NULL) {
 				// printf("Comparing current: "); printMatch(curr); printf(" against max: "); if (max == NULL)printf("NULL"); else printMatch(max); printf("\n");
 				if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
@@ -274,7 +275,7 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 				// printf("Didn't execute because curr is %s and max_start is %s\n", curr == NULL ? "NULL" : "NOT NULL", max == NULL ? "NULL" : "NOT NULL");
 			}
 		}
-		// else printf("The two matches weren't compatable or one was NULL.\n");
+		else printf("The two matches weren't compatable or one was NULL.\n");
 	}
 	return max;
 }
@@ -325,6 +326,7 @@ int * testMerge(Match * a, Match * b) {
 Match * merge(Match * matches[], int size) {	//will return NULL if merge made unequal body/crypt match.
 												// IF THEY AREN'T COMPATABLE U MESSED UP
 	Match * match;
+	
 	int min_b_start = matches[0]->start;
 	int max_b_end = matches[0]->end;
 	int min_c_start = matches[0]->cindex;
@@ -332,6 +334,8 @@ Match * merge(Match * matches[], int size) {	//will return NULL if merge made un
 
 	for (int i = 1; i < size; i++) {	//take the least start and the greatest end
 		if (matches[i] != NULL) {
+			//type check
+			if (matches[i]->type != matches[0]->type)printf("WARNING: MERGING MATCHES OF DIFFERENT TYPES!!\n\n");
 			// min/max for body
 			if (matches[i]->start < min_b_start) min_b_start = matches[i]->start;
 			if (matches[i]->end > max_b_end) max_b_end = matches[i]->end;
@@ -347,7 +351,7 @@ Match * merge(Match * matches[], int size) {	//will return NULL if merge made un
 	// printf("\nmin_b_start: %i\nmax_b_end: %i\nmin_c_start: %i\nmax_c_end:%i",  min_b_start, max_b_end, min_c_start, max_c_end);
 	if (max_b_end - min_b_start != max_c_end - min_c_start) return NULL;	//when all merged together, the length of the body match must be equal to the length of the crypt match
 
-	match = newMatch(min_b_start, min_c_start, max_b_end - min_b_start + 1);
+	match = newMatch(min_b_start, min_c_start, max_b_end - min_b_start + 1, matches[0]->type);
 	return match;
 }
 

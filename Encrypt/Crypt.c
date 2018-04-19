@@ -8,7 +8,7 @@
 int main()
 {
 	 /* create file pointers for body and crypt */
-	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/body";
+	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longtest";
 	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/crypt";
 	FILE * body = fopen(body_loc, "rb");
 	FILE * crypt = fopen(crypt_loc, "rb");
@@ -35,7 +35,7 @@ int main()
 
 	 /* print binary */
 	binary->crypt->arr[6] = 0;
-	printBinaryHandle(binary);
+	//printBinaryHandle(binary);
 
 	
 	 /* find matchings */
@@ -44,10 +44,9 @@ int main()
 	Matches * matches = newMatches(matches_size);
 	
 	//testing compareRange
-	compareRange(binary, matches, 0, 0, 8);//    <-- seems to work but there's no distinction between pos and neg matches yet (maybe test more ranges)?
+	compareRange(binary, matches, 0, 0, 8);
 
 	printMatches(matches);
-
 	 /* close files and free memory */
 	//deleteBinaryHandle(binary);
 	//deleteMatches(matches)

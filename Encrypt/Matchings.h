@@ -11,6 +11,7 @@ typedef struct Match {
 	int cindex;
 	struct Match * start_next;	//next match in the start array
 	struct Match * end_next;	//next match in the end array
+	bool type;					//true for a positive match, false for a negative match
 } Match;
 
 
@@ -46,8 +47,8 @@ void printMatch(Match * m);
 /* prints matches */
 void printMatches(Matches * m);
 
-/* returns index of max matching within a range for either of the matches array */
-Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
+/* returns index of max matching within a range (for a specified pos/neg type) for either of the matches array */
+Match * maxMatchInRange(Match ** arr, Match * m, int start, int end, bool type);
 
 /* tests to see whether or not two matches are compatible: that is to say that the crypt parts of the matching can be merged */
 bool cryptCompatable(Match * m1, Match * m2);
