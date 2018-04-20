@@ -70,14 +70,13 @@ void compareRange(Binary * binary, Matches * matches, int b_start, int c_start, 
 
 void bodyCryptAnalysis(Binary * binary, Matches * matches) {
 	//treat the smaller one as the body
+	int a = binary->body->size;
+	int b = binary->crypt->size;
 	/*int bodySize = binary->body->size < binary->crypt->size ? binary->body->size : binary->crypt->size;
 	int cryptSize = binary->body->size < binary->crypt->size ? binary->crypt->size : binary->body->size;*/
-	int a = 5;
-	int b = 4;
-
+	
 	int bodySize = a <= b ? a : b;
 	int cryptSize = a <= b ? b : a;
-
 
 	int b_start = bodySize - 2;
 	int b_end = bodySize - 1;
@@ -88,7 +87,7 @@ void bodyCryptAnalysis(Binary * binary, Matches * matches) {
 	while (b_start > 0) {
 		printf("Body:  %i->%i\n", b_start, b_end);
 		printf("Crypt: %i->%i\n\n", c_start, c_end);
-
+		compareRange(binary, matches, b_start, c_start, b_end - b_start + 1);
 		b_start--;
 		c_end++;
 	}
@@ -96,7 +95,7 @@ void bodyCryptAnalysis(Binary * binary, Matches * matches) {
 	while (c_end < cryptSize - 1) {
 		printf("Body:  %i->%i\n", b_start, b_end);
 		printf("Crypt: %i->%i\n\n", c_start, c_end);
-
+		compareRange(binary, matches, b_start, c_start, b_end - b_start + 1);
 		c_start++;
 		c_end++;
 	}
@@ -106,7 +105,7 @@ void bodyCryptAnalysis(Binary * binary, Matches * matches) {
 	while (c_start < cryptSize - 1) {
 		printf("Body:  %i->%i\n", b_start, b_end);
 		printf("Crypt: %i->%i\n\n", c_start, c_end);
-
+		compareRange(binary, matches, b_start, c_start, b_end - b_start + 1);
 		b_end--;
 		c_start++;
 	}

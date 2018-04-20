@@ -8,8 +8,8 @@
 int main()
 {
 	 /* create file pointers for body and crypt */
-	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/body";
-	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/crypt";
+	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/a";
+	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/b";
 	FILE * body = fopen(body_loc, "rb");
 	FILE * crypt = fopen(crypt_loc, "rb");
 	if (body == NULL || crypt == NULL) return 1;
@@ -45,18 +45,14 @@ int main()
 	
 
 	//first for loop
-	printf("Comparing ranges: \n");
-
-	int bodySize = 2;//binary->body->size;
-	int cryptSize = 4;// binary->crypt->size;
-	
+	printf("Performing Range Analysis: \n");
 	bodyCryptAnalysis(binary, matches);
 
 
 
 
 	
-	//printMatches(matches);
+	printMatches(matches);
 
 	 /* close files and free memory */
 	//deleteBinaryHandle(binary);
