@@ -42,30 +42,69 @@ int main()
 	int matches_size = 30;
 	Matches * matches = newMatches(matches_size);
 	
-	int bodySize = 3;//binary->body->size;
-	int cryptSize = 3;// binary->crypt->size;
-
-	//works but only if bodySize is smaller than or equal to cryptsize
+	int bodySize = 4;//binary->body->size;
+	int cryptSize = 2;// binary->crypt->size;
 
 	//first for loop
 	printf("Comparing ranges: \n");
-	for (int b = 0; b < bodySize - 2; b++) {
-		printf("%i->%i\n", bodySize - 2 - b, bodySize - 1);
-		printf("%i->%i\n\n", 0, 1 + b);
-	}
-	
-	//second for loop
-	for (int b = 0; b <= cryptSize - bodySize; b++) {
-		printf("%i->%i\n", 0, bodySize - 1);
-		printf("%i->%i\n\n", 0 + b, bodySize - 1 + b);
-	}
+	int b_start;
+	int b_end;
+	int c_start;
+	int c_end;
+	//for (int b = 0; b < bodySize - 2; b++) {
+	//	b_start = bodySize - 2 - b;
+	//	b_end = bodySize - 1;
+	//	c_start = 0;
+	//	c_end = 1 + b;
 
-	//third for loop
-	for (int b = 0; b < bodySize - 2; b++) {
-		printf("%i->%i\n", 0, bodySize - 2 - b);
-		printf("%i->%i\n\n", bodySize - 3 + b, cryptSize - 1);
-	}
-	printMatches(matches);
+	//	if (bodySize <= cryptSize) {
+	//		printf("Body:  %i->%i\n", b_start, b_end);
+	//		printf("Crypt: %i->%i\n\n", c_start, c_end);
+	//	}
+	//	else {
+	//		printf("Body:  %i->%i\n", c_start, c_end);
+	//		printf("Crypt: %i->%i\n\n", b_start, b_end);
+	//	}
+	//}
+	//
+	////second for loop
+	//for (int b = 0; b <= cryptSize - bodySize; b++) {
+	//	b_start = 0;
+	//	b_end = bodySize - 1;
+	//	c_start = b;
+	//	c_end = bodySize - 1 + b;
+
+	//	if (bodySize <= cryptSize) {
+	//		printf("Body:  %i->%i\n", b_start, b_end);
+	//		printf("Crypt: %i->%i\n\n", c_start, c_end);
+	//	}
+	//	else {
+	//		printf("Body:  %i->%i\n", c_start, c_end);
+	//		printf("Crypt: %i->%i\n\n", b_start, b_end);
+	//	}
+	//}
+
+	////third for loop
+	//for (int b = 0; b < bodySize - 2; b++) {
+	//	b_start = 0;
+	//	b_end = bodySize - 2 - b;
+	//	c_start = cryptSize - bodySize + 1 + b;
+	//	c_end = cryptSize - 1;
+
+	//	if (bodySize <= cryptSize) {
+	//		printf("Body:  %i->%i\n", b_start, b_end);
+	//		printf("Crypt: %i->%i\n\n", c_start, c_end);
+	//	}
+	//	else {
+	//		printf("Body:  %i->%i\n", c_start, c_end);
+	//		printf("Crypt: %i->%i\n\n", b_start, b_end);
+	//	}
+	//}
+
+	//would probably work if I made it remove negative values, but trying different approach
+	
+	
+	//printMatches(matches);
 
 	 /* close files and free memory */
 	//deleteBinaryHandle(binary);
