@@ -46,45 +46,11 @@ int main()
 
 	//first for loop
 	printf("Comparing ranges: \n");
-	int b_start;
-	int b_end;
-	int c_start;
-	int c_end;
 
-	int bodySize = 4;//binary->body->size;
-	int cryptSize = 7;// binary->crypt->size;
-
-	b_start = bodySize - 2;
-	b_end = bodySize - 1;
-	c_start = 0;
-	c_end = 1;
-
-	//first while loop
-	while (b_start > 0) {
-		printf("Body:  %i->%i\n", b_start, b_end);
-		printf("Crypt: %i->%i\n\n", c_start, c_end);
-
-		b_start--;
-		c_end++;
-	}
-	//second while loop
-	while (c_end < cryptSize - 1) {
-		printf("Body:  %i->%i\n", b_start, b_end);
-		printf("Crypt: %i->%i\n\n", c_start, c_end);
-
-		c_start++;
-		c_end++;
-	}
-	//third while loop
-	printf("After: b_start: %i, b_end: %i, c_start: %i, c_end: %i\n", b_start, b_end, c_start, c_end);
-
-	while (c_start < cryptSize - 1) {
-		printf("Body:  %i->%i\n", b_start, b_end);
-		printf("Crypt: %i->%i\n\n", c_start, c_end);
-
-		b_end--;
-		c_start++;
-	}
+	int bodySize = 2;//binary->body->size;
+	int cryptSize = 4;// binary->crypt->size;
+	
+	bodyCryptAnalysis(binary, matches);
 
 
 

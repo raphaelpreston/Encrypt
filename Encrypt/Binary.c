@@ -68,6 +68,51 @@ void compareRange(Binary * binary, Matches * matches, int b_start, int c_start, 
 	else printf(" Match not sufficient length (%i).\n", l - m_start);
 }
 
+void bodyCryptAnalysis(Binary * binary, Matches * matches) {
+	//treat the smaller one as the body
+	/*int bodySize = binary->body->size < binary->crypt->size ? binary->body->size : binary->crypt->size;
+	int cryptSize = binary->body->size < binary->crypt->size ? binary->crypt->size : binary->body->size;*/
+	int a = 5;
+	int b = 4;
+
+	int bodySize = a <= b ? a : b;
+	int cryptSize = a <= b ? b : a;
+
+
+	int b_start = bodySize - 2;
+	int b_end = bodySize - 1;
+	int c_start = 0;
+	int c_end = 1;
+
+	//first while loop
+	while (b_start > 0) {
+		printf("Body:  %i->%i\n", b_start, b_end);
+		printf("Crypt: %i->%i\n\n", c_start, c_end);
+
+		b_start--;
+		c_end++;
+	}
+	//second while loop
+	while (c_end < cryptSize - 1) {
+		printf("Body:  %i->%i\n", b_start, b_end);
+		printf("Crypt: %i->%i\n\n", c_start, c_end);
+
+		c_start++;
+		c_end++;
+	}
+	//third while loop
+	//printf("After: b_start: %i, b_end: %i, c_start: %i, c_end: %i\n", b_start, b_end, c_start, c_end);
+
+	while (c_start < cryptSize - 1) {
+		printf("Body:  %i->%i\n", b_start, b_end);
+		printf("Crypt: %i->%i\n\n", c_start, c_end);
+
+		b_end--;
+		c_start++;
+	}
+
+}
+
 //void deleteBinaryHandle(Binary * b) {
 //	free(b_binary);
 //	free(c_binary);
