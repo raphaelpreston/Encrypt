@@ -87,66 +87,66 @@ void addMatch(Matches * matches, Match * m) {
 		/* get the max compatable match from all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end (that match in both crypt and body)*/
 
 		if (!matches->num_matches == 0) {	//only look for max matches if the arrays are not empty
-			printf("\nStart_arr: ");
+			//printf("\nStart_arr: ");
 			Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1 >= matches->size ? m->end : m->end + 1);	//make sure the upper limit is in bounds
-			printf("\nEnd arr:");
+			//printf("\nEnd arr:");
 			Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1 < 0 ? m->start : m->start - 1, m->end);		//make sure the lower limit is in bounds
 
 			if (max_start != NULL) {
-				printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printMatch(max_start); printf("\n");
+				//printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printMatch(max_start); printf("\n");
 			}
-			else printf("No max start match found in range [%i,%i]", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printf("\n");
+			//else printf("No max start match found in range [%i,%i]", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printf("\n");
 
 			if (max_end != NULL) {
-				printf("The max end matching found in range [%i,%i] was ", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printMatch(max_end); printf("\n");
+				//printf("The max end matching found in range [%i,%i] was ", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printMatch(max_end); printf("\n");
 			}
-			else printf("No max end match found in range [%i,%i]", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printf("\n");
+			//else printf("No max end match found in range [%i,%i]", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printf("\n");
 
 			// merge the 0/2/3 to get a supermatch
 			if (max_start || max_end) {	//merge() can handle if one is NULL but no reason to call if they both are
 				Match * max_matches[] = { m, max_start, max_end };
 				Match * merged = merge(max_matches, 3);
 				if (merged != NULL) {
-					printf("New merged baby match: "); printMatch(merged); printf(" \n");
+					//printf("New merged baby match: "); printMatch(merged); printf(" \n");
 
 					// delete the 1/2 out of both arrays
 					if (max_start == max_end) {	//protect against double delete
 						if (max_start) {
-							printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
+							//printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
 							deleteMatch(matches, max_start);
 						}
 					}
 					else {
 						if (max_start) {
-							printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
+							//printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
 							deleteMatch(matches, max_start);
 						}
 						if (max_end) {
-							printf("Attempting to delete the max_end: "); printMatch(max_end); printf("\n");
+							//printf("Attempting to delete the max_end: "); printMatch(max_end); printf("\n");
 							deleteMatch(matches, max_end);
 						}
 					}
 
 					// now we are adding the supermatch, so m = supermatch
 					m = merged;
-					printf("Now adding merged match: "); printMatch(m); printf("\n");
+					//printf("Now adding merged match: "); printMatch(m); printf("\n");
 				}
 				else {
-					printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
+					//printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
 				}
 
 			}
-			else printf("No attempt to merge because max start and max end were both NULL.\n");
+			//else printf("No attempt to merge because max start and max end were both NULL.\n");
 
 
 			//printf("Attempting to merge:\n");
 		}
 		else {
-			printf("Matches were empty so no merging was attempted.\n");
+			//printf("Matches were empty so no merging was attempted.\n");
 		}
 
-
-
+		printf("Adding match: "); printMatch(m); printf("\n");
+		length = matchLength(m); //update length
 		/* add to start_arr */
 		int start = m->start;
 		if (matches->start_arr[start] == NULL) {	//first match * in this linked list
