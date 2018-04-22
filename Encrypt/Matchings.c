@@ -199,12 +199,13 @@ void addMatch(Matches * matches, Match * m) {
 	}
 }
 
-bool enveloped(Matches * matches, Match * match) {
-	int l = match->start + matchLength(match);	//don't subtract 1 here and use < instead
-	for (int i = match->start; i < l; i++) {
-		if (!matches->used[i]) return false;
-	}
-	return true;
+bool enveloped(Matches * matches, Match * match) {	//TESTING HERE TO SEE IF IT WORKS BETTER WITH NO ENVELOPED TESTING
+	//int l = match->start + matchLength(match);	//don't subtract 1 here and use < instead
+	//for (int i = match->start; i < l; i++) {
+	//	if (!matches->used[i]) return false;
+	//}
+	return false;
+	//return true
 }
 
 void set_bits_used(Matches * matches, Match * match) {
