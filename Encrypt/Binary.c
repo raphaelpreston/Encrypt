@@ -85,16 +85,16 @@ void bodyCryptAnalysis(Binary * binary, Matches * matches) {
 
 	//first while loop
 	while (b_start > 0) {
-		printf("Body:  %i->%i\n", b_start, b_end);
-		printf("Crypt: %i->%i\n\n", c_start, c_end);
+		// printf("Body:  %i->%i\n", b_start, b_end);
+	//	printf("Crypt: %i->%i\n\n", c_start, c_end);
 		compareRange(binary, matches, b_start, c_start, b_end - b_start + 1);
 		b_start--;
 		c_end++;
 	}
 	//second while loop
 	while (c_end < cryptSize - 1) {
-		printf("Body:  %i->%i\n", b_start, b_end);
-		printf("Crypt: %i->%i\n\n", c_start, c_end);
+		// printf("Body:  %i->%i\n", b_start, b_end);
+		//printf("Crypt: %i->%i\n\n", c_start, c_end);
 		compareRange(binary, matches, b_start, c_start, b_end - b_start + 1);
 		c_start++;
 		c_end++;
@@ -103,8 +103,8 @@ void bodyCryptAnalysis(Binary * binary, Matches * matches) {
 	//printf("After: b_start: %i, b_end: %i, c_start: %i, c_end: %i\n", b_start, b_end, c_start, c_end);
 
 	while (c_start < cryptSize - 1) {
-		printf("Body:  %i->%i\n", b_start, b_end);
-		printf("Crypt: %i->%i\n\n", c_start, c_end);
+		// printf("Body:  %i->%i\n", b_start, b_end);
+		// printf("Crypt: %i->%i\n\n", c_start, c_end);
 		compareRange(binary, matches, b_start, c_start, b_end - b_start + 1);
 		b_end--;
 		c_start++;
