@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Matchings.h"
 
-// this is all kinds of messed up, revert to when it was working.  Now the matches aren't even real matches.
 Match * newMatch(int b, int c, int l, bool type) {
 
 	/* allocate space for match boye */
@@ -41,7 +40,7 @@ Matches * newMatches(int num_bits) {
 		start = (Match **)calloc(num_bits, sizeof(Match *));	//technically we can remove 1 because there are no endings at 0 
 		end = (Match **)calloc(num_bits, sizeof(Match *));	// use calloc to initialize each match * to 0
 
-		/* make the array to keep track of matched bits */
+															/* make the array to keep track of matched bits */
 		bool * used = (bool *)calloc(num_bits, sizeof(bool));
 
 		if (start && end) {
@@ -88,9 +87,9 @@ void addMatch(Matches * matches, Match * m) {
 		/* get the max compatable match from all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end (that match in both crypt and body)*/
 
 		if (!matches->num_matches == 0) {	//only look for max matches if the arrays are not empty
-			//printf("\nStart_arr: ");
+											//printf("\nStart_arr: ");
 			Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1 >= matches->size ? m->end : m->end + 1);	//make sure the upper limit is in bounds
-			//printf("\nEnd arr:");
+																																		//printf("\nEnd arr:");
 			Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1 < 0 ? m->start : m->start - 1, m->end);		//make sure the lower limit is in bounds
 
 			if (max_start != NULL) {
@@ -148,7 +147,7 @@ void addMatch(Matches * matches, Match * m) {
 
 		printf("Adding match: "); printMatch(m); printf("\n");
 		length = matchLength(m); //update length
-		/* add to start_arr */
+								 /* add to start_arr */
 		int start = m->start;
 		if (matches->start_arr[start] == NULL) {	//first match * in this linked list
 			matches->start_arr[start] = m;
@@ -201,10 +200,10 @@ void addMatch(Matches * matches, Match * m) {
 }
 
 bool enveloped(Matches * matches, Match * match) {	//TESTING HERE TO SEE IF IT WORKS BETTER WITH NO ENVELOPED TESTING
-	//int l = match->start + matchLength(match);	//don't subtract 1 here and use < instead
-	//for (int i = match->start; i < l; i++) {
-	//	if (!matches->used[i]) return false;
-	//}
+													//int l = match->start + matchLength(match);	//don't subtract 1 here and use < instead
+													//for (int i = match->start; i < l; i++) {
+													//	if (!matches->used[i]) return false;
+													//}
 	return false;
 	//return true
 }
@@ -217,7 +216,7 @@ void set_bits_used(Matches * matches, Match * match) {
 }
 
 void printMatch(Match * m) {
-	printf("(%i-%i,%i-%i [%i,%s] - %p)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, m->end - m->start + 1, m->type==1?"+":"-", m);
+	printf("(%i-%i,%i-%i [%i,%s] - %p)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, m->end - m->start + 1, m->type == 1 ? "+" : "-", m);
 }
 
 void printMatches(Matches * m) {
@@ -328,7 +327,7 @@ int * testMerge(Match * a, Match * b) {
 Match * merge(Match * matches[], int size) {	//will return NULL if merge made unequal body/crypt match.
 												// IF THEY AREN'T COMPATABLE U MESSED UP
 	Match * match;
-	
+
 	int min_b_start = matches[0]->start;
 	int max_b_end = matches[0]->end;
 	int min_c_start = matches[0]->cindex;
