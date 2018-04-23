@@ -1,7 +1,4 @@
 #include "stdafx.h"
-#include "Matchings.h"
-#include "Binary.h"
-#include "IntArray.h"
 
 #define BUFFER_SIZE 1
 #define MAX_BINARY_SIZE 2

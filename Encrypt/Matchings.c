@@ -1,8 +1,6 @@
 #include "stdafx.h"
-#include "Matchings.h"
 
 Match * newMatch(int b, int c, int l, bool type) {
-
 	/* allocate space for match boye */
 	Match * m;
 	m = (Match *)malloc(sizeof(Match));
