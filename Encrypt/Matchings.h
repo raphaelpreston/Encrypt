@@ -26,7 +26,7 @@ typedef struct Matches {
 } Matches;
 
 /* returns a new match object */
-Match * newMatch(int body_begin, int crypt_begin, int length);	//if I add bool to this it breaks
+Match * newMatch(int body_begin, int crypt_begin, int length, int type);
 
 /* returns a new matches object */
 Matches * newMatches(int num_bits);
