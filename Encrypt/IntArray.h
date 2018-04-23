@@ -1,4 +1,6 @@
-#pragma once
+#ifndef INTARRAY_H
+#define INTARRAY_H
+
 #include "stdafx.h"
 
 /* structs */
@@ -17,3 +19,5 @@ void IntArr_readInBuffer(IntArr * intArr, unsigned char buffer[], int bytes_read
 
 /* print the array */
 void printIntArr(IntArr * intArr);
+
+#endif

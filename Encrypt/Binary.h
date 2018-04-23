@@ -1,7 +1,9 @@
-#pragma once
+#ifndef BINARY_H
+#define BINARY_H
+
 #include "stdafx.h"
-#include "IntArray.h"
 #include "Matchings.h"
+#include "IntArray.h"
 
 typedef struct Binary_Handler{
 	IntArr * body;
@@ -21,3 +23,5 @@ void compareRange(Binary * b, Matches * matches, int b_start, int c_start, int l
 
 /* prints an entire Binary Handle object */
 void printBinaryHandle(Binary * b);
+
+#endif

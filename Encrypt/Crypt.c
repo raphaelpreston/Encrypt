@@ -1,12 +1,14 @@
 #include "stdafx.h"
+#include "Binary.h"
+#include "Matchings.h"
 
 #define BUFFER_SIZE 1
 #define MAX_BINARY_SIZE 2
 int main()
 {
 	 /* create file pointers for body and crypt */
-	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/a";
-	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/b";
+	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/body";
+	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/crypt";
 	FILE * body = fopen(body_loc, "rb");
 	FILE * crypt = fopen(crypt_loc, "rb");
 	if (body == NULL || crypt == NULL) return 1;
@@ -48,8 +50,8 @@ int main()
 
 
 
-	
-	printMatches(matches);
+	printMatchesValidity(matches, binary);
+	// printMatches(matches);
 
 	 /* close files and free memory */
 	//deleteBinaryHandle(binary);

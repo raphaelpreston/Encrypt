@@ -1,5 +1,7 @@
-#pragma once
+#ifndef MATCHINGS_H
+#define MATCHINGS_H
 #include "stdafx.h"
+#include "Binary.h"
 
 //a lot of lag is going to come from deleting not being optimized
 
@@ -11,7 +13,7 @@ typedef struct Match {
 	int cindex;
 	struct Match * start_next;	//next match in the start array
 	struct Match * end_next;	//next match in the end array
-	bool type;					//true for a positive match, false for a negative match
+	int type;					//1 for a positive match, 2 for a negative match
 } Match;
 
 
@@ -44,7 +46,13 @@ void set_bits_used(Matches * matches, Match * match);
 /* prints a specific match */
 void printMatch(Match * m);
 
-/* prints matches */
+/* prints a match and tests validity */
+// void printValidity(Match * m, Binary * binary);
+
+/* test whether a set of matches is valid */
+// void printMatchesValidity(Matches * m, Binary * b);
+
+/* prints matches*/
 void printMatches(Matches * m);
 
 /* returns index of max matching within a range (for a specified pos/neg type) for either of the matches array */
@@ -61,3 +69,6 @@ Match * merge(Match * matches[], int size);
 
 /* deletes the exact match object given from the matches (both arrays).  Returns 1 on success 0 on failure. */
 bool deleteMatch(Matches * matches, Match * m);		//doesn't actually free cus it doesn't work but it frees some stuff :DD
+
+
+#endif
