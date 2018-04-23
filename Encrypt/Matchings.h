@@ -50,7 +50,7 @@ void printMatches(Matches * m);
 /* returns index of max matching within a range (for a specified pos/neg type) for either of the matches array */
 Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
 
-/* tests to see whether or not two matches are compatible: that is to say that the crypt parts of the matching can be merged */
+/* tests to see whether or not two matches are compatible: that is to say that the crypt parts of the matching can be merged (correct number and correct side)*/
 bool cryptCompatable(Match * m1, Match * m2);
 
 /* returns the length of what a merged matching between m1 and m2 would look like */

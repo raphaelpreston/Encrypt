@@ -306,6 +306,10 @@ bool cryptCompatable(Match * a, Match * b) {
 
 	/* the crypt portions can be merged if there is no more than 1 difference between them */
 	if (m2->cindex - m1_end > 1) return false;
+	
+	/* also return false if the sides aren't aligned */
+	if (!(m2->start >= m1->start && m2->cindex >= m1->cindex) || !(m2->start <= m1->start && m2->cindex <= m1->cindex)) return false;
+
 	return true;
 }
 
