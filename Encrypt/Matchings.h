@@ -53,7 +53,7 @@ void printMatch(Match * m);
 // void printMatchesValidity(Matches * m, Binary * b);
 
 /* prints matches*/
-void printMatches(Matches * m);
+ void printMatches(Matches * m);
 
 /* returns index of max matching within a range (for a specified pos/neg type) for either of the matches array */
 Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
