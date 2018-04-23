@@ -36,13 +36,13 @@ int main()
 	
 	 /* find matchings */
 	printf("Finding matches...\n");
-	int matches_size = 30;
+	int matches_size = 21;
 	Matches * matches = newMatches(matches_size);
 	
 	
 
 	//first for loop
-	printf("Performing Range Analysis: \n");
+	printf("Performing Range Analysis... \n");
 	bodyCryptAnalysis(binary, matches);
 
 

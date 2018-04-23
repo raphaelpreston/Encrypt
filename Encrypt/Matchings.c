@@ -67,7 +67,7 @@ int matchLength(Match * m) {
 }
 
 void addMatch(Matches * matches, Match * m) {
-	printf("Attempting to add match: "); printMatch(m); printf("\n");
+	// printf("Attempting to add match: "); printMatch(m); printf("\n");
 	int length = matchLength(m);
 	Match * temp;
 	Match * curr;
@@ -143,7 +143,7 @@ void addMatch(Matches * matches, Match * m) {
 			//printf("Matches were empty so no merging was attempted.\n");
 		}
 
-		printf("Adding match: "); printMatch(m); printf("\n");
+		// printf("Adding match: "); printMatch(m); printf("\n");
 		length = matchLength(m); //update length
 								 /* add to start_arr */
 		int start = m->start;
@@ -254,13 +254,13 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 	Match * max;
 	Match * curr;
 	max = arr[m->start] == NULL || arr[m->start] != m->type || !cryptCompatable(m, arr[m->start]) ? NULL : arr[m->start];	//we are trying to find the max compatable pair to merge (must test to make sure it's not NULL first and that its the same type
-	printf("\n");
+	// printf("\n");
 	for (int i = start; i <= end; i++) {		//must retest for some reason i dunno why lol
 		curr = arr[i];	//current max match
 		if (curr != NULL && m->type == curr->type && cryptCompatable(m, curr)) {	//have to test to make sure it's not null otherwise cryptComp will throw an error (also make sure it's crypt comp and same type)
 			if (curr != NULL) {
 				// printf("Comparing current: "); printMatch(curr); printf(" against max: "); if (max == NULL)printf("NULL"); else printMatch(max); printf("\n");
-				if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
+				//if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
 				if (max == NULL) {
 
 					if (max == NULL || testMerge(curr, m) > testMerge(max, m)) {
@@ -274,7 +274,7 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 				// printf("Didn't execute because curr is %s and max_start is %s\n", curr == NULL ? "NULL" : "NOT NULL", max == NULL ? "NULL" : "NOT NULL");
 			}
 		}
-		else printf("The two matches weren't compatable or one was NULL.\n");
+		// else printf("The two matches weren't compatable or one was NULL.\n");
 	}
 	return max;
 }
