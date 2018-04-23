@@ -359,7 +359,7 @@ bool cryptCompatable(Match * a, Match * b) {
 
 	int m1_end = m1->cindex + matchLength(m1) - 1;
 	int m2_end = m2->cindex + matchLength(m2) - 1;
-
+	
 	/* the crypt portions can be merged if there is no more than 1 difference between them */
 	if (m2->cindex - m1_end > 1) return false;
 	
