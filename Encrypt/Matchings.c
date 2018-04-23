@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#define PRINT 1
 Match * newMatch(int b, int c, int l, bool type) {
 	/* allocate space for match boye */
 	Match * m;
@@ -67,7 +67,7 @@ int matchLength(Match * m) {
 }
 
 void addMatch(Matches * matches, Match * m) {
-	// printf("Attempting to add match: "); printMatch(m); printf("\n");
+	if(PRINT == 1) printf("Attempting to add match: "); printMatch(m); printf("\n");
 	int length = matchLength(m);
 	Match * temp;
 	Match * curr;
@@ -91,59 +91,65 @@ void addMatch(Matches * matches, Match * m) {
 			Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1 < 0 ? m->start : m->start - 1, m->end);		//make sure the lower limit is in bounds
 
 			if (max_start != NULL) {
-				//printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printMatch(max_start); printf("\n");
+				if (PRINT == 1) printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printMatch(max_start); printf("\n");
 			}
-			//else printf("No max start match found in range [%i,%i]", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printf("\n");
+			else {
+				if (PRINT == 1) printf("No max start match found in range [%i,%i]", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printf("\n");
+			}
 
 			if (max_end != NULL) {
-				//printf("The max end matching found in range [%i,%i] was ", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printMatch(max_end); printf("\n");
+				if (PRINT == 1) printf("The max end matching found in range [%i,%i] was ", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printMatch(max_end); printf("\n");
 			}
-			//else printf("No max end match found in range [%i,%i]", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printf("\n");
+			else {
+				if (PRINT == 1) printf("No max end match found in range [%i,%i]", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printf("\n");
+			}
 
 			// merge the 0/2/3 to get a supermatch
 			if (max_start || max_end) {	//merge() can handle if one is NULL but no reason to call if they both are
 				Match * max_matches[] = { m, max_start, max_end };
 				Match * merged = merge(max_matches, 3);
 				if (merged != NULL) {
-					//printf("New merged baby match: "); printMatch(merged); printf(" \n");
+					if (PRINT == 1) printf("New merged baby match: "); printMatch(merged); printf(" \n");
 
 					// delete the 1/2 out of both arrays
 					if (max_start == max_end) {	//protect against double delete
 						if (max_start) {
-							//printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
+							if (PRINT == 1) printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
 							deleteMatch(matches, max_start);
 						}
 					}
 					else {
 						if (max_start) {
-							//printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
+							if (PRINT == 1) printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");
 							deleteMatch(matches, max_start);
 						}
 						if (max_end) {
-							//printf("Attempting to delete the max_end: "); printMatch(max_end); printf("\n");
+							if (PRINT == 1) printf("Attempting to delete the max_end: "); printMatch(max_end); printf("\n");
 							deleteMatch(matches, max_end);
 						}
 					}
 
 					// now we are adding the supermatch, so m = supermatch
 					m = merged;
-					//printf("Now adding merged match: "); printMatch(m); printf("\n");
+					if (PRINT == 1) printf("Now adding merged match: "); printMatch(m); printf("\n");
 				}
 				else {
-					//printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
+					if (PRINT == 1) printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
 				}
 
 			}
-			//else printf("No attempt to merge because max start and max end were both NULL.\n");
+			else {
+				if (PRINT == 1) printf("No attempt to merge because max start and max end were both NULL.\n");
+			}
 
 
-			//printf("Attempting to merge:\n");
+			if (PRINT == 1) printf("Attempting to merge:\n");
 		}
 		else {
-			//printf("Matches were empty so no merging was attempted.\n");
+			if (PRINT == 1) printf("Matches were empty so no merging was attempted.\n");
 		}
 
-		// printf("Adding match: "); printMatch(m); printf("\n");
+		if (PRINT == 1) printf("Adding match: "); printMatch(m); printf("\n");
 		length = matchLength(m); //update length
 								 /* add to start_arr */
 		int start = m->start;
@@ -195,6 +201,7 @@ void addMatch(Matches * matches, Match * m) {
 	else {	//is enveloped
 		printf("Match was enveloped, didn't do anything. \n");
 	}
+	if (PRINT == 1) printf("Match adding process was completed (attempted).\n");
 }
 
 bool enveloped(Matches * matches, Match * match) {	//TESTING HERE TO SEE IF IT WORKS BETTER WITH NO ENVELOPED TESTING
@@ -254,7 +261,7 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 	Match * max;
 	Match * curr;
 	max = arr[m->start] == NULL || arr[m->start] != m->type || !cryptCompatable(m, arr[m->start]) ? NULL : arr[m->start];	//we are trying to find the max compatable pair to merge (must test to make sure it's not NULL first and that its the same type
-	// printf("\n");
+	if (PRINT == 1)  printf("\n");
 	for (int i = start; i <= end; i++) {		//must retest for some reason i dunno why lol
 		curr = arr[i];	//current max match
 		if (curr != NULL && m->type == curr->type && cryptCompatable(m, curr)) {	//have to test to make sure it's not null otherwise cryptComp will throw an error (also make sure it's crypt comp and same type)
@@ -274,7 +281,9 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 				// printf("Didn't execute because curr is %s and max_start is %s\n", curr == NULL ? "NULL" : "NOT NULL", max == NULL ? "NULL" : "NOT NULL");
 			}
 		}
-		// else printf("The two matches weren't compatable or one was NULL.\n");
+		else {
+			if (PRINT == 1) printf("The two matches weren't compatable or one was NULL.\n");
+		}
 	}
 	return max;
 }
