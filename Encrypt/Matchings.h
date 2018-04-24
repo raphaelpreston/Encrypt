@@ -18,7 +18,7 @@ typedef struct Match {
 
 
 typedef struct Matches {
-	Match ** start_arr;	//array of match objects indexed by where the match starts
+	Match ** start_arr;	//array of match objects indexed by where the match starts 
 	Match ** end_arr;	//array of match objects indexed by where the match ends
 	int size;			//size of each array, (designates upper and lower limits of matches), set to the number of bits that are read
 	int num_matches;
