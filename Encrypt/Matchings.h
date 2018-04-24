@@ -1,8 +1,10 @@
+#include "Binary.h"
+#include <stdbool.h>
+
 #ifndef MATCHINGS_H
 #define MATCHINGS_H
 
-#include "Binary.h"
-#include <stdbool.h>
+
 
 //a lot of lag is going to come from deleting not being optimized
 
@@ -19,8 +21,8 @@ typedef struct Match {
 
 
 typedef struct Matches {
-	Match ** start_arr;	//array of match objects indexed by where the match starts
-	Match ** end_arr;	//array of match objects indexed by where the match ends
+	struct Match ** start_arr;	//array of match objects indexed by where the match starts
+	struct Match ** end_arr;	//array of match objects indexed by where the match ends
 	int size;			//size of each array, (designates upper and lower limits of matches), set to the number of bits that are read
 	int num_matches;
 	bool * used;		//1 if the bit is already matched, 0 if the bit is not
@@ -48,10 +50,12 @@ void set_bits_used(Matches * matches, Match * match);
 void printMatch(Match * m);
 
 /* prints a match and tests validity */
-// void printValidity(Match * m, Binary * binary);
+//void printValidity(Match * m, Binary * binary);
+//void printValidity();
 
 /* test whether a set of matches is valid */
-// void printMatchesValidity(Matches * m, Binary * b);
+//void printMatchesValidity(Matches * m, Binary * b);
+//void printMatchesValidity();
 
 /* prints matches*/
  void printMatches(Matches * m);

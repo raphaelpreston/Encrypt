@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "Binary.h"
 #include "Matchings.h"
 #include "IntArray.h"
@@ -24,17 +26,6 @@ void readInBody(Binary * b, unsigned char b_buffer[], int b_bytes_read) {
 void readInCrypt(Binary * b, unsigned char c_buffer[], int c_bytes_read) {
 	IntArr_readInBuffer(b->crypt, c_buffer, c_bytes_read);
 }
-
-void printBinaryHandle(Binary * b) {
-	printf("B: ");
-	printIntArr(b->body);
-	printf("\n");
-	printf("C: ");
-	printIntArr(b->crypt);
-	printf("\n\n");
-}
-
-// matching functions
 
 void compareRange(Binary * binary, Matches * matches, int b_start, int c_start, int l) {
 	int mode = 0;  //mode 0 for NULL, mode 1 for POS, mode 2 for NEG
@@ -66,6 +57,15 @@ void compareRange(Binary * binary, Matches * matches, int b_start, int c_start, 
 		addMatch(matches, match);
 	}
 	//else printf(" Match not sufficient length (%i).\n", l - m_start);
+}
+
+void printBinaryHandle(Binary * b) {
+	printf("B: ");
+	printIntArr(b->body);
+	printf("\n");
+	printf("C: ");
+	printIntArr(b->crypt);
+	printf("\n\n");
 }
 
 void bodyCryptAnalysis(Binary * binary, Matches * matches) {

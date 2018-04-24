@@ -3,13 +3,13 @@
 
 #include <stdlib.h>
 
-#include "Binary.h"
 #include "Matchings.h"
 #include "IntArray.h"
 
+
 typedef struct Binary_Handler{
-	IntArr * body;
-	IntArr * crypt;
+	struct IntArray * body;
+	struct IntArray * crypt;
 } Binary;
 
 /* returns a new binary object */
@@ -25,5 +25,8 @@ void compareRange(Binary * b, Matches * matches, int b_start, int c_start, int l
 
 /* prints an entire Binary Handle object */
 void printBinaryHandle(Binary * b);
+
+/* analyzes the entire body/crypt and adds all matches to the given Matches object */
+void bodyCryptAnalysis(Binary * binary, Matches * matches);
 
 #endif

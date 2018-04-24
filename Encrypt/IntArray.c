@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "stdafx.h"
 #include "IntArray.h"
 
 #define UPLE_CONSTANT 2	//how much to multiply the new memory by each time it runs out of space

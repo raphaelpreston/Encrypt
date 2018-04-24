@@ -1,6 +1,8 @@
 #include <stdio.h>
-#include "Binary.h"
+
 #include "Matchings.h"
+#include "Binary.h"
+
 
 #define PRINT 0
 Match * newMatch(int b, int c, int l, int type) {
@@ -227,57 +229,12 @@ void printMatch(Match * m){
 	printf("(%i-%i,%i-%i [%i,%s] - %p)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", m);
 }
 
-void printValidity(Match * m, Binary * b) {
-	bool valid = true;
-	int fail;
-
-	int bi;
-	int ci;
-
-	for (int i = 0; i + m->start <= m->end; i++) {	//test each reference point
-		bi = b->body->arr[m->start + i];
-		ci = b->crypt->arr[m->cindex + i];
-
-			if ((bi != ci && m->type == 1) || (bi == ci && m->type == 2)) {
-			if(valid) fail = m->start + i;	//assign it on first fail but not again
-			valid = false;
-		}
-	}
-
-	printf("(%i-%i,%i-%i [%i,%s] ... %s)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", valid?"VALID":"NOT VALID");
+void printValidity(Match * m, Binary * binary) {
+	printf("hello\n");
 }
 
 void printMatchesValidity(Matches * m, Binary * b) {
-	Match ** start = m->start_arr;
-	Match ** end = m->end_arr;
-	Match * curr;
-
-	printf("Start Array:\n");
-	for (int i = 0; i < m->size; i++) {
-		printf("%i\n", i);
-		if (start[i] != NULL) {
-			printf(" "); printValidity(start[i], b); printf("\n");
-			curr = start[i];
-			while (curr->start_next != NULL) {
-				printf(" "); printValidity(curr->start_next, b); printf("\n");
-				curr = curr->start_next;
-			}
-		}
-	}
-
-	printf("End Array:\n");
-	for (int i = 0; i < m->size; i++) {
-		printf("%i\n", i);
-		if (end[i] != NULL) {
-			printf(" "); printValidity(end[i], b); printf("\n");
-			curr = end[i];
-			while (curr->end_next != NULL) {
-				printf(" "); printValidity(curr->end_next, b); printf("\n");
-				curr = curr->end_next;
-			}
-		}
-	}
-	printf("Num matches: %i\n", m->num_matches);
+	printf("hello2\n");
 }
 
 void printMatches(Matches * m) {
