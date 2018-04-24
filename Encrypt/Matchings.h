@@ -48,10 +48,10 @@ void set_bits_used(Matches * matches, Match * match);
 void printMatch(Match * m);
 
 /* prints a match and tests validity */
-void printValidity(Match * m, struct Binary * binary);
+//void printValidity(Match * m, struct Binary * binary);
 
 /* test whether a set of matches is valid */
-void printMatchesValidity(Matches * m, struct Binary * b);
+//void printMatchesValidity(Matches * m, struct Binary * b);
 
 /* prints matches*/
  void printMatches(Matches * m);
