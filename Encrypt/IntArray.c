@@ -1,5 +1,9 @@
 //dynamic integer array to help with various aspects
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "stdafx.h"
 #include "IntArray.h"
 
