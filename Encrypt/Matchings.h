@@ -1,10 +1,8 @@
-#include "Binary.h"
-#include <stdbool.h>
-
 #ifndef MATCHINGS_H
 #define MATCHINGS_H
 
-
+#include "Binary.h"
+#include <stdbool.h>
 
 //a lot of lag is going to come from deleting not being optimized
 
@@ -50,12 +48,10 @@ void set_bits_used(Matches * matches, Match * match);
 void printMatch(Match * m);
 
 /* prints a match and tests validity */
-//void printValidity(Match * m, Binary * binary);
-//void printValidity();
+void printValidity(Match * m, struct Binary * binary);
 
 /* test whether a set of matches is valid */
-//void printMatchesValidity(Matches * m, Binary * b);
-//void printMatchesValidity();
+void printMatchesValidity(Matches * m, struct Binary * b);
 
 /* prints matches*/
  void printMatches(Matches * m);

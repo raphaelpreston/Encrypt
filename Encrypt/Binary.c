@@ -5,6 +5,7 @@
 #include "IntArray.h"
 
 
+
 Binary * newBinary(int max) {
 	/* allocate space */
 	Binary * b = (Binary *)malloc(sizeof(Binary));

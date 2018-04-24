@@ -4,6 +4,7 @@
 
 #define BUFFER_SIZE 1
 #define MAX_BINARY_SIZE 2
+
 int main()
 {
 	 /* create file pointers for body and crypt */

@@ -229,11 +229,11 @@ void printMatch(Match * m){
 	printf("(%i-%i,%i-%i [%i,%s] - %p)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", m);
 }
 
-void printValidity(Match * m, Binary * binary) {
+void printValidity(Match * m, struct Binary * binary) {
 	printf("hello\n");
 }
 
-void printMatchesValidity(Matches * m, Binary * b) {
+void printMatchesValidity(Matches * m, struct Binary * b) {
 	printf("hello2\n");
 }
 
