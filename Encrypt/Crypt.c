@@ -41,17 +41,15 @@ int main()
 	int matches_size = 21;
 	Matches * matches = newMatches(matches_size);
 	
-	
-
-	//first for loop
 	printf("Performing Range Analysis... \n");
 	bodyCryptAnalysis(binary, matches);
 
-
-
-
 	printMatchesValidity(matches, binary);
+
 	// printMatches(matches);
+
+
+
 
 	 /* close files and free memory */
 	//deleteBinaryHandle(binary);
