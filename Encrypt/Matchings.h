@@ -1,7 +1,8 @@
 #ifndef MATCHINGS_H
 #define MATCHINGS_H
-#include "stdafx.h"
+
 #include "Binary.h"
+#include <stdbool.h>
 
 //a lot of lag is going to come from deleting not being optimized
 
@@ -18,7 +19,7 @@ typedef struct Match {
 
 
 typedef struct Matches {
-	Match ** start_arr;	//array of match objects indexed by where the match starts 
+	Match ** start_arr;	//array of match objects indexed by where the match starts
 	Match ** end_arr;	//array of match objects indexed by where the match ends
 	int size;			//size of each array, (designates upper and lower limits of matches), set to the number of bits that are read
 	int num_matches;
@@ -62,7 +63,7 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end);
 bool cryptCompatable(Match * m1, Match * m2);
 
 /* returns the length of what a merged matching between m1 and m2 would look like */
-int * testMerge(Match * m1, Match * m2);
+int testMerge(Match * m1, Match * m2);
 
 /* returns a match that is the merged match of all match objects in matches[]. Size is how many objects there are. Set any to NULL */
 Match * merge(Match * matches[], int size);
@@ -70,5 +71,6 @@ Match * merge(Match * matches[], int size);
 /* deletes the exact match object given from the matches (both arrays).  Returns 1 on success 0 on failure. */
 bool deleteMatch(Matches * matches, Match * m);		//doesn't actually free cus it doesn't work but it frees some stuff :DD
 
-
+/* returns -1 if the match should be on the left, +1 if the match should be on the right*/
+// 
 #endif

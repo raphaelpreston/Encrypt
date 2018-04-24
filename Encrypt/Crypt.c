@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdio.h>
 #include "Binary.h"
 #include "Matchings.h"
 

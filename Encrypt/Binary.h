@@ -1,7 +1,9 @@
 #ifndef BINARY_H
 #define BINARY_H
 
-#include "stdafx.h"
+#include <stdlib.h>
+
+#include "Binary.h"
 #include "Matchings.h"
 #include "IntArray.h"
 

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Binary.h"
 #include "Matchings.h"
 #include "IntArray.h"

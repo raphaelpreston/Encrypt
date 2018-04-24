@@ -1,8 +1,6 @@
 #ifndef INTARRAY_H
 #define INTARRAY_H
 
-#include "stdafx.h"
-
 /* structs */
 
 typedef struct IntArray {

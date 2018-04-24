@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <stdio.h>
 #include "Binary.h"
 #include "Matchings.h"
 
@@ -369,7 +369,7 @@ bool cryptCompatable(Match * a, Match * b) {
 	return true;
 }
 
-int * testMerge(Match * a, Match * b) {
+int testMerge(Match * a, Match * b) {
 	Match * m1;
 	Match * m2;
 	if (a->start <= b->start) {	//sort them accordingly
@@ -469,6 +469,7 @@ bool deleteMatch(Matches * matches, Match * match) {
 	}
 	// free(match); doesn't work lol
 	matches->num_matches--;
+	return true;
 }
 
 //void deleteMatches(matches * m, int num_bits) {
