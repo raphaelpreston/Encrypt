@@ -68,7 +68,7 @@ Matches * newMatches(int num_bits) {
 int matchLength(Match * m) {
 	return m->end - m->start + 1;
 }
-
+ 
 void addMatch(Matches * matches, Match * m) {
 	if (PRINT == 1) { printf("Attempting to add match: "); printMatch(m); printf("\n"); }
 	int length = matchLength(m);
