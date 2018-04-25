@@ -4,7 +4,7 @@
 #include "Binary.h"
 
 
-#define PRINT 1
+#define PRINT 0
 Match * newMatch(int b, int c, int l, int type) {
 	/* allocate space for match boye */
 	Match * m;
@@ -156,7 +156,7 @@ void addMatch(Matches * matches, Match * m) {
 		length = matchLength(m); //update length
 								 /* add to start_arr */
 		int start = m->start;
-		bool used = false;
+		// bool used = false;
 		if (matches->start_arr[start] == NULL) {	//first match * in this linked list
 			matches->start_arr[start] = m;
 		}
@@ -167,7 +167,7 @@ void addMatch(Matches * matches, Match * m) {
 			if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, replace it and free the old one
 				// free(curr);
 				matches->start_arr[start] = m;
-				used = true;
+				// used = true;
 			}
 		}
 
@@ -185,7 +185,7 @@ void addMatch(Matches * matches, Match * m) {
 				matches->end_arr[end] = m;
 			}
 			else {
-				if (!used) free(m);	//wasn't used in start array so we can trash it
+				//if (!used) free(m);	//wasn't used in start array so we can trash it
 			}
 		}
 		matches->num_matches++;			//added one match to the matches
@@ -194,6 +194,8 @@ void addMatch(Matches * matches, Match * m) {
 		printf("Match was enveloped, didn't do anything. \n");
 	}
 	if (PRINT == 1) printf("Match adding process was completed (attempted).\n");
+	if (matches->start_arr[13]) printf("Length of 13: %i\n", matchLength(matches->start_arr[13]));
+	else printf("Length of 13: NULL\n");
 }
 
 bool enveloped(Matches * matches, Match * match) {	//TESTING HERE TO SEE IF IT WORKS BETTER WITH NO ENVELOPED TESTING
