@@ -80,138 +80,113 @@ void addMatch(Matches * matches, Match * m) {
 		printf("\nMatch "); printMatch(m); printf(" out of bounds of matches arrays.\n");
 	}
 
-	/* make sure all bits in the match aren't already used up */
-	if (!enveloped(matches, m)) {
-		/* set the bits as used */
-		set_bits_used(matches, m);
 
-		/* get the max compatable match from all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end (that match in both crypt and body)*/
+	/* get the max compatable match from all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end (that match in both crypt and body)*/
 
-		if (!matches->num_matches == 0) {	//only look for max matches if the arrays are not empty
-											//printf("\nStart_arr: ");
-			Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1 >= matches->size ? m->end : m->end + 1);	//make sure the upper limit is in bounds
-																																		//printf("\nEnd arr:");
-			Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1 < 0 ? m->start : m->start - 1, m->end);		//make sure the lower limit is in bounds
+	if (!matches->num_matches == 0) {	//only look for max matches if the arrays are not empty
+										//printf("\nStart_arr: ");
+		Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1 >= matches->size ? m->end : m->end + 1);	//make sure the upper limit is in bounds
+																																	//printf("\nEnd arr:");
+		Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1 < 0 ? m->start : m->start - 1, m->end);		//make sure the lower limit is in bounds
 
-			if (max_start != NULL) {
-				if (PRINT == 1) { printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printMatch(max_start); printf("\n"); }
-			}
-			else {
-				if (PRINT == 1){ printf("No max start match found in range [%i,%i]", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printf("\n");}
-			}
+		if (max_start != NULL) {
+			if (PRINT == 1) { printf("The max start matching found in range [%i,%i] was ", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printMatch(max_start); printf("\n"); }
+		}
+		else {
+			if (PRINT == 1){ printf("No max start match found in range [%i,%i]", m->start, m->end + 1 >= matches->size ? m->end : m->end + 1); printf("\n");}
+		}
 
-			if (max_end != NULL) {
-				if (PRINT == 1) { printf("The max end matching found in range [%i,%i] was ", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printMatch(max_end); printf("\n"); }
-			}
-			else {
-				if (PRINT == 1) { printf("No max end match found in range [%i,%i]", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printf("\n"); }
-			}
+		if (max_end != NULL) {
+			if (PRINT == 1) { printf("The max end matching found in range [%i,%i] was ", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printMatch(max_end); printf("\n"); }
+		}
+		else {
+			if (PRINT == 1) { printf("No max end match found in range [%i,%i]", m->start - 1 < 0 ? m->start : m->start - 1, m->end); printf("\n"); }
+		}
 
-			// merge the 0/2/3 to get a supermatch
-			if (max_start || max_end) {	//merge() can handle if one is NULL but no reason to call if they both are
-				Match * max_matches[] = { m, max_start, max_end };
-				Match * merged = merge(max_matches, 3);
-				if (merged != NULL) {
-					if (PRINT == 1) { printf("New merged baby match: "); printMatch(merged); printf(" \n"); }
+		// merge the 0/2/3 to get a supermatch
+		if (max_start || max_end) {	//merge() can handle if one is NULL but no reason to call if they both are
+			Match * max_matches[] = { m, max_start, max_end };
+			Match * merged = merge(max_matches, 3);
+			if (merged != NULL) {
+				if (PRINT == 1) { printf("New merged baby match: "); printMatch(merged); printf(" \n"); }
 
-					// delete the 1/2 out of both arrays
-					if (max_start == max_end) {	//protect against double delete
-						if (max_start) {
-							if (PRINT == 1) { printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n"); }
-							deleteMatch(matches, max_start);
-						}
+				// delete the 1/2 out of both arrays
+				if (max_start == max_end) {	//protect against double delete
+					if (max_start) {
+						if (PRINT == 1) { printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n"); }
+						deleteMatch(matches, max_start);
 					}
-					else {
-						if (max_start) {
-							if (PRINT == 1) {printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");}
-							deleteMatch(matches, max_start);
-						}
-						if (max_end) {
-							if (PRINT == 1) { printf("Attempting to delete the max_end: "); printMatch(max_end); printf("\n"); }
-							deleteMatch(matches, max_end);
-						}
-					}
-
-					// now we are adding the supermatch, so m = supermatch
-					m = merged;
-					if (PRINT == 1) { printf("Now adding merged match: "); printMatch(m); printf("\n"); }
 				}
 				else {
-					if (PRINT == 1) printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
+					if (max_start) {
+						if (PRINT == 1) {printf("Attempting to delete the max_start: "); printMatch(max_start); printf("\n");}
+						deleteMatch(matches, max_start);
+					}
+					if (max_end) {
+						if (PRINT == 1) { printf("Attempting to delete the max_end: "); printMatch(max_end); printf("\n"); }
+						deleteMatch(matches, max_end);
+					}
 				}
 
+				// now we are adding the supermatch, so m = supermatch
+				m = merged;
+				if (PRINT == 1) { printf("Now adding merged match: "); printMatch(m); printf("\n"); }
 			}
 			else {
-				if (PRINT == 1) printf("No attempt to merge because max start and max end were both NULL.\n");
+				if (PRINT == 1) printf("The merge was unsuccsesful because they came up with different body/crypt lengths.\n");
 			}
 
-
-			if (PRINT == 1) printf("Attempting to merge:\n");
 		}
 		else {
-			if (PRINT == 1) printf("Matches were empty so no merging was attempted.\n");
+			if (PRINT == 1) printf("No attempt to merge because max start and max end were both NULL.\n");
 		}
 
-		if (PRINT == 1) { printf("Adding match: "); printMatch(m); printf("\n"); }
-		length = matchLength(m); //update length
-								 /* add to start_arr */
-		int start = m->start;
-		// bool used = false;
-		if (matches->start_arr[start] == NULL) {	//first match * in this linked list
+
+		if (PRINT == 1) printf("Attempting to merge:\n");
+	}
+	else {
+		if (PRINT == 1) printf("Matches were empty so no merging was attempted.\n");
+	}
+
+	if (PRINT == 1) { printf("Adding match: "); printMatch(m); printf("\n"); }
+	length = matchLength(m); //update length
+								/* add to start_arr */
+	int start = m->start;
+	// bool used = false;
+	if (matches->start_arr[start] == NULL) {	//first match * in this linked list
+		matches->start_arr[start] = m;
+	}
+	else {
+
+		/* keep max length in front */
+		curr = matches->start_arr[start];	//the max 
+		if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, replace it and free the old one
+			// free(curr);
 			matches->start_arr[start] = m;
+			// used = true;
 		}
-		else {
+	}
 
-			/* keep max length in front */
-			curr = matches->start_arr[start];	//the max 
-			if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, replace it and free the old one
-				// free(curr);
-				matches->start_arr[start] = m;
-				// used = true;
-			}
-		}
+	/* repeat with end_arr*/
+	int end = m->end;
+	if (matches->end_arr[end] == NULL) {	//first match * in this linked list
+		matches->end_arr[end] = m;
+	}
+	else {
 
-		/* repeat with end_arr*/
-		int end = m->end;
-		if (matches->end_arr[end] == NULL) {	//first match * in this linked list
+		/* keep max length in front */
+		curr = matches->end_arr[end];
+		if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, replace it and free old one
+			// free(curr);
 			matches->end_arr[end] = m;
 		}
 		else {
-
-			/* keep max length in front */
-			curr = matches->end_arr[end];
-			if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, replace it and free old one
-				// free(curr);
-				matches->end_arr[end] = m;
-			}
-			else {
-				//if (!used) free(m);	//wasn't used in start array so we can trash it
-			}
+			//if (!used) free(m);	//wasn't used in start array so we can trash it
 		}
-		matches->num_matches++;			//added one match to the matches
 	}
-	else {	//is enveloped
-		printf("Match was enveloped, didn't do anything. \n");
-	}
+	matches->num_matches++;			//added one match to the matches
+
 	if (PRINT == 1) printf("Match adding process was completed (attempted).\n");
-	if (matches->start_arr[13]) printf("Length of 13: %i\n", matchLength(matches->start_arr[13]));
-	else printf("Length of 13: NULL\n");
-}
-
-bool enveloped(Matches * matches, Match * match) {	//TESTING HERE TO SEE IF IT WORKS BETTER WITH NO ENVELOPED TESTING
-													//int l = match->start + matchLength(match);	//don't subtract 1 here and use < instead
-													//for (int i = match->start; i < l; i++) {
-													//	if (!matches->used[i]) return false;
-													//}
-	return false;
-	//return true
-}
-
-void set_bits_used(Matches * matches, Match * match) {
-	int l = match->start + matchLength(match);	//don't subtract 1 here and use < instead
-	for (int i = match->start; i < l; i++) {
-		matches->used[i] = true;
-	}
 }
 
 void printMatch(Match * m){
