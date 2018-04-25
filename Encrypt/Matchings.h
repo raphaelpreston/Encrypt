@@ -71,6 +71,7 @@ Match * merge(Match * matches[], int size);
 /* deletes the exact match object given from the matches (both arrays).  Returns 1 on success 0 on failure. */
 bool deleteMatch(Matches * matches, Match * m);		//doesn't actually free cus it doesn't work but it frees some stuff :DD
 
-/* returns -1 if the match should be on the left, +1 if the match should be on the right*/
-// 
+/* returns middle of match, -1 to favor left, 1 to favor right */
+int middle(Match * match, int balance);
+
 #endif

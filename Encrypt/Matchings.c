@@ -5,6 +5,7 @@
 
 
 #define PRINT 0
+
 Match * newMatch(int b, int c, int l, int type) {
 	/* allocate space for match boye */
 	Match * m;
@@ -68,11 +69,10 @@ Matches * newMatches(int num_bits) {
 int matchLength(Match * m) {
 	return m->end - m->start + 1;
 }
- 
+
 void addMatch(Matches * matches, Match * m) {
 	if (PRINT == 1) { printf("Attempting to add match: "); printMatch(m); printf("\n"); }
 	int length = matchLength(m);
-	Match * temp;
 	Match * curr;
 
 	/* error check for exceeding limit of arrays */
@@ -217,7 +217,6 @@ void printValidity(Match * m, Binary * b) {
 void printMatchesValidity(Matches * m, Binary * b) {
 	Match ** start = m->start_arr;
 	Match ** end = m->end_arr;
-	Match * curr;
 
 	printf("Start Array:\n");
 	for (int i = 0; i < m->size; i++) {
@@ -241,7 +240,6 @@ void printMatchesValidity(Matches * m, Binary * b) {
 void printMatches(Matches * m) {
 	Match ** start = m->start_arr;
 	Match ** end = m->end_arr;
-	Match * curr;
 
 	printf("Start Array:\n");
 	for (int i = 0; i < m->size; i++) {
@@ -407,7 +405,20 @@ int modifiedMatchLength(Match * m, int start, int end) {	//modified match length
 	else printf("YOU DIDN'T ACCOUNT FOR SOMETHING LMAO\n\n\n\n\n");
 }
 
-
+int middle(Match * m, int balance) {
+	int length = matchLength(m);
+	int mid;
+	if (length % 2 == 0) {	//even length
+		if (balance == -1) mid = length / 2 - 1;
+		else if (balance == 1) mid = length / 2;
+		else printf("\n\n\nWrong value sent to middle balance: %i.\n\n", balance);
+	}
+	else {	//odd length
+		mid = length / 2;
+	}
+	
+	return m->start + mid;
+}
 
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {

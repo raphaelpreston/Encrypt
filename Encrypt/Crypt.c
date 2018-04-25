@@ -48,9 +48,12 @@ int main()
 	printMatchesValidity(matches, binary);
 
 	// printMatches(matches);
-	/* finding most efficient matches */
+	/* print out most efficient matches using the MatchHeap */
+	//testing middle
+	printf("6: %i\n", middle(newMatch(4, 9, 6, 1), -1));
+	printf("7: %i\n", middle(newMatch(4, 9, 6, 1), 1));
 
-	//Matches ** best = findBestMatches(matches);
+	printf("6: %i\n", middle(newMatch(4, 8, 5, 1), 1));
 
 
 
