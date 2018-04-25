@@ -15,8 +15,6 @@ Match * newMatch(int b, int c, int l, int type) {
 		m->start = b;
 		m->end = b + l - 1;
 		m->cindex = c;
-		m->start_next = NULL;
-		m->end_next = NULL;
 		m->type = type;
 
 		if (l < 2) {
@@ -158,24 +156,18 @@ void addMatch(Matches * matches, Match * m) {
 		length = matchLength(m); //update length
 								 /* add to start_arr */
 		int start = m->start;
+		bool used = false;
 		if (matches->start_arr[start] == NULL) {	//first match * in this linked list
 			matches->start_arr[start] = m;
 		}
 		else {
 
 			/* keep max length in front */
-			curr = matches->start_arr[start];
-			if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, make it the head 
-				m->start_next = curr;
+			curr = matches->start_arr[start];	//the max 
+			if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, replace it and free the old one
+				// free(curr);
 				matches->start_arr[start] = m;
-			}
-			else {	//loop through until we find appropriate spot
-				while (curr->start_next != NULL && (curr->start_next->end - curr->start_next->start + 1) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
-					curr = curr->start_next;
-				}
-				temp = curr->start_next;	//either null or <=
-				curr->start_next = m;
-				m->start_next = temp;	//will point to null, should be ok
+				used = true;
 			}
 		}
 
@@ -188,17 +180,12 @@ void addMatch(Matches * matches, Match * m) {
 
 			/* keep max length in front */
 			curr = matches->end_arr[end];
-			if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, make it the head 
-				m->end_next = curr;
+			if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, replace it and free old one
+				// free(curr);
 				matches->end_arr[end] = m;
 			}
-			else {	//loop through until we find appropriate spot
-				while (curr->end_next != NULL && (curr->end_next->end - curr->end_next->start + 1) > length) {	//keep looking until curr->next is null or curr->next is shorter or equal to in length than m
-					curr = curr->end_next;
-				}
-				temp = curr->end_next;	//either null or <=
-				curr->end_next = m;
-				m->end_next = temp;	//will point to null, should be ok
+			else {
+				if (!used) free(m);	//wasn't used in start array so we can trash it
 			}
 		}
 		matches->num_matches++;			//added one match to the matches
@@ -260,11 +247,6 @@ void printMatchesValidity(Matches * m, Binary * b) {
 		printf("%i\n", i);
 		if (start[i] != NULL) {
 			printf(" "); printValidity(start[i], b); printf("\n");
-			curr = start[i];
-			while (curr->start_next != NULL) {
-				printf(" "); printValidity(curr->start_next, b); printf("\n");
-				curr = curr->start_next;
-			}
 		}
 	}
 
@@ -273,11 +255,6 @@ void printMatchesValidity(Matches * m, Binary * b) {
 		printf("%i\n", i);
 		if (end[i] != NULL) {
 			printf(" "); printValidity(end[i], b); printf("\n");
-			curr = end[i];
-			while (curr->end_next != NULL) {
-				printf(" "); printValidity(curr->end_next, b); printf("\n");
-				curr = curr->end_next;
-			}
 		}
 	}
 	printf("Num matches: %i\n", m->num_matches);
@@ -294,11 +271,6 @@ void printMatches(Matches * m) {
 		printf("%i\n", i);
 		if (start[i] != NULL) {
 			printf(" "); printMatch(start[i]); printf("\n");
-			curr = start[i];
-			while (curr->start_next != NULL) {
-				printf(" "); printMatch(curr->start_next); printf("\n");
-				curr = curr->start_next;
-			}
 		}
 	}
 
@@ -307,11 +279,6 @@ void printMatches(Matches * m) {
 		printf("%i\n", i);
 		if (end[i] != NULL) {
 			printf(" "); printMatch(end[i]); printf("\n");
-			curr = end[i];
-			while (curr->end_next != NULL) {
-				printf(" "); printMatch(curr->end_next); printf("\n");
-				curr = curr->end_next;
-			}
 		}
 	}
 	printf("Num matches: %i\n", m->num_matches);
@@ -326,19 +293,19 @@ Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
 		curr = arr[i];	//current max match
 		if (curr != NULL && m->type == curr->type && cryptCompatable(m, curr)) {	//have to test to make sure it's not null otherwise cryptComp will throw an error (also make sure it's crypt comp and same type)
 			if (curr != NULL) {
-				// printf("Comparing current: "); printMatch(curr); printf(" against max: "); if (max == NULL)printf("NULL"); else printMatch(max); printf("\n");
-				//if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start);
+				if (PRINT == 1) { printf("Comparing current: "); printMatch(curr); printf(" against max: "); if (max == NULL)printf("NULL"); else printMatch(max); printf("\n"); }
+				if (PRINT == 1) { if (!max == NULL) printf("Is %i > %i?\n", curr->end - m->start, max->end - m->start); }
 				if (max == NULL) {
 
 					if (max == NULL || testMerge(curr, m) > testMerge(max, m)) {
 						max = curr;
-						// printf("Yes, assigned.\n");
+						if (PRINT == 1) printf("Yes, assigned.\n");
 					}
 				}
-				// else printf("No, skipped.\n");
+				else if(PRINT == 1) printf("No, skipped.\n");
 			}
 			else {
-				// printf("Didn't execute because curr is %s and max_start is %s\n", curr == NULL ? "NULL" : "NOT NULL", max == NULL ? "NULL" : "NOT NULL");
+				if (PRINT == 1) printf("Didn't execute because curr is %s and max_start is %s\n", curr == NULL ? "NULL" : "NOT NULL", max == NULL ? "NULL" : "NOT NULL");
 			}
 		}
 		else {
@@ -419,8 +386,8 @@ Match * merge(Match * matches[], int size) {	//will return NULL if merge made un
 	}
 
 	/* do the real merging */
-	// printf("\n(%i, %i, %i)", matches[1]->start, matches[1]->cindex, matches[1]->end - matches[1]->start + 1);
-	// printf("\nmin_b_start: %i\nmax_b_end: %i\nmin_c_start: %i\nmax_c_end:%i",  min_b_start, max_b_end, min_c_start, max_c_end);
+	if (PRINT == 1) printf("\n(%i, %i, %i)", matches[1]->start, matches[1]->cindex, matches[1]->end - matches[1]->start + 1);
+	if (PRINT == 1) printf("\nmin_b_start: %i\nmax_b_end: %i\nmin_c_start: %i\nmax_c_end:%i",  min_b_start, max_b_end, min_c_start, max_c_end);
 	if (max_b_end - min_b_start != max_c_end - min_c_start) return NULL;	//when all merged together, the length of the body match must be equal to the length of the crypt match
 
 	match = newMatch(min_b_start, min_c_start, max_b_end - min_b_start + 1, matches[0]->type);
@@ -434,42 +401,21 @@ bool deleteMatch(Matches * matches, Match * match) {
 
 	//delete from start_arr by finding index of start
 	curr = matches->start_arr[match->start];
-	if (curr == match) {	//simply reassign head
+	if (curr == match) {	//simply remove head
 		temp = matches->start_arr[match->start];
-		matches->start_arr[match->start] = matches->start_arr[match->start]->start_next;
 	}
 	else {
-		while (curr->start_next != NULL && curr->start_next != match) {	//ends when curr->next is NULL or curr == match to delete
-			curr = curr->start_next;
-		}
-		// delete it
-		if (curr->start_next != NULL) {
-			temp = curr->start_next;
-			curr->start_next = temp->start_next;
-			return true;
-		}
-		else return false;		//looped all the way through without reaching it
+		return false; //this shouldn't happen
 	}
 
 	//repeat with end_arr
 	curr = matches->end_arr[match->end];
 	if (curr == match) {	//simply reassign head
-		temp = matches->end_arr[match->end];
-		matches->end_arr[match->end] = matches->end_arr[match->end]->end_next;
-		free(temp);
+		free(matches->end_arr[match->end]);
 	}
 	else {
-		while (curr->end_next != NULL && curr->end_next != match) {	//ends when curr->next is NULL or curr == match to delete
-			curr = curr->end_next;
-		}
 		// delete it
-		if (curr->end_next != NULL) {
-			temp = curr->end_next;
-			curr->end_next = temp->end_next;
-			free(temp);
-			return true;
-		}
-		else return false;		//looped all the way through without reaching it
+		return false;		//this shouldn't happen
 	}
 	// free(match); doesn't work lol
 	matches->num_matches--;
