@@ -420,6 +420,12 @@ int middle(Match * m, int balance) {
 	return m->start + mid;
 }
 
+void swap(Match * a, Match * b) {
+	Match temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {
 //

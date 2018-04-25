@@ -25,11 +25,21 @@ typedef struct MatchHeap {
 
 MatchHeap * newMatchHeap();
 
+Node * newNode(Match * match);
+
 /* percolate down */
-void insertNode(MatchHeap * heap, Match * match);
+void insertNode(MatchHeap * heap, Node * node);
+
+/* helper function for insertNode */
+void insertRecurse(Node * root, Node * node);
+
+/* recursively print out the heap (in a very cryptic annoying way) */
+void printHeap(MatchHeap * heap);
+
+void printNodeRecurse(Node * node);
 
 /* updates node and calls heapify down and heapify up */
-void updateNode();
+//void updateNode();
 
 /* heapify down */
 

@@ -74,4 +74,6 @@ bool deleteMatch(Matches * matches, Match * m);		//doesn't actually free cus it 
 /* returns middle of match, -1 to favor left, 1 to favor right */
 int middle(Match * match, int balance);
 
+/* swaps values of match pointers */
+void swap(Match * a, Match * b);
 #endif

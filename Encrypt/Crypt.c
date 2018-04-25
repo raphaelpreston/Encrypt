@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "Binary.h"
 #include "Matchings.h"
+#include "MatchHeap.h"
 
 #define BUFFER_SIZE 1
 #define MAX_BINARY_SIZE 2
@@ -49,11 +50,32 @@ int main()
 
 	// printMatches(matches);
 	/* print out most efficient matches using the MatchHeap */
-	//testing middle
-	printf("6: %i\n", middle(newMatch(4, 9, 6, 1), -1));
-	printf("7: %i\n", middle(newMatch(4, 9, 6, 1), 1));
+	//testing MatchHeap
+	printf("\n\n");
 
-	printf("6: %i\n", middle(newMatch(4, 8, 5, 1), 1));
+	Match * a = newMatch(5, 15, 11, 1);
+	Match * b = newMatch(4, 6, 3, 1);
+	Match * c = newMatch(14, 16, 3, 1);
+	Match * d = newMatch(11, 14, 4, 1);
+	Match * n = newMatch(20, 31, 12, 1);
+
+
+	Node * anode = newNode(a);
+	Node * cnode = newNode(c);
+	Node * bnode = newNode(b);
+	Node * dnode = newNode(d);
+	Node * nnode = newNode(n);
+
+	MatchHeap * heap = newMatchHeap();
+	
+	insertNode(heap, anode);
+	insertNode(heap, bnode);
+    insertNode(heap, cnode);
+	insertNode(heap, dnode);
+	insertNode(heap, nnode);
+
+	printHeap(heap);
+
 
 
 
