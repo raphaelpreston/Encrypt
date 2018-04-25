@@ -150,7 +150,7 @@ void addMatch(Matches * matches, Match * m) {
 
 	if (PRINT == 1) { printf("Adding match: "); printMatch(m); printf("\n"); }
 	length = matchLength(m); //update length
-								/* add to start_arr */
+	/* add to start_arr */
 	int start = m->start;
 	// bool used = false;
 	if (matches->start_arr[start] == NULL) {	//first match * in this linked list
@@ -159,7 +159,7 @@ void addMatch(Matches * matches, Match * m) {
 	else {
 
 		/* keep max length in front */
-		curr = matches->start_arr[start];	//the max 
+		curr = matches->start_arr[start];	//the max
 		if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, replace it and free the old one
 			// free(curr);
 			matches->start_arr[start] = m;

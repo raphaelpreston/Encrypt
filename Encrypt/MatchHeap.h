@@ -19,13 +19,13 @@ typedef struct Node {
 } Node;
 
 typedef struct MatchHeap {
-	int size;
+	// int size;
 	struct Node * root;
 } MatchHeap;
 
-MatchHeap * newMatchHeap();
-
 Node * newNode(Match * match);
+
+MatchHeap * newMatchHeap();
 
 /* percolate down */
 void insertNode(MatchHeap * heap, Node * node);
@@ -38,12 +38,8 @@ void printHeap(MatchHeap * heap);
 
 void printNodeRecurse(Node * node);
 
-/* updates node and calls heapify down and heapify up */
+/* updates node and calls heapify down and heapify up appropriately */
 //void updateNode();
-
-/* heapify down */
-
-/* heapfiy up */
 
 
 

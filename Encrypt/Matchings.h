@@ -3,6 +3,7 @@
 
 #include "Binary.h"
 #include <stdbool.h>
+#include "MatchHeap.h"
 
 //a lot of lag is going to come from deleting not being optimized
 
@@ -12,8 +13,7 @@ typedef struct Match {
 	int start;
 	int end;
 	int cindex;
-	//struct Match * start_next;	//next match in the start array
-	//struct Match * end_next;	//next match in the end array
+
 	int type;					//1 for a positive match, 2 for a negative match
 } Match;
 
@@ -21,6 +21,7 @@ typedef struct Match {
 typedef struct Matches {
 	struct Match ** start_arr;	//array of match objects indexed by where the match starts
 	struct Match ** end_arr;	//array of match objects indexed by where the match ends
+	struct MatchHeap * heap;	//heap used to store the max length matches and map where they are relative to eachother
 	int size;			//size of each array, (designates upper and lower limits of matches), set to the number of bits that are read
 	int num_matches;
 	bool * used;		//1 if the bit is already matched, 0 if the bit is not
