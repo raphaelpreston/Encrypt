@@ -476,7 +476,92 @@ bool deleteMatch(Matches * matches, Match * match) {
 	return true;
 }
 
+int modifiedMatchLength(Match * m, int start, int end) {	//modified match length 
+	if (m->end <= start || m->start >= end) return matchLength(m); //completely outside limits
+	if (m->start >= start && m->end <= end) return 0;	//enveloped or exactly same length
+	if (m->start >= start && m->start < end && m->end > end) return matchLength(m) - (end - m->start);	//starts inside and ends to the right
+	if (m->start < start && m->end <= end && m->end > start) return matchLength(m) - (m->end - start);	//starts to the left and ends inside
+	else printf("YOU DIDN'T ACCOUNT FOR SOMETHING LMAO\n\n\n\n\n");
+}
 
+//Match ** findBestMatches(Matches * matches) {
+//	/* array for Match objects */
+//	Match ** bestMatches = (Match **)malloc(sizeof(Match *) * matches->size);
+//	
+//	/* find max */
+//	Match * maxMatch = matches->start_arr[0];
+//	Match * curr;
+//	for (int i = 1; i < matches->size - 1; i++) {
+//		curr = matches->start_arr[i];
+//		if (curr) {
+//			if (matchLength(curr) > matchLength(maxMatch)) maxMatch = curr;
+//		}
+//	}
+//	printf("Found biggest match: "); printMatch(maxMatch); printf("\n");
+//
+//	/* add it to array */
+//	bestMatches[0] = maxMatch;
+//
+//	printf("Starting analysis on left...\n");
+//	int a = bestMatchesLeft(matches, bestMatches, 0, maxMatch->start, 1);	//start at 1 because 0 has already been added
+//	printf("Starting analysis on left...\n");
+//	int b = bestMatchesRight(matches, bestMatches, maxMatch->end, matches->size - 1, 1);
+//
+//	return bestMatches;
+//}
+//
+//int bestMatchesLeft(Matches * matches, Match ** bestMatches, int start, int end, int i) {	//use the start as the indicator
+//	/* base case: when the start and the end are overlapping or difference of 0 */
+//	if (end - start <= 0) return i;
+//
+//	/* find the max adjusted length match where the middle is within this range */
+//	Match * maxMatch = matches->start_arr[start];
+//	Match * curr;
+//	for (int i = start + 1; i < end; i++) {
+//		curr = matches->start_arr[i];
+//		if (curr) {
+//			if (modifiedMatchLength(curr, start, end) > modifiedMatchLength(maxMatch, start, end)) maxMatch = curr;
+//		}
+//	}
+//	printf("Found biggest match to the left: "); printMatch(maxMatch); printf("\n");
+//	// maxMatch now greatest adjusted length match with start as indicator
+//
+//	/* add that to the bestMatches at the next index, and increase the index */
+//	bestMatches[i] = maxMatch;
+//	i++;
+//
+//	/* modify start and end and call them */
+//	printf("Calling to the left...");
+//	int a = bestMatchesLeft(matches, bestMatches, 0, start, i);
+//	//call bestMatchesRight
+//}
+//
+//int bestMatchesRight(Matches * matches, Match ** bestMatches, int start, int end, int i) {	//use the end as the indicator
+//	/* base case: when the start and the end are overlapping or difference of 0 */
+//	if (end - start <= 0) return i;
+//
+//	/* find the max adjusted length match where the end is within this range */
+//	Match * maxMatch = matches->end_arr[start];
+//	Match * curr;
+//	for (int i = start + 1; i < end; i++) {
+//		curr = matches->end_arr[i];
+//		if (curr) {
+//			if (modifiedMatchLength(curr, start, end) > modifiedMatchLength(maxMatch, start, end)) maxMatch = curr;
+//		}
+//	}
+//	printf("Found biggest match to the right: "); printMatch(maxMatch); printf("\n");
+//	// maxMatch now greatest adjusted length match with end as indicator
+//
+//	/* add that to the bestMatches at the next index, and increase the index */
+//	bestMatches[i] = maxMatch;
+//	i++;
+//
+//	/* modify start and end and call them */
+//	//printf("Calling to the left...");
+//	//int a = bestMatchesLeft(matches, bestMatches, 0, start, i);
+//	printf("Calling to the right with index %i...\n", i);
+//	bestMatchesRight(b, bestMatches, maxMatch->end, matches->size - 1, i);
+//}
 
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {
