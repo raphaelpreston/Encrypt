@@ -12,8 +12,8 @@ typedef struct Match {
 	int start;
 	int end;
 	int cindex;
-	struct Match * start_next;	//next match in the start array
-	struct Match * end_next;	//next match in the end array
+	//struct Match * start_next;	//next match in the start array
+	//struct Match * end_next;	//next match in the end array
 	int type;					//1 for a positive match, 2 for a negative match
 } Match;
 
