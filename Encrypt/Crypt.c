@@ -47,8 +47,9 @@ int main()
 
 	printMatchesValidity(matches, binary);
 
-	// printMatches(matches);
+	printMatches(matches);
 
+	printf("\nLength of 13: %i\n", matchLength(matches->start_arr[13]));
 	/* finding most efficient matches */
 
 	//Matches ** best = findBestMatches(matches);

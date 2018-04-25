@@ -4,7 +4,7 @@
 #include "Binary.h"
 
 
-#define PRINT 0
+#define PRINT 1
 Match * newMatch(int b, int c, int l, int type) {
 	/* allocate space for match boye */
 	Match * m;
