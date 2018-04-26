@@ -12,18 +12,19 @@
 
 
 */
+
 typedef struct Node {
-	Match * match;
+	struct Match * match;
 	struct Node * lChild;
 	struct Node * rChild;
 } Node;
 
 typedef struct MatchHeap {
-	// int size;
+	int size;
 	struct Node * root;
 } MatchHeap;
 
-Node * newNode(Match * match);
+// Node * newNode(Match * match);
 
 MatchHeap * newMatchHeap();
 
