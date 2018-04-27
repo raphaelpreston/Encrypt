@@ -153,6 +153,7 @@ void addMatch(Matches * matches, Match * m) {
 
 	if (PRINT == 1) { printf("Adding match: "); printMatch(m); printf("\n"); }
 	length = matchLength(m); //update length
+
 	/* add to start_arr */
 	int start = m->start;
 	// bool used = false;
