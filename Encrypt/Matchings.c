@@ -187,6 +187,7 @@ void addMatch(Matches * matches, Match * m) {
 			//if (!used) free(m);	//wasn't used in start array so we can trash it
 		}
 	}
+
 	matches->num_matches++;			//added one match to the matches
 
 	if (PRINT == 1) printf("Match adding process was completed (attempted).\n");
