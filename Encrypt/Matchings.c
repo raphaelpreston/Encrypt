@@ -16,6 +16,8 @@ Match * newMatch(int b, int c, int l, int type) {
 		m->start = b;
 		m->end = b + l - 1;
 		m->cindex = c;
+		m->lChild = NULL;
+		m->rChild = NULL;
 		m->type = type;
 
 		if (l < 2) {
@@ -420,10 +422,24 @@ int middle(Match * m, int balance) {
 	return m->start + mid;
 }
 
-void swap(Match * a, Match * b) {
-	Match temp = *a;
-	*a = *b;
-	*b = temp;
+void swapValues(Match * a, Match * b) {
+	Match * temp = a;
+
+	// assign all b stuff to a
+	a->start = b->start;
+	a->end = b->end;
+	a->cindex = b->cindex;
+	a->type = b->type;
+	a->lChild = b->lChild;
+	a->rChild = b->rChild;
+
+	//assign all a stuff to b
+	b->start = temp->start;
+	b->end = temp->end;
+	b->cindex = temp->cindex;
+	b->type = temp->type;
+	b->lChild = temp->lChild;
+	b->rChild = temp->rChild;
 }
 
 //void deleteMatches(matches * m, int num_bits) {
@@ -434,5 +450,91 @@ void swap(Match * a, Match * b) {
 //	free(m->end_arr);
 //}
 
+
+/* MATCHHEAP */
+
+MatchHeap * newMatchHeap() {
+	MatchHeap * heap = (MatchHeap *)malloc(sizeof(MatchHeap));
+	heap->size = 0;
+	heap->root = NULL;
+
+	return heap;
+}
+
+void heap_insertMatch(MatchHeap * heap, Match * match) {
+	if (match == NULL) printf("ERROR: MATCH WAS NULL\n\n.");
+
+	/* first time adding a node */
+	if (heap->root == NULL) {
+		heap->root = match;
+	}
+	else {
+		if (middle(match, 1) < middle(heap->root, 1)) insertRecurse(heap->root, match);	//node to add belongs to left
+		else if (middle(match, -1) > middle(heap->root, -1)) insertRecurse(heap->root, match);	//node to add belongs to right
+		else insertRecurse(heap->root, match);	//the share the same middle, insert left
+	}
+}
+
+void heap_insertRecurse(Match * root, Match * match) {
+
+	/* if it's bigger than the current one, swap the root out for the node */
+	if (matchLength(match) > matchLength(root)) {
+		//assign the node into the proper position
+		Match * temp = root;
+
+		/* swap the values of the root and the match*/
+		swapValues(root, match);
+		// working here to update in the other arrays
+	}
+
+	/* send the appropriate match down */
+	if (middle(match, 1) < middle(root, 1)) {
+		if (!root->lChild) {
+			root->lChild = match;
+			return;
+		}
+		else {
+			insertRecurse(root->lChild, match);	//node to add belongs to left
+		}
+	}
+	else if (middle(match, -1) > middle(root, -1)) {
+		if (!root->rChild) {
+			root->rChild = match;
+			return;
+		}
+		else {
+			insertRecurse(root->rChild, match);	//node to add belongs to right
+		}
+	}
+	else {	//ties go to the left
+		if (!root->lChild) {
+			root->lChild = match;
+			return;
+		}
+		else {
+			insertRecurse(root->lChild, match);	//node to add belongs to left
+		}
+	}
+}
+
+void printHeap(MatchHeap * heap) {
+	if (heap == NULL || heap->root == NULL) return;
+
+	printNodeRecurse(heap->root);
+}
+
+void printNodeRecurse(Match * match) {
+	if (!match) return;
+
+	for (int i = 0; i < middle(match, -1); i++) {
+		printf(" ");
+	}
+	printMatch(match);
+	printf("\n");
+
+	printNodeRecurse(match->lChild);
+	printNodeRecurse(match->rChild);
+
+}
 
 

@@ -3,7 +3,6 @@
 
 #include "Binary.h"
 #include <stdbool.h>
-#include "MatchHeap.h"
 
 //a lot of lag is going to come from deleting not being optimized
 
@@ -13,7 +12,8 @@ typedef struct Match {
 	int start;
 	int end;
 	int cindex;
-
+	struct Match * lChild;		//for the MatchHeap
+	struct Match * rChild;
 	int type;					//1 for a positive match, 2 for a negative match
 } Match;
 
@@ -26,6 +26,23 @@ typedef struct Matches {
 	int num_matches;
 	bool * used;		//1 if the bit is already matched, 0 if the bit is not
 } Matches;
+
+
+//code based of off Robin Thomas's GitHub version
+/* properties of this heap:
+1. A parent match will always have a bigger length
+2. A parent's left child's middle is to the left or equal to itself
+3. A parent's right child's middle is to the right of itself
+
+
+
+*/
+typedef struct MatchHeap {
+	int size;
+	struct Match * root;
+} MatchHeap;
+
+
 
 /* returns a new match object */
 Match * newMatch(int body_begin, int crypt_begin, int length, int type);
@@ -75,6 +92,29 @@ bool deleteMatch(Matches * matches, Match * m);		//doesn't actually free cus it 
 /* returns middle of match, -1 to favor left, 1 to favor right */
 int middle(Match * match, int balance);
 
-/* swaps values of match pointers */
-void swap(Match * a, Match * b);
+/* swaps all values of both matches */
+void swapValues(Match * a, Match * b);
+
+
+/* MATCHHEAP */
+
+
+MatchHeap * newMatchHeap();
+
+/* percolate down */
+void heap_insertMatch(MatchHeap * heap, Match * match);
+
+/* helper function for insertNode */
+void heap_insertRecurse(Match * root, Match * match);
+
+/* recursively print out the heap (in a very cryptic annoying way) */
+void printHeap(MatchHeap * heap);
+
+void printNodeRecurse(Match * match);
+
+/* updates node and calls heapify down and heapify up appropriately */
+//void updateNode();
+
+
+
 #endif

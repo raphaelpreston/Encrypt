@@ -151,7 +151,6 @@
   <ItemGroup>
     <ClInclude Include="Binary.h" />
     <ClInclude Include="IntArray.h" />
-    <ClInclude Include="MatchHeap.h" />
     <ClInclude Include="Matchings.h" />
   </ItemGroup>
   <ItemGroup>
@@ -160,7 +159,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="IntArray.c" />
-    <ClCompile Include="MatchHeap.c" />
     <ClCompile Include="Matchings.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

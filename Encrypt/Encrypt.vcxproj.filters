@@ -24,9 +24,6 @@
     <ClInclude Include="IntArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MatchHeap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Crypt.c">
@@ -39,9 +36,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IntArray.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MatchHeap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
