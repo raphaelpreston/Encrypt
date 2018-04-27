@@ -56,11 +56,11 @@ int main()
 	printf("\n\n");
 	Matches * testers = newMatches(32);
 
-	Match * a = newMatch(5, 15, 11, 1);
-	Match * b = newMatch(4, 6, 3, 1);
-	Match * c = newMatch(14, 16, 3, 1);
-	Match * d = newMatch(11, 14, 4, 1);
-	Match * n = newMatch(20, 31, 12, 1);
+	Match * a = newMatch(5, 15, 11, 1);	//mid 10
+	Match * b = newMatch(4, 6, 3, 1);	//mid 5
+	Match * c = newMatch(14, 16, 3, 1);	//mid 15
+	Match * d = newMatch(11, 14, 4, 1);	//mid: 12.5
+	Match * n = newMatch(20, 31, 12, 1);	//mid: 20...
 
 	addMatch(testers, a);
 	addMatch(testers, b);
@@ -70,11 +70,18 @@ int main()
 	//right now we are doing this seperately but it will be worked in to addMatch
 	printMatches(testers);
 
-	heap_insertMatch(testers, a);
-	heap_insertMatch(testers, b);
 	heap_insertMatch(testers, c);
+	printf("AFTER C:\n\n"); printMatches(testers);
+	heap_insertMatch(testers, b);
+	printf("AFTER B:\n\n");	printMatches(testers);
 	heap_insertMatch(testers, d);
+	printf("AFTER D:\n\n"); printMatches(testers);
+	heap_insertMatch(testers, a);
+	printMatches(testers);
 	heap_insertMatch(testers, n);
+	printMatches(testers);
+	
+	
 
 	printHeap(testers->heap);
 	printMatches(testers);

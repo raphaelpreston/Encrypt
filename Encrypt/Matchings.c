@@ -486,10 +486,12 @@ void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
 		Match * temp = root;
 
 		/* swap pointers for both starting and ending arrays */
-		/*matches->start_arr[match->start] = root->start;
-		matches->start_arr[root->start] = match->start;
-		matches->end_arr[match->end] = root->end;
-		matches->end_arr[root->end] = match->start;*/
+		// printf("Beginning swapping...\n");
+		// printf("start_arr[%i] = ")
+		matches->start_arr[match->start] = root;
+		matches->start_arr[root->start] = match;
+		matches->end_arr[match->end] = root;
+		matches->end_arr[root->end] = match;
 
 		/* swap the values of the root and the match*/
 		swapValues(root, match);
