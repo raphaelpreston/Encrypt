@@ -33,10 +33,8 @@ typedef struct Matches {
 1. A parent match will always have a bigger length
 2. A parent's left child's middle is to the left or equal to itself
 3. A parent's right child's middle is to the right of itself
-
-
-
 */
+
 typedef struct MatchHeap {
 	int size;
 	struct Match * root;
@@ -55,12 +53,6 @@ int matchLength(Match *);
 
 /* adds the match to a matches */
 void addMatch(Matches * matches, Match * m);
-
-/* returns true if all bits in match m are already matched by other bits in the matches object (note:  it only checks if body is enveloped when adding, crypt being enveloped is fine) */
-bool enveloped(Matches * matches, Match * m);
-
-/* sets the bits in a matches object as used */
-void set_bits_used(Matches * matches, Match * match);
 
 /* prints a specific match */
 void printMatch(Match * m);
