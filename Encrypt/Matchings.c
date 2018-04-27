@@ -55,6 +55,7 @@ Matches * newMatches(int num_bits) {
 			m->size = num_bits;
 			m->num_matches = 0;
 			m->used = used;
+			m->heap = newMatchHeap();
 		}
 		else {
 			printf("Failed to calloc space for begin and end array with %i bits each", num_bits);
@@ -461,30 +462,37 @@ MatchHeap * newMatchHeap() {
 	return heap;
 }
 
-void heap_insertMatch(MatchHeap * heap, Match * match) {
+void heap_insertMatch(Matches * matches, Match * match) {
 	if (match == NULL) printf("ERROR: MATCH WAS NULL\n\n.");
 
 	/* first time adding a node */
-	if (heap->root == NULL) {
-		heap->root = match;
+	if (matches->heap->root == NULL) {
+		matches->heap->root = match;
 	}
 	else {
-		if (middle(match, 1) < middle(heap->root, 1)) insertRecurse(heap->root, match);	//node to add belongs to left
-		else if (middle(match, -1) > middle(heap->root, -1)) insertRecurse(heap->root, match);	//node to add belongs to right
-		else insertRecurse(heap->root, match);	//the share the same middle, insert left
+		if (middle(match, 1) < middle(matches->heap->root, 1)) heap_insertRecurse(matches, matches->heap->root, match);	//node to add belongs to left
+		else if (middle(match, -1) > middle(matches->heap->root, -1)) heap_insertRecurse(matches, matches->heap->root, match);	//node to add belongs to right
+		else heap_insertRecurse(matches, matches->heap->root, match);	//the share the same middle, insert left
 	}
 }
 
-void heap_insertRecurse(Match * root, Match * match) {
+void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
 
 	/* if it's bigger than the current one, swap the root out for the node */
 	if (matchLength(match) > matchLength(root)) {
 		//assign the node into the proper position
 		Match * temp = root;
 
+		/* swap pointers for both starting and ending arrays */
+		/*matches->start_arr[match->start] = root->start;
+		matches->start_arr[root->start] = match->start;
+		matches->end_arr[match->end] = root->end;
+		matches->end_arr[root->end] = match->start;*/
+
 		/* swap the values of the root and the match*/
 		swapValues(root, match);
-		// working here to update in the other arrays
+		
+		
 	}
 
 	/* send the appropriate match down */
@@ -494,7 +502,7 @@ void heap_insertRecurse(Match * root, Match * match) {
 			return;
 		}
 		else {
-			insertRecurse(root->lChild, match);	//node to add belongs to left
+			heap_insertRecurse(matches, root->lChild, match);	//node to add belongs to left
 		}
 	}
 	else if (middle(match, -1) > middle(root, -1)) {
@@ -503,7 +511,7 @@ void heap_insertRecurse(Match * root, Match * match) {
 			return;
 		}
 		else {
-			insertRecurse(root->rChild, match);	//node to add belongs to right
+			heap_insertRecurse(matches, root->rChild, match);	//node to add belongs to right
 		}
 	}
 	else {	//ties go to the left
@@ -512,7 +520,7 @@ void heap_insertRecurse(Match * root, Match * match) {
 			return;
 		}
 		else {
-			insertRecurse(root->lChild, match);	//node to add belongs to left
+			heap_insertRecurse(matches, root->lChild, match);	//node to add belongs to left
 		}
 	}
 }
