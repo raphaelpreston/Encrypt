@@ -425,8 +425,8 @@ int middle(Match * m, int balance) {
 }
 
 void swapValues(Match * a, Match * b) {
-	Match * temp = a;
-
+	Match temp = *a;
+	//printf("Swapping values of "); printMatch(a); printf(" and "); printMatch(b); printf("\n");
 	// assign all b stuff to a
 	a->start = b->start;
 	a->end = b->end;
@@ -436,12 +436,13 @@ void swapValues(Match * a, Match * b) {
 	a->rChild = b->rChild;
 
 	//assign all a stuff to b
-	b->start = temp->start;
-	b->end = temp->end;
-	b->cindex = temp->cindex;
-	b->type = temp->type;
-	b->lChild = temp->lChild;
-	b->rChild = temp->rChild;
+	b->start = temp.start;
+	b->end = temp.end;
+	b->cindex = temp.cindex;
+	b->type = temp.type;
+	b->lChild = temp.lChild;
+	b->rChild = temp.rChild;
+	//printf("Post swap:         "); printMatch(a); printf(" and "); printMatch(b); printf("\n");
 }
 
 //void deleteMatches(matches * m, int num_bits) {
