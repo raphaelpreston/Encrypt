@@ -14,6 +14,7 @@ typedef struct Match {
 	int cindex;
 	struct Match * lChild;		//for the MatchHeap
 	struct Match * rChild;
+	struct Match * parent;
 	int type;					//1 for a positive match, 2 for a negative match
 } Match;
 
@@ -92,6 +93,10 @@ void swapValues(Match * a, Match * b);
 
 
 MatchHeap * newMatchHeap();
+
+void assignLChild(Match * lChild, Match * parent);
+
+void assignRChild(Match * rChild, Match * parent);
 
 /* percolate down */
 void heap_insertMatch(MatchHeap * heap, Match * match);

@@ -68,28 +68,25 @@ int main()
 	addMatch(testers, d);
 	addMatch(testers, n);
 	//right now we are doing this seperately but it will be worked in to addMatch
-	printMatches(testers);
 
 	//to do this within addMatch
 	// 1. Every time a match in the arrays is replaced, instead of deleting the old match and putting in the new one, instead just change the values of the existing match in the arrays.
 	//    Next, update the heap by appropriatly making that match percolate up or down.
 	// 2. In addMatch, when a match is deleted out of both arrays, also effectively delete it from the heap.  For this we will have to keep track of parent matches.  RIP LOL
 
-	heap_insertMatch(testers, c);
-	printf("AFTER C:\n\n"); printMatches(testers);
-	heap_insertMatch(testers, b);
-	printf("AFTER B:\n\n");	printMatches(testers);
-	heap_insertMatch(testers, d);
-	printf("AFTER D:\n\n"); printMatches(testers);
 	heap_insertMatch(testers, a);
-	printMatches(testers);
-	heap_insertMatch(testers, n);
-	printMatches(testers);
+	// printf("AFTER C:\n\n"); printMatches(testers);
+	heap_insertMatch(testers, b);
+	// printf("AFTER B:\n\n");	printMatches(testers);
+	heap_insertMatch(testers, c);
+	// printf("AFTER D:\n\n"); printMatches(testers);
+	//heap_insertMatch(testers, a);
+	//heap_insertMatch(testers, n);
 	
 	
-
+	printf("\n");
 	printHeap(testers->heap);
-	printMatches(testers);
+	// printMatches(testers);
 
 
 
