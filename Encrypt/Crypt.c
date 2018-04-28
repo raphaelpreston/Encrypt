@@ -80,8 +80,8 @@ int main()
 	// printf("AFTER B:\n\n");	printMatches(testers);
 	heap_insertMatch(testers, c);
 	// printf("AFTER D:\n\n"); printMatches(testers);
-	//heap_insertMatch(testers, a);
-	//heap_insertMatch(testers, n);
+	heap_insertMatch(testers, d);
+	heap_insertMatch(testers, n);
 	
 	
 	printf("\n");

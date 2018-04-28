@@ -490,9 +490,7 @@ void heap_insertMatch(Matches * matches, Match * match) {
 		matches->heap->root = match;
 	}
 	else {
-		if (middle(match, 1) < middle(matches->heap->root, 1)) heap_insertRecurse(matches, matches->heap->root, match);	//node to add belongs to left
-		else if (middle(match, -1) > middle(matches->heap->root, -1)) heap_insertRecurse(matches, matches->heap->root, match);	//node to add belongs to right
-		else heap_insertRecurse(matches, matches->heap->root, match);	//the share the same middle, insert left
+		heap_insertRecurse(matches, matches->heap->root, match);	//node to add belongs to right
 	}
 }
 
@@ -556,7 +554,7 @@ void printNodeRecurse(Match * match) {
 	for (int i = 0; i < middle(match, -1); i++) {
 		printf(" ");
 	}
-	printMatch(match); printf("(%p)\n", match->parent);
+	printMatch(match); printf("(P: %p, LC: %p, RC: %p)\n", match->parent, match->lChild, match->rChild);
 
 	printNodeRecurse(match->lChild);
 	printNodeRecurse(match->rChild);
