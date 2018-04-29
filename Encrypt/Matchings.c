@@ -196,7 +196,7 @@ void addMatch(Matches * matches, Match * m) {
 }
 
 void printMatch(Match * m){
-	printf("(%i-%i,%i-%i [%i,%s] - %p)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", m);
+	printf("(%i-%i,%i-%i [%i,%s] - %p [P: %p, LC: %p, RC: %p])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", m, m->parent, m->lChild, m->rChild);
 }
 
 void printValidity(Match * m, Binary * b) {
@@ -499,7 +499,7 @@ void heap_insertMatch(Matches * matches, Match * match) {
 		matches->heap->root = match;
 	}
 	else {
-		heap_insertRecurse(matches, matches->heap->root, match);	//node to add belongs to right
+		heap_insertRecurse(matches, matches->heap->root, match);
 	}
 }
 
@@ -508,6 +508,7 @@ void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
 
 	/* if it's bigger than the current one, swap the root out for the node */
 	if (matchLength(match) > matchLength(root)) {
+		printf("Length of match: "); printMatch(match); printf(" is bigger than root: "); printMatch(root); printf(".. commencing swapping.\n");
 		//assign the node into the proper position
 		temp = root;
 
@@ -527,22 +528,21 @@ void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
 		root->end = match->end;
 		root->cindex = match->cindex;
 		root->type = match->type;
-		root->lChild = match->lChild;
-		root->rChild = match->rChild;
+		// root->lChild = match->lChild;
+		// root->rChild = match->rChild;
 		// root->parent = match->parent; // not this yet, this has to happen later
-		
+		// root needs to keep its parents and its children
 
 		//assign all root stuff to match
 		match->start = t2.start;
 		match->end = t2.end;
 		match->cindex = t2.cindex;
 		match->type = t2.type;
-		match->lChild = t2.lChild;
-		match->rChild = t2.rChild;
+		// match->lChild = t2.lChild;
+		// match->rChild = t2.rChild;
 
 		// match->parent = &t2;
-		// printf("Switched parents between %p (now %p) and %p (now %p)\n", root, root->parent, match, match->parent);
-		printf("Switch vals between %p and %p\n", root, match);
+		printf("Post swap... match: "); printMatch(match); printf(" root: "); printMatch(root); printf("\n");
 	}
 
 	/* send the appropriate match down */
@@ -595,7 +595,7 @@ void printNodeRecurse(Match * match) {
 	for (int i = 0; i < middle(match, -1); i++) {
 		printf(" ");
 	}
-	printMatch(match); printf("(P: %p, LC: %p, RC: %p)\n", match->parent, match->lChild, match->rChild);
+	printMatch(match); printf("\n");//printf("(P: %p, LC: %p, RC: %p)\n", match->parent, match->lChild, match->rChild);
 
 	printNodeRecurse(match->lChild);
 	printNodeRecurse(match->rChild);
@@ -605,11 +605,15 @@ void printNodeRecurse(Match * match) {
 void checkHeap(Matches * matches) {
 	Match * m;
 	bool conflict;
+	bool left;
+	bool right;
 	for (int i = 0; i < matches->size; i++) {
 		m = matches->start_arr[i];
 		if (m) {
 			conflict = false;
-
+			left = true;
+			right = true;;
+			/* check with parent/children conflict */
 			/* check its children */
 			if (m->lChild && m->lChild->parent != m) conflict = true;
 			if (m->rChild && m->rChild->parent != m) conflict = true;
@@ -617,7 +621,31 @@ void checkHeap(Matches * matches) {
 			/* check its parent */
 			if (m->parent && m->parent->lChild != m && m->parent->rChild != m) conflict = true;
 
-			printf("(%i-%i,%i-%i [%i,%s] ... %s)\n", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", conflict ? "CONFLICTED" : "NO CONFLICT");
+			/* check with max in its branch conflict */
+			bool maxFail = maxCheck(m);
+
+			/* check that its child to the left is to the left and same with right. */
+			if (m->lChild && middle(m->lChild, 1) > middle(m, 1)) left = false;
+			if (m->rChild && middle(m->rChild, -1) <= middle(m, -1)) right = false;
+
+			printf("(%i-%i,%i-%i [%i,%s] ... parents: %s, maxCheck: %s, lrCheck: %s <> %s)\n", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", conflict ? "CONFLICTED" : "NO CONFLICT", maxFail ? "FAIL" : "PASS", left ? "PASS" : "FAIL", right ? "PASS" : "FAIL");
 		}
 	}
 }
+
+bool maxCheck(Match * m) {
+	int max = matchLength(m);
+
+	bool l = m->lChild ? maxRecurse(m->lChild, max) : true;
+	bool r = m->rChild ? maxRecurse(m->rChild, max) : true;
+	return l && r;
+}
+
+bool maxRecurse(Match * m, int max) {
+	if (matchLength(m) > max) return false;
+
+	bool l = m->lChild ? maxRecurse(m->lChild, max) : true;
+	bool r = m->rChild ? maxRecurse(m->rChild, max) : true;
+	return l && r;
+}
+

@@ -110,6 +110,10 @@ void printHeap(MatchHeap * heap);
 void printNodeRecurse(Match * match);
 
 void checkHeap(Matches * matches);
+
+bool maxCheck(Match * match);
+
+bool maxRecurse(Match * m, int max);
 /* updates node and calls heapify down and heapify up appropriately */
 //void updateNode();
 
