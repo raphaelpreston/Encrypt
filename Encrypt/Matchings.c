@@ -477,18 +477,6 @@ MatchHeap * newMatchHeap() {
 	return heap;
 }
 
-//void assignLChild(Match * lChild, Match * parent) {
-//	parent->lChild = lChild;
-//	lChild->parent = parent;
-//	printf("Just assigned the match "); printMatch(parent); printf(" as the parent of "); printMatch(lChild); printf("\n");
-//}
-//
-//void assignRChild(Match * rChild, Match * parent) {
-//	parent->rChild = rChild;
-//	rChild->parent = parent;
-//	printf("Just assigned the match "); printMatch(parent); printf(" as the parent of "); printMatch(rChild); printf("\n");
-//}
-
 void heap_insertMatch(Matches * matches, Match * match) {
 	if (match == NULL) printf("ERROR: MATCH WAS NULL\n\n.");
 	printf("\nInserting: "); printMatch(match); printf("\n");	//i'm pretty sure that also if temp is not null we have to reassign the parent of something to something
