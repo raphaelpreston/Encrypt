@@ -76,17 +76,18 @@ int main()
 
 	heap_insertMatch(testers, a);
 	// printf("AFTER C:\n\n"); printMatches(testers);
+	printf("\n"); printHeap(testers->heap);
 	heap_insertMatch(testers, b);
-	// printf("AFTER B:\n\n");	printMatches(testers);
+	printf("\n"); printHeap(testers->heap);
 	heap_insertMatch(testers, c);
-	// printf("AFTER D:\n\n"); printMatches(testers);
+	printf("\n"); printHeap(testers->heap);
 	heap_insertMatch(testers, d);
+	printf("\n"); printHeap(testers->heap);
 	heap_insertMatch(testers, n);
-	
-	
+	printf("\n"); printHeap(testers->heap);
+
 	printf("\n");
-	printHeap(testers->heap);
-	// printMatches(testers);
+	checkHeap(testers->heap);
 
 
 

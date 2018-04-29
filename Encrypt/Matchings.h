@@ -99,16 +99,17 @@ void assignLChild(Match * lChild, Match * parent);
 void assignRChild(Match * rChild, Match * parent);
 
 /* percolate down */
-void heap_insertMatch(MatchHeap * heap, Match * match);
+void heap_insertMatch(Matches * heap, Match * match);
 
 /* helper function for insertNode */
-void heap_insertRecurse(Match * root, Match * match);
+void heap_insertRecurse(Match * matches, Match * root, Match * match);
 
 /* recursively print out the heap (in a very cryptic annoying way) */
 void printHeap(MatchHeap * heap);
 
 void printNodeRecurse(Match * match);
 
+void checkHeap(MatchHeap * heap);
 /* updates node and calls heapify down and heapify up appropriately */
 //void updateNode();
 
