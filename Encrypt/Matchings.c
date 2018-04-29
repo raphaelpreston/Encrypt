@@ -202,6 +202,7 @@ void printMatch(Match * m){
 void printValidity(Match * m, Binary * b) {
 	bool valid = true;
 	int fail;
+	int conflict = false;
 
 	int bi;
 	int ci;
@@ -216,7 +217,14 @@ void printValidity(Match * m, Binary * b) {
 		}
 	}
 
-	printf("(%i-%i,%i-%i [%i,%s] ... %s)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", valid ? "VALID" : "NOT VALID");
+	/* check its children */
+	if (m->lChild && m->lChild->parent != m) conflict = true;
+	if (m->rChild && m->rChild->parent != m) conflict = true;
+
+	/* check its parent */
+	if (m->parent && m->parent->lChild != m && m->parent->rChild != m) conflict = true;
+
+	printf("(%i-%i,%i-%i [%i,%s] ... %s and %s)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", valid ? "VALID" : "NOT VALID", conflict ? "CONFLICTED" : "NO CONFLICT");
 
 }
 
@@ -594,30 +602,22 @@ void printNodeRecurse(Match * match) {
 
 }
 
-void checkHeap(MatchHeap * heap) {
-	printf("Checking validity of heap with root %p...\n", heap->root);
-	int errsL = heap->root->lChild ? checkRecurse(heap->root->lChild) : 0;
-	int errsR = heap->root->rChild ? checkRecurse(heap->root->rChild) : 0;
-	printf("Validity check completed with %i errors.\n", errsL + errsR);
-}
+void checkHeap(Matches * matches) {
+	Match * m;
+	bool conflict;
+	for (int i = 0; i < matches->size; i++) {
+		m = matches->start_arr[i];
+		if (m) {
+			conflict = false;
 
-int checkRecurse(Match * match) {
-	int errs = 0;
+			/* check its children */
+			if (m->lChild && m->lChild->parent != m) conflict = true;
+			if (m->rChild && m->rChild->parent != m) conflict = true;
 
-	if (match->lChild) {
-		if (match->lChild->parent != match) {
-			printf("Err: Parent of lChild of %p is %p\n", match, match->lChild->parent);
-			errs++;
+			/* check its parent */
+			if (m->parent && m->parent->lChild != m && m->parent->rChild != m) conflict = true;
+
+			printf("(%i-%i,%i-%i [%i,%s] ... %s)\n", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", conflict ? "CONFLICTED" : "NO CONFLICT");
 		}
 	}
-	if (match->rChild) {
-		if (match->rChild->parent != match) {
-			printf("Err: Parent of rChild of %p is %p\n", match, match->rChild->parent);
-			errs++;
-		}
-	}
-
-	int errsL = match->lChild ? checkRecurse(match->lChild) : 0;
-	int errsR = match->rChild ? checkRecurse(match->rChild): 0;
-	return errs + errsL + errsR;
 }

@@ -109,7 +109,7 @@ void printHeap(MatchHeap * heap);
 
 void printNodeRecurse(Match * match);
 
-void checkHeap(MatchHeap * heap);
+void checkHeap(Matches * matches);
 /* updates node and calls heapify down and heapify up appropriately */
 //void updateNode();
 

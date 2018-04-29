@@ -75,7 +75,6 @@ int main()
 	// 2. In addMatch, when a match is deleted out of both arrays, also effectively delete it from the heap.  For this we will have to keep track of parent matches.  RIP LOL
 
 	heap_insertMatch(testers, a);
-	// printf("AFTER C:\n\n"); printMatches(testers);
 	printf("\n"); printHeap(testers->heap);
 	heap_insertMatch(testers, b);
 	printf("\n"); printHeap(testers->heap);
@@ -87,7 +86,7 @@ int main()
 	printf("\n"); printHeap(testers->heap);
 
 	printf("\n");
-	checkHeap(testers->heap);
+	checkHeap(testers);
 
 
 
