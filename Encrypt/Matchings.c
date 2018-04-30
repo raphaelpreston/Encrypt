@@ -479,19 +479,22 @@ MatchHeap * newMatchHeap() {
 
 void heap_insertMatch(Matches * matches, Match * match) {
 	if (match == NULL) printf("ERROR: MATCH WAS NULL\n\n.");
-	printf("\nInserting: "); printMatch(match); printf("\n");	//i'm pretty sure that also if temp is not null we have to reassign the parent of something to something
+	printf("\nInserting: "); printMatch(match); printf("\n");
 
 	/* first time adding a node */
 	if (matches->heap->root == NULL) {
+		printf("Heap root is NULL so adding "); printMatch(match); printf(" as the root.\n");
 		match->parent = NULL;
 		matches->heap->root = match;
 	}
 	else {
+		printf("Heap wasn't null so calling percolating down, starting at root: "); printMatch(matches->heap->root); printf("\n");
 		heap_insertRecurse(matches, matches->heap->root, match);
 	}
 }
 
 void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
+	printf("Comparing match: "); printMatch(match); printf(" with root: "); printMatch(root); printf("\n");
 	Match * temp = NULL; //use this if the values have been swapped to preserve the pointer
 
 	/* if it's bigger than the current one, swap the root out for the node */
@@ -501,7 +504,7 @@ void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
 		temp = root;
 
 		/* swap pointers for both starting and ending arrays */
-		matches->start_arr[match->start] = root;
+		matches->start_arr[match->start] = root;	/// phase away from doing this, instead just change the parent/lchild/rchild instead of swapping values
 		matches->start_arr[root->start] = match;
 		matches->end_arr[match->end] = root;
 		matches->end_arr[root->end] = match;
@@ -532,9 +535,11 @@ void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
 		// match->parent = &t2;
 		printf("Post swap... match: "); printMatch(match); printf(" root: "); printMatch(root); printf("\n");
 	}
-
+	
+	printf("Time to send the appropriate match down...\n");
 	/* send the appropriate match down */
 	if (middle(match, 1) < middle(root, 1)) {
+		printf("Middle of match "); printMatch(match); printf(" was to the left of the middle of the root "); printMatch(root); printf("\n");
 		if (!root->lChild) {
 			// assignLChild(match, root);
 			root->lChild = match;
@@ -543,10 +548,12 @@ void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
 			return;
 		}
 		else {
+			printf("Match "); printMatch(match); printf(" has a left child, so percolating down from there...\n");
 			heap_insertRecurse(matches, root->lChild, match);	//node to add belongs to left
 		}
 	}
 	else if (middle(match, -1) > middle(root, -1)) {
+		printf("Middle of match "); printMatch(match); printf(" was to the right of the middle of the root "); printMatch(root); printf("\n");
 		if (!root->rChild) {
 			// assignRChild(match, root);
 			root->rChild = match;
@@ -555,10 +562,13 @@ void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
 			return;
 		}
 		else {
+			printf("Match "); printMatch(match); printf(" has a right child, so percolating down from there...\n");
 			heap_insertRecurse(matches, root->rChild, match);	//node to add belongs to right
+
 		}
 	}
 	else {	//ties go to the left
+		printf("Middle of match "); printMatch(match); printf(" was the same as the middle of the root "); printMatch(root); printf("\n");
 		if (!root->lChild) {
 			// assignLChild(match, root);
 			root->lChild = match;
@@ -567,6 +577,7 @@ void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
 			return;
 		}
 		else {
+			printf("Match "); printMatch(match); printf(" has a left child, so percolating down from there...\n");
 			heap_insertRecurse(matches, root->lChild, match);	//node to add belongs to left
 		}
 	}
