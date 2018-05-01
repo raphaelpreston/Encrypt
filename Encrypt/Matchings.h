@@ -121,7 +121,7 @@ bool rootReplace(Match * root, Match * match);
 /* returns true if child belongs to the left of parent, false otherwise	*/
 bool goesToLeft(Match * child, Match * parent);
 
-/* reAdds all branches below root to the destination root */
+/* reAdds all branches startin with root to the destination match */
 void reAdd(Match * root, Match * dest)
 
 #endif

@@ -537,7 +537,7 @@ void heap_insertRecurse(Match * root, Match * match) {
 bool rootReplace(Match * root, Match * match) {	//returns true if root went to left of match, false otherwise
 
 	/* reassign the old root's parent's child pointer */
-	if (root == root->lChild) root->parent->lChild = match;
+	if (root == root->parent->lChild) root->parent->lChild = match;
 	else root->parent->rChild = match;
 
 	/* update the old root's parent to the new match */
@@ -566,6 +566,29 @@ bool goesToLeft(Match * child, Match * parent) {
 		printf("Middle of match "); printMatch(child); printf(" was to the left of the middle of the root "); printMatch(parent); printf("\n");
 		return true;	//ties go left
 	}
+}
+
+bool reAdd(Match * root, Match * dest) {
+
+	/* cut off the connection to the parent */
+	if (root == root->parent->lChild) root->parent->lChild = NULL;
+	else root->parent->rChild = NULL;
+	root->parent = NULL;
+
+	/* make a copy of lChild and rChild and cut of connections */
+	Match * lChild = root->lChild;
+	Match * rChild = root->rChild;
+	root->lChild = NULL;
+	root->rChild = NULL;
+
+	/* insert the newly cut off root to the destination */
+	heap_insertRecurse(dest, root);
+
+	/* readd rest of minitree */
+	if (lChild) reAdd(root->lChild, dest);
+	if (rChild) reAdd(root->rChild, dest);
+
+	return;
 }
 
 void printHeap(MatchHeap * heap) {
