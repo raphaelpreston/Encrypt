@@ -37,7 +37,6 @@ int main()
 
 	// /* print binary */
 	//printBinaryHandle(binary);
-
 	//
 	// /* find matchings */
 	//printf("Finding matches...\n");
@@ -49,44 +48,59 @@ int main()
 
 	//printMatchesValidity(matches, binary);
 	//
+	// HAVE TO CHANGE: INSTEAD OF DELETING A MATCH, JUST SWAP THE VALUES AND THEN UPATE IT'S SPOT IN THE START_ARR, END_ARR, AND THE HEAP
 
-	//// printMatches(matches);
+	// printMatches(matches);
 	/* print out most efficient matches using the MatchHeap */
-	//testing MatchHeap
-	printf("\n\n");
-	Matches * testers = newMatches(32);
+	//big testing for MatchHeap: using the actual matches
 
-	Match * a = newMatch(5, 15, 11, 1);	//mid 10
-	Match * b = newMatch(4, 6, 3, 1);	//mid 5
-	Match * c = newMatch(14, 16, 3, 1);	//mid 15
-	Match * d = newMatch(11, 14, 4, 1);	//mid: 12.5
-	Match * n = newMatch(20, 31, 12, 1);	//mid: 20...
+	/*for (int i = 0; i < matches->size; i++) {
+		Match * m = matches->start_arr[i];
+		if (m) heap_insertMatch(matches, m);
+	}
 
-	addMatch(testers, a);
-	addMatch(testers, b);
-	addMatch(testers, c);
-	addMatch(testers, d);
-	addMatch(testers, n);
-	//right now we are doing this seperately but it will be worked in to addMatch
-
-	//to do this within addMatch
-	// 1. Every time a match in the arrays is replaced, instead of deleting the old match and putting in the new one, instead just change the values of the existing match in the arrays.
-	//    Next, update the heap by appropriatly making that match percolate up or down.
-	// 2. In addMatch, when a match is deleted out of both arrays, also effectively delete it from the heap.  For this we will have to keep track of parent matches.  RIP LOL
-
-	heap_insertMatch(testers, a);
-	// printf("\n"); printHeap(testers->heap);
-	heap_insertMatch(testers, b);
-	printf("\n"); printHeap(testers->heap);
-	heap_insertMatch(testers, c);
-	printf("\n"); printHeap(testers->heap);
-	heap_insertMatch(testers, d);
-	printf("\n"); printHeap(testers->heap);
-	heap_insertMatch(testers, n);
-	printf("\n"); printHeap(testers->heap);
-
+	printf("\n"); printHeap(matches->heap);
 	printf("\n");
-	checkHeap(testers);
+	checkHeap(matches);
+	*/
+
+	//Checking int/double comps
+	int i = 2;
+	double d = 2.1;
+	double d2 = 2.0;
+
+	printf("%f %s %i\n", d, d == i ? "==" : (d < i ? "<" : ">"), i);
+	printf("%f %s %i\n", d2, d2 == i ? "==" : (d2 < i ? "<" : ">"), i);
+	printf("%f %s (double)%f\n", d, d == (double)i ? "==" : (d < (double)i ? "<" : ">"), (double)i);
+	printf("%f %s (double)%f\n", d2, d2 == (double)i ? "==" : (d2 < (double)i ? "<" : ">"), (double)i);
+
+
+	//testing MatchHeap
+	//printf("\n\n");
+	//Matches * testers = newMatches(32);
+	//Match * a = newMatch(5, 15, 11, 1);	//mid 10
+	//Match * b = newMatch(4, 6, 3, 1);	//mid 5
+	//Match * c = newMatch(14, 16, 3, 1);	//mid 15
+	//Match * d = newMatch(11, 14, 4, 1);	//mid: 12.5
+	//Match * n = newMatch(20, 31, 12, 1);	//mid: 20...
+	//addMatch(testers, a);
+	//addMatch(testers, b);
+	//addMatch(testers, c);
+	//addMatch(testers, d);
+	//addMatch(testers, n);
+	////right now we are doing this seperately but it will be worked in to addMatch
+	//heap_insertMatch(testers, a);
+	//// printf("\n"); printHeap(testers->heap);
+	//heap_insertMatch(testers, b);
+	//printf("\n"); printHeap(testers->heap);
+	//heap_insertMatch(testers, c);
+	//printf("\n"); printHeap(testers->heap);
+	//heap_insertMatch(testers, d);
+	//printf("\n"); printHeap(testers->heap);
+	//heap_insertMatch(testers, n);
+	//printf("\n"); printHeap(testers->heap);
+	//printf("\n");
+	//checkHeap(testers);
 
 
 

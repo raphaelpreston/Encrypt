@@ -96,7 +96,7 @@ void swapValues(Match * a, Match * b);
 MatchHeap * newMatchHeap();
 
 /* percolate down */
-void heap_insertMatch(Matches * heap, Match * match);
+void heap_insertMatch(Matches * matches, Match * match);
 
 /* helper function for insertNode */
 void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match);

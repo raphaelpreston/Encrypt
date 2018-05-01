@@ -196,7 +196,7 @@ void addMatch(Matches * matches, Match * m) {
 }
 
 void printMatch(Match * m){
-	printf("(%i-%i,%i-%i [%i,%s] - %p [P: %p, LC: %p, RC: %p])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", m, m->parent, m->lChild, m->rChild);
+	printf("(%i-%i,%i-%i [%i,%s] - %i=%i - %p [P: %p, LC: %p, RC: %p])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", middle(m, -1), middle(m, 1), m, m->parent, m->lChild, m->rChild);
 }
 
 void printValidity(Match * m, Binary * b) {
@@ -514,7 +514,6 @@ void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have 
 			if (root->lChild) reAdd(root->lChild, match);
 		}
 
-		
 		return;
 	}
 	
