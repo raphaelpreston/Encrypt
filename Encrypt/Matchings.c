@@ -489,23 +489,31 @@ void heap_insertMatch(Matches * matches, Match * match) {
 	}
 	else {
 		printf("Heap wasn't null so calling percolating down, starting at root: "); printMatch(matches->heap->root); printf("\n");
-		heap_insertRecurse(matches->heap->root, match);
+		heap_insertRecurse(matches->heap, matches->heap->root, match);
 	}
 }
 
-void heap_insertRecurse(Match * root, Match * match) {
+void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have to send heap in case we are replacing the root, send it as null if it's not needed to check
 	printf("Comparing match: "); printMatch(match); printf(" with root: "); printMatch(root); printf("\n");
 
 	/* if it's bigger than the current one, insert it in as a new root of the mini tree */
 	if (matchLength(match) > matchLength(root)) {
+		/* reassign root of matches heap if neccesary */
+		if (heap && heap->root == root) heap->root = match;
+
 		printf("Length of match: "); printMatch(match); printf(" is bigger than root: "); printMatch(root); printf(".. commencing root replacement.\n");
 		
 		/* make the match become the root of the new mini tree */
 		bool wentToLeft = rootReplace(root, match);
 		
 		/* if the root went to the left of the new match, have to re-add stuff to the right of the old root	starting at the new root (match) & vice versa */
-		if (wentToLeft) reAdd(root->rChild, match);
-		else reAdd(root->lChild, match);
+		if (wentToLeft) {
+			if(root->rChild) reAdd(root->rChild, match);
+		}
+		else {
+			if (root->lChild) reAdd(root->lChild, match);
+		}
+
 		
 		return;
 	}
@@ -519,7 +527,7 @@ void heap_insertRecurse(Match * root, Match * match) {
 			return;
 		}
 		else {	//has a left child
-			heap_insertRecurse(root->lChild, match);	//send it further down the tree to the left
+			heap_insertRecurse(NULL, root->lChild, match);	//send it further down the tree to the left
 		}
 	}
 	else {	//goes to the right
@@ -529,7 +537,7 @@ void heap_insertRecurse(Match * root, Match * match) {
 			return;
 		}
 		else {	//has a right child
-			heap_insertRecurse(root->rChild, match); //send it further down the tree to the right
+			heap_insertRecurse(NULL, root->rChild, match); //send it further down the tree to the right
 		}
 	}
 }
@@ -537,12 +545,18 @@ void heap_insertRecurse(Match * root, Match * match) {
 bool rootReplace(Match * root, Match * match) {	//returns true if root went to left of match, false otherwise
 
 	/* reassign the old root's parent's child pointer */
-	if (root == root->parent->lChild) root->parent->lChild = match;
-	else root->parent->rChild = match;
+	if (root->parent) {	//true root won't have a parent
+		if (root == root->parent->lChild) root->parent->lChild = match;
+		else root->parent->rChild = match;
+	}
+
+	/* make new match's parent the old root's parent */
+	match->parent = root->parent;
 
 	/* update the old root's parent to the new match */
 	root->parent = match;
 
+	
 	/* appropriately assign the old root as the child of the new match */
 	if (goesToLeft(root, match)) {
 		match->lChild = root;
@@ -568,12 +582,14 @@ bool goesToLeft(Match * child, Match * parent) {
 	}
 }
 
-bool reAdd(Match * root, Match * dest) {
+void reAdd(Match * root, Match * dest) {
 
 	/* cut off the connection to the parent */
-	if (root == root->parent->lChild) root->parent->lChild = NULL;
-	else root->parent->rChild = NULL;
-	root->parent = NULL;
+	if (root->parent) {	//true root won't have a parent
+		if (root == root->parent->lChild) root->parent->lChild = NULL;
+		else root->parent->rChild = NULL;
+		root->parent = NULL;
+	}
 
 	/* make a copy of lChild and rChild and cut of connections */
 	Match * lChild = root->lChild;
@@ -582,11 +598,11 @@ bool reAdd(Match * root, Match * dest) {
 	root->rChild = NULL;
 
 	/* insert the newly cut off root to the destination */
-	heap_insertRecurse(dest, root);
+	heap_insertRecurse(NULL, dest, root);
 
 	/* readd rest of minitree */
-	if (lChild) reAdd(root->lChild, dest);
-	if (rChild) reAdd(root->rChild, dest);
+	if (lChild) reAdd(lChild, dest);
+	if (rChild) reAdd(rChild, dest);
 
 	return;
 }
@@ -610,6 +626,8 @@ void printNodeRecurse(Match * match) {
 }
 
 void checkHeap(Matches * matches) {
+	printf("Checking heap starting at root "); printMatch(matches->heap->root); printf("...\n");
+	int numErr = 0;
 	Match * m;
 	bool conflict;
 	bool left;
@@ -629,15 +647,17 @@ void checkHeap(Matches * matches) {
 			if (m->parent && m->parent->lChild != m && m->parent->rChild != m) conflict = true;
 
 			/* check with max in its branch conflict */
-			bool maxFail = maxCheck(m);
+			bool maxPass = maxCheck(m);
 
 			/* check that its child to the left is to the left and same with right. */
 			if (m->lChild && middle(m->lChild, 1) > middle(m, 1)) left = false;
 			if (m->rChild && middle(m->rChild, -1) <= middle(m, -1)) right = false;
 
-			printf("(%i-%i,%i-%i [%i,%s] ... parents: %s, maxCheck: %s, lrCheck: %s <> %s)\n", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", conflict ? "CONFLICTED" : "NO CONFLICT", maxFail ? "FAIL" : "PASS", left ? "PASS" : "FAIL", right ? "PASS" : "FAIL");
+			printf("(%i-%i,%i-%i [%i,%s] ... parents: %s, maxCheck: %s, lrCheck: %s <> %s)\n", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", conflict ? "CONFLICTED" : "NO CONFLICT", maxPass ? "PASS" : "FAIL", left ? "PASS" : "FAIL", right ? "PASS" : "FAIL");
+			if (conflict || !maxPass || !left || !right) numErr++;
 		}
 	}
+	printf("\n\nHeap check completed with %i errors. %s\n\n", numErr, numErr == 0 ? "CONGRATS!!!" : "aw :*(");
 }
 
 bool maxCheck(Match * m) {

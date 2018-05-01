@@ -77,7 +77,7 @@ int main()
 	heap_insertMatch(testers, a);
 	// printf("\n"); printHeap(testers->heap);
 	heap_insertMatch(testers, b);
-	// printf("\n"); printHeap(testers->heap);
+	printf("\n"); printHeap(testers->heap);
 	heap_insertMatch(testers, c);
 	printf("\n"); printHeap(testers->heap);
 	heap_insertMatch(testers, d);

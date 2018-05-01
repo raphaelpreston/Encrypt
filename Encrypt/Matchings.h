@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 //a lot of lag is going to come from deleting not being optimized
+// see reAdd for more optimization
 
 /* structs */
 
@@ -94,15 +95,11 @@ void swapValues(Match * a, Match * b);
 
 MatchHeap * newMatchHeap();
 
-void assignLChild(Match * lChild, Match * parent);
-
-void assignRChild(Match * rChild, Match * parent);
-
 /* percolate down */
 void heap_insertMatch(Matches * heap, Match * match);
 
 /* helper function for insertNode */
-void heap_insertRecurse(Match * root, Match * match);
+void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match);
 
 /* recursively print out the heap (in a very cryptic annoying way) */
 void printHeap(MatchHeap * heap);
@@ -121,7 +118,8 @@ bool rootReplace(Match * root, Match * match);
 /* returns true if child belongs to the left of parent, false otherwise	*/
 bool goesToLeft(Match * child, Match * parent);
 
-/* reAdds all branches startin with root to the destination match */
-void reAdd(Match * root, Match * dest)
+/* reAdds all branches starting with root to the destination match (don't readd at a heap's root cus the heap won't have it's root pointer updated 
+   Note: could make this faster by not adding every single thing below the node, just the ones that have to be readded */
+void reAdd(Match * root, Match * dest);
 
 #endif
