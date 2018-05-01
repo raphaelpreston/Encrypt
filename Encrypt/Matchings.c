@@ -196,7 +196,7 @@ void addMatch(Matches * matches, Match * m) {
 }
 
 void printMatch(Match * m){
-	printf("(%i-%i,%i-%i [%i,%s] - %i=%i - %p [P: %p, LC: %p, RC: %p])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", middle(m, -1), middle(m, 1), m, m->parent, m->lChild, m->rChild);
+	printf("(%i-%i,%i-%i [%i,%s] - %.1f - %p [P: %p, LC: %p, RC: %p])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", middle(m), m, m->parent, m->lChild, m->rChild);
 }
 
 void printValidity(Match * m, Binary * b) {
@@ -419,19 +419,9 @@ int modifiedMatchLength(Match * m, int start, int end) {	//modified match length
 	else printf("YOU DIDN'T ACCOUNT FOR SOMETHING LMAO\n\n\n\n\n");
 }
 
-int middle(Match * m, int balance) {
-	int length = matchLength(m);
-	int mid;
-	if (length % 2 == 0) {	//even length
-		if (balance == -1) mid = length / 2 - 1;
-		else if (balance == 1) mid = length / 2;
-		else printf("\n\n\nWrong value sent to middle balance: %i.\n\n", balance);
-	}
-	else {	//odd length
-		mid = length / 2;
-	}
-	
-	return m->start + mid;
+double middle(Match * m) {
+	double length = (double)matchLength(m);
+	return m->start + length / 2.0;
 }
 
 void swapValues(Match * a, Match * b) {
@@ -567,11 +557,11 @@ bool rootReplace(Match * root, Match * match) {	//returns true if root went to l
 }
 
 bool goesToLeft(Match * child, Match * parent) {
-	if (middle(child, 1) < middle(parent, 1)) {
+	if (middle(child) < middle(parent)) {
 		printf("Middle of match "); printMatch(child); printf(" was to the left of the middle of the root "); printMatch(parent); printf("\n");
 		return true;	//goes to left
 	}
-	else if (middle(child, -1) > middle(parent, -1)) {
+	else if (middle(child) > middle(parent)) {
 		printf("Middle of match "); printMatch(child); printf(" was to the right of the middle of the root "); printMatch(parent); printf("\n");
 		return false;	//goes to right
 	}
@@ -614,7 +604,7 @@ void printHeap(MatchHeap * heap) {
 void printNodeRecurse(Match * match) {
 	if (!match) return;
 
-	for (int i = 0; i < middle(match, -1); i++) {
+	for (int i = 0; i < middle(match); i++) {
 		printf(" ");
 	}
 	printMatch(match); printf("\n");//printf("(P: %p, LC: %p, RC: %p)\n", match->parent, match->lChild, match->rChild);
@@ -649,8 +639,8 @@ void checkHeap(Matches * matches) {
 			bool maxPass = maxCheck(m);
 
 			/* check that its child to the left is to the left and same with right. */
-			if (m->lChild && middle(m->lChild, 1) > middle(m, 1)) left = false;
-			if (m->rChild && middle(m->rChild, -1) <= middle(m, -1)) right = false;
+			if (m->lChild && middle(m->lChild) > middle(m)) left = false;
+			if (m->rChild && middle(m->rChild) <= middle(m)) right = false;
 
 			printf("(%i-%i,%i-%i [%i,%s] ... parents: %s, maxCheck: %s, lrCheck: %s <> %s)\n", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", conflict ? "CONFLICTED" : "NO CONFLICT", maxPass ? "PASS" : "FAIL", left ? "PASS" : "FAIL", right ? "PASS" : "FAIL");
 			if (conflict || !maxPass || !left || !right) numErr++;

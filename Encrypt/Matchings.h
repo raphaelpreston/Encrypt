@@ -84,7 +84,7 @@ Match * merge(Match * matches[], int size);
 bool deleteMatch(Matches * matches, Match * m);		//doesn't actually free cus it doesn't work but it frees some stuff :DD
 
 /* returns middle of match, -1 to favor left, 1 to favor right */
-int middle(Match * match, int balance);
+double middle(Match * match);
 
 /* swaps all values of both matches */
 void swapValues(Match * a, Match * b);
