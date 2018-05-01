@@ -412,11 +412,16 @@ bool deleteMatch(Matches * matches, Match * match) {
 }
 
 int modifiedMatchLength(Match * m, int start, int end) {	//modified match length
-	if (m->end <= start || m->start >= end) return matchLength(m); //completely outside limits
-	if (m->start >= start && m->end <= end) return 0;	//enveloped or exactly same length
-	if (m->start >= start && m->start < end && m->end > end) return matchLength(m) - (end - m->start);	//starts inside and ends to the right
-	if (m->start < start && m->end <= end && m->end > start) return matchLength(m) - (m->end - start);	//starts to the left and ends inside
-	else printf("YOU DIDN'T ACCOUNT FOR SOMETHING LMAO\n\n\n\n\n");
+	//if (m->end <= start || m->start >= end) return matchLength(m); //completely outside limits
+	//if (m->start >= start && m->end <= end) return 0;	//enveloped or exactly same length
+	//if (m->start >= start && m->start < end && m->end > end) return matchLength(m) - (end - m->start);	//starts inside and ends to the right
+	//if (m->start < start && m->end <= end && m->end > start) return matchLength(m) - (m->end - start);	//starts to the left and ends inside
+	//else printf("YOU DIDN'T ACCOUNT FOR SOMETHING LMAO\n\n\n\n\n");
+	int length = 0;
+	for (int i = 0; i < matchLength(m); i++) {
+		if (!(m->start + i <= end && m->start + i >= start)) length++;
+	}
+	return length;
 }
 
 double middle(Match * m) {
@@ -481,10 +486,11 @@ void heap_insertMatch(Matches * matches, Match * match) {
 		printf("Heap wasn't null so calling percolating down, starting at root: "); printMatch(matches->heap->root); printf("\n");
 		heap_insertRecurse(matches->heap, matches->heap->root, match);
 	}
+	printf("Post insert: \n"); printHeap(matches->heap); printf("\n\n");
+	checkHeap(matches);
 }
 
 void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have to send heap in case we are replacing the root, send it as null if it's not needed to check
-	printf("Comparing match: "); printMatch(match); printf(" with root: "); printMatch(root); printf("\n");
 
 	/* if it's bigger than the current one, taking into account the parents length insert it in as a new root of the mini tree */
 	bool isRoot = root->parent == NULL;
@@ -495,10 +501,10 @@ void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have 
 		/* reassign root of matches heap if neccesary */
 		if (heap && heap->root == root) heap->root = match;
 
-		printf("Length of match: "); printMatch(match); printf(" is bigger than root: "); printMatch(root); printf(".. commencing root replacement.\n");
+		printf("Modified length of match: "); printMatch(match); printf(" (%i) is bigger than root: ", modifiedLengthMatch); printMatch(root); printf(" (%i) ...  commencing root replacement.\n", modifiedLengthRoot);
 		
 		/* make the match become the root of the new mini tree */
-		bool wentToLeft = rootReplace(root, match);
+		// bool wentToLeft = rootReplace(root, match);
 		
 		/* if the root went to the left of the new match, have to re-add stuff to the right of the old root	starting at the new root (match) & vice versa */
 		/*if (wentToLeft) {
@@ -587,7 +593,7 @@ void reAdd(Match * root, Match * dest) {
 		root->parent = NULL;
 	}
 
-	/* make a copy of lChild and rChild and cut of connections */
+	/* make a copy of lChild and rChild and cut off connections */			//think error is happening somewhere around here
 	Match * lChild = root->lChild;
 	Match * rChild = root->rChild;
 	root->lChild = NULL;
@@ -650,6 +656,9 @@ void checkHeap(Matches * matches) {
 			if (m->rChild && middle(m->rChild) <= middle(m)) right = false;
 
 			printf("(%i-%i,%i-%i [%i,%s] ... parents: %s, maxCheck: %s, lrCheck: %s <> %s)\n", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", conflict ? "CONFLICTED" : "NO CONFLICT", maxPass ? "PASS" : "FAIL", left ? "PASS" : "FAIL", right ? "PASS" : "FAIL");
+			if (conflict) {
+				printf("Parent: "); printMatch(m->parent); printf("\n");
+			}
 			if (conflict || !maxPass || !left || !right) numErr++;
 		}
 	}

@@ -6,6 +6,7 @@
 
 //a lot of lag is going to come from deleting not being optimized
 // see reAdd for more optimization
+// see modifiedMatchLength and optimize it
 
 /* structs */
 

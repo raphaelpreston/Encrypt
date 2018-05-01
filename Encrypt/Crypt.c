@@ -70,6 +70,9 @@ int main()
 	int numMatches = printOptimumMatches(matches);
 	printf("\nThe entire body can be covered with %i matches.\n", numMatches);
 	
+	// Testing modified length
+
+
 	//testing MatchHeap
 	//printf("\n\n");
 	//Matches * testers = newMatches(32);
