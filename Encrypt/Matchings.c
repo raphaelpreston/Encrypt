@@ -489,97 +489,82 @@ void heap_insertMatch(Matches * matches, Match * match) {
 	}
 	else {
 		printf("Heap wasn't null so calling percolating down, starting at root: "); printMatch(matches->heap->root); printf("\n");
-		heap_insertRecurse(matches, matches->heap->root, match);
+		heap_insertRecurse(matches->heap->root, match);
 	}
 }
 
-void heap_insertRecurse(Matches * matches, Match * root, Match * match) {
+void heap_insertRecurse(Match * root, Match * match) {
 	printf("Comparing match: "); printMatch(match); printf(" with root: "); printMatch(root); printf("\n");
-	Match * temp = NULL; //use this if the values have been swapped to preserve the pointer
 
-	/* if it's bigger than the current one, swap the root out for the node */
+	/* if it's bigger than the current one, insert it in as a new root of the mini tree */
 	if (matchLength(match) > matchLength(root)) {
-		printf("Length of match: "); printMatch(match); printf(" is bigger than root: "); printMatch(root); printf(".. commencing swapping.\n");
-		//assign the node into the proper position
-		temp = root;
-
-		/* swap pointers for both starting and ending arrays */
-		matches->start_arr[match->start] = root;	/// phase away from doing this, instead just change the parent/lchild/rchild instead of swapping values
-		matches->start_arr[root->start] = match;
-		matches->end_arr[match->end] = root;
-		matches->end_arr[root->end] = match;
-
-		/* swap the values of the root and the match*/
-
-		// swapValues(root, match);
-		Match t2 = *root;
-
-		// assign all match stuff to root
-		root->start = match->start;
-		root->end = match->end;
-		root->cindex = match->cindex;
-		root->type = match->type;
-		// root->lChild = match->lChild;
-		// root->rChild = match->rChild;
-		// root->parent = match->parent; // not this yet, this has to happen later
-		// root needs to keep its parents and its children
-
-		//assign all root stuff to match
-		match->start = t2.start;
-		match->end = t2.end;
-		match->cindex = t2.cindex;
-		match->type = t2.type;
-		// match->lChild = t2.lChild;
-		// match->rChild = t2.rChild;
-
-		// match->parent = &t2;
-		printf("Post swap... match: "); printMatch(match); printf(" root: "); printMatch(root); printf("\n");
+		printf("Length of match: "); printMatch(match); printf(" is bigger than root: "); printMatch(root); printf(".. commencing root replacement.\n");
+		
+		/* make the match become the root of the new mini tree */
+		bool wentToLeft = rootReplace(root, match);
+		
+		/* if the root went to the left of the new match, have to re-add stuff to the right of the old root	starting at the new root (match) & vice versa */
+		if (wentToLeft) reAdd(root->rChild, match);
+		else reAdd(root->lChild, match);
+		
+		return;
 	}
 	
-	printf("Time to send the appropriate match down...\n");
-	/* send the appropriate match down */
-	if (middle(match, 1) < middle(root, 1)) {
-		printf("Middle of match "); printMatch(match); printf(" was to the left of the middle of the root "); printMatch(root); printf("\n");
-		if (!root->lChild) {
-			// assignLChild(match, root);
-			root->lChild = match;
-			match->parent = temp ? temp : root;
-			printf("Just assigned the match "); printMatch(match); printf(" to the parent "); printMatch(temp ? temp : root); printf(" because temp was %s\n", temp?"NOT NULL":"NULL");
-			return;
-		}
-		else {
-			printf("Match "); printMatch(match); printf(" has a left child, so percolating down from there...\n");
-			heap_insertRecurse(matches, root->lChild, match);	//node to add belongs to left
-		}
-	}
-	else if (middle(match, -1) > middle(root, -1)) {
-		printf("Middle of match "); printMatch(match); printf(" was to the right of the middle of the root "); printMatch(root); printf("\n");
-		if (!root->rChild) {
-			// assignRChild(match, root);
-			root->rChild = match;
-			match->parent = temp ? temp : root;
-			printf("Just assigned the match "); printMatch(match); printf(" to the parent "); printMatch(temp ? temp : root); printf(" because temp was %s\n", temp ? "NOT NULL" : "NULL");
-			return;
-		}
-		else {
-			printf("Match "); printMatch(match); printf(" has a right child, so percolating down from there...\n");
-			heap_insertRecurse(matches, root->rChild, match);	//node to add belongs to right
+	/* assign match or continue percolating down */
 
-		}
-	}
-	else {	//ties go to the left
-		printf("Middle of match "); printMatch(match); printf(" was the same as the middle of the root "); printMatch(root); printf("\n");
-		if (!root->lChild) {
-			// assignLChild(match, root);
+	if (goesToLeft(match, root)) {
+		if (!root->lChild) {	//no left child yet, assign
 			root->lChild = match;
-			match->parent = temp ? temp : root;
-			printf("Just assigned the match "); printMatch(match); printf(" to the parent "); printMatch(temp ? temp : root); printf(" because temp was %s\n", temp ? "NOT NULL" : "NULL");
+			match->parent = root;
 			return;
 		}
-		else {
-			printf("Match "); printMatch(match); printf(" has a left child, so percolating down from there...\n");
-			heap_insertRecurse(matches, root->lChild, match);	//node to add belongs to left
+		else {	//has a left child
+			heap_insertRecurse(root->lChild, match);	//send it further down the tree to the left
 		}
+	}
+	else {	//goes to the right
+		if (!root->rChild) {	//no right chid yet, assign
+			root->rChild = match;
+			match->parent = root;
+			return;
+		}
+		else {	//has a right child
+			heap_insertRecurse(root->rChild, match); //send it further down the tree to the right
+		}
+	}
+}
+
+bool rootReplace(Match * root, Match * match) {	//returns true if root went to left of match, false otherwise
+
+	/* reassign the old root's parent's child pointer */
+	if (root == root->lChild) root->parent->lChild = match;
+	else root->parent->rChild = match;
+
+	/* update the old root's parent to the new match */
+	root->parent = match;
+
+	/* appropriately assign the old root as the child of the new match */
+	if (goesToLeft(root, match)) {
+		match->lChild = root;
+		return true;
+	} else {
+		match->rChild = root;
+		return false;
+	}
+}
+
+bool goesToLeft(Match * child, Match * parent) {
+	if (middle(child, 1) < middle(parent, 1)) {
+		printf("Middle of match "); printMatch(child); printf(" was to the left of the middle of the root "); printMatch(parent); printf("\n");
+		return true;	//goes to left
+	}
+	else if (middle(child, -1) > middle(parent, -1)) {
+		printf("Middle of match "); printMatch(child); printf(" was to the right of the middle of the root "); printMatch(parent); printf("\n");
+		return false;	//goes to right
+	}
+	else {
+		printf("Middle of match "); printMatch(child); printf(" was to the left of the middle of the root "); printMatch(parent); printf("\n");
+		return true;	//ties go left
 	}
 }
 

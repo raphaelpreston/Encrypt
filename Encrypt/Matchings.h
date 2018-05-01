@@ -102,7 +102,7 @@ void assignRChild(Match * rChild, Match * parent);
 void heap_insertMatch(Matches * heap, Match * match);
 
 /* helper function for insertNode */
-void heap_insertRecurse(Match * matches, Match * root, Match * match);
+void heap_insertRecurse(Match * root, Match * match);
 
 /* recursively print out the heap (in a very cryptic annoying way) */
 void printHeap(MatchHeap * heap);
@@ -114,9 +114,14 @@ void checkHeap(Matches * matches);
 bool maxCheck(Match * match);
 
 bool maxRecurse(Match * m, int max);
-/* updates node and calls heapify down and heapify up appropriately */
-//void updateNode();
 
+/* basically inserts match as the new root of a minitree.  Returns true if the root and the mini tree went to the left of the match, false otherwise */
+bool rootReplace(Match * root, Match * match);
 
+/* returns true if child belongs to the left of parent, false otherwise	*/
+bool goesToLeft(Match * child, Match * parent);
+
+/* reAdds all branches below root to the destination root */
+void reAdd(Match * root, Match * dest)
 
 #endif
