@@ -665,3 +665,23 @@ bool maxRecurse(Match * m, int max) {
 	return l && r;
 }
 
+int printOptimumMatches(Matches * matches) {
+	/* print out the root */
+	printMatch(matches->heap->root); printf("\n");
+
+	int a = matches->heap->root->start != 0 ? printOptimumRecurse(0, matches->heap->root->start, matches->heap->root->lChild, 1) : 1;
+	int b = matches->heap->root->end != matches->size - 1 ? printOptimumRecurse(matches->heap->root->end, matches->size - 1, matches->heap->root->rChild, a) : a;
+
+	return b;
+}
+
+int printOptimumRecurse(int lower, int upper, Match * root, int i) {
+	/* print out the root */
+	printMatch(root); printf("\n");
+	i++;
+
+	int a = root->start > lower ? printOptimumRecurse(lower, root->start, root->lChild, i) : i;
+	int b = root->end < upper ? printOptimumRecurse(root->end, upper, root->rChild, a) : a;
+
+	return b;
+}

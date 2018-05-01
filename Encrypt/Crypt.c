@@ -40,7 +40,7 @@ int main()
 	
 	 /* find matchings */
 	printf("Finding matches...\n");
-	int matches_size = 21;
+	int matches_size = 16;
 	Matches * matches = newMatches(matches_size);
 	
 	printf("Performing Range Analysis... \n");
@@ -52,27 +52,24 @@ int main()
 
 	printMatches(matches);
 	/* print out most efficient matches using the MatchHeap */
-	//big testing for MatchHeap: using the actual matches
+	//for now putting each match into the heap, then later we will implement it in addmatch and update the stuff
+	// in future, make the heap take into account the overlapping size of the node above it
 
 	for (int i = 0; i < matches->size; i++) {
 		Match * m = matches->start_arr[i];
 		if (m) heap_insertMatch(matches, m);
 	}
 
+	/* */
 	printf("\n"); printHeap(matches->heap);
 	printf("\n");
 	checkHeap(matches);
 	
-
-	/*//Checking int/double comps
-	int i = 2;
-	double d = 2.1;
-	double d2 = 2.0;
-	printf("%f %s %i\n", d, d == i ? "==" : (d < i ? "<" : ">"), i);
-	printf("%f %s %i\n", d2, d2 == i ? "==" : (d2 < i ? "<" : ">"), i);
-	printf("%f %s (double)%f\n", d, d == (double)i ? "==" : (d < (double)i ? "<" : ">"), (double)i);
-	printf("%f %s (double)%f\n", d2, d2 == (double)i ? "==" : (d2 < (double)i ? "<" : ">"), (double)i);*/
-
+	// print out optimum matches
+	printf("Optimum matches:\n");
+	int numMatches = printOptimumMatches(matches);
+	printf("\nThe entire body can be covered with %i matches.\n", numMatches);
+	
 	//testing MatchHeap
 	//printf("\n\n");
 	//Matches * testers = newMatches(32);

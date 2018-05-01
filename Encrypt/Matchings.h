@@ -122,4 +122,9 @@ bool goesToLeft(Match * child, Match * parent);
    Note: could make this faster by not adding every single thing below the node, just the ones that have to be readded */
 void reAdd(Match * root, Match * dest);
 
+/* prints the minimum amount of matches needed to cover the entire body, returns the number of matches needed */
+int printOptimumMatches(Matches * matches);
+
+int printOptimumRecurse(int lower, int upper, Match * root, int i);
+
 #endif
