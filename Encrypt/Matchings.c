@@ -411,7 +411,7 @@ bool deleteMatch(Matches * matches, Match * match) {
 	return true;
 }
 
-int modifiedMatchLength(Match * m, int start, int end) {	//modified match length 
+int modifiedMatchLength(Match * m, int start, int end) {	//modified match length
 	if (m->end <= start || m->start >= end) return matchLength(m); //completely outside limits
 	if (m->start >= start && m->end <= end) return 0;	//enveloped or exactly same length
 	if (m->start >= start && m->start < end && m->end > end) return matchLength(m) - (end - m->start);	//starts inside and ends to the right
@@ -486,8 +486,12 @@ void heap_insertMatch(Matches * matches, Match * match) {
 void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have to send heap in case we are replacing the root, send it as null if it's not needed to check
 	printf("Comparing match: "); printMatch(match); printf(" with root: "); printMatch(root); printf("\n");
 
-	/* if it's bigger than the current one, insert it in as a new root of the mini tree */
-	if (matchLength(match) > matchLength(root)) {
+	/* if it's bigger than the current one, taking into account the parents length insert it in as a new root of the mini tree */
+	bool isRoot = root->parent == NULL;
+	int modifiedLengthMatch = isRoot ? matchLength(match) : modifiedMatchLength(match, root->parent->start, root->parent->end);
+	int modifiedLengthRoot = isRoot ? matchLength(root) : modifiedMatchLength(root, root->parent->start, root->parent->end);		//save time by storing these in match?
+
+	if (modifiedLengthMatch > modifiedLengthRoot) {
 		/* reassign root of matches heap if neccesary */
 		if (heap && heap->root == root) heap->root = match;
 
@@ -497,12 +501,15 @@ void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have 
 		bool wentToLeft = rootReplace(root, match);
 		
 		/* if the root went to the left of the new match, have to re-add stuff to the right of the old root	starting at the new root (match) & vice versa */
-		if (wentToLeft) {
+		/*if (wentToLeft) {
 			if(root->rChild) reAdd(root->rChild, match);
 		}
 		else {
 			if (root->lChild) reAdd(root->lChild, match);
-		}
+		}*/
+		/* have to reset entire tree below becuase now the parent has changed and length is dependent on that */
+		if (root->rChild) reAdd(root->rChild, match);
+		if (root->lChild) reAdd(root->lChild, match);
 
 		return;
 	}
