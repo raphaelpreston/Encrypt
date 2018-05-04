@@ -196,7 +196,7 @@ void addMatch(Matches * matches, Match * m) {
 }
 
 void printMatch(Match * m){
-	printf("(%i-%i,%i-%i [%i,%s] - %.1f - %p [P: %p, LC: %p, RC: %p])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", middle(m), m, m->parent, m->lChild, m->rChild);
+	if(m) printf("(%i-%i,%i-%i [%i,%s] - %.1f - %p [P: %p, LC: %p, RC: %p])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", middle(m), m, m->parent, m->lChild, m->rChild);
 }
 
 void printValidity(Match * m, Binary * b) {
@@ -504,7 +504,7 @@ void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have 
 		printf("Modified length of match: "); printMatch(match); printf(" (%i) is bigger than root: ", modifiedLengthMatch); printMatch(root); printf(" (%i) ...  commencing root replacement.\n", modifiedLengthRoot);
 		
 		/* make the match become the root of the new mini tree */
-		// bool wentToLeft = rootReplace(root, match);
+		bool wentToLeft = rootReplace(root, match);
 		
 		/* if the root went to the left of the new match, have to re-add stuff to the right of the old root	starting at the new root (match) & vice versa */
 		/*if (wentToLeft) {
@@ -513,9 +513,17 @@ void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have 
 		else {
 			if (root->lChild) reAdd(root->lChild, match);
 		}*/
+
 		/* have to reset entire tree below becuase now the parent has changed and length is dependent on that */
-		if (root->rChild) reAdd(root->rChild, match);
-		if (root->lChild) reAdd(root->lChild, match);
+
+		if (match->rChild) {	//changed this part to match->child... it works but not 100% sure why
+			printf("Re-adding rchild: "); printMatch(match->rChild); printf("\n");
+			reAdd(match->rChild, match);
+		}
+		if (match->lChild) {
+			reAdd(match->lChild, match);
+			printf("Re-adding lchild: "); printMatch(match->lChild); printf("\n");
+		}
 
 		return;
 	}
@@ -526,6 +534,7 @@ void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have 
 		if (!root->lChild) {	//no left child yet, assign
 			root->lChild = match;
 			match->parent = root;
+			printf("Assigned "); printMatch(match); printf(" as lchild to "); printMatch(root); printf("\n");
 			return;
 		}
 		else {	//has a left child
@@ -536,6 +545,7 @@ void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have 
 		if (!root->rChild) {	//no right chid yet, assign
 			root->rChild = match;
 			match->parent = root;
+			printf("Assigned "); printMatch(match); printf(" as rchild to "); printMatch(root); printf("\n");
 			return;
 		}
 		else {	//has a right child
@@ -588,14 +598,23 @@ void reAdd(Match * root, Match * dest) {
 
 	/* cut off the connection to the parent */
 	if (root->parent) {	//true root won't have a parent
-		if (root == root->parent->lChild) root->parent->lChild = NULL;
-		else root->parent->rChild = NULL;
+		if (root == root->parent->lChild) {
+			printf("Setting the lchild of "); printMatch(root->parent); printf(" to NULL\n");
+			root->parent->lChild = NULL;
+		}
+		else if (root == root->parent->rChild) {
+			printf("Setting the rchild of "); printMatch(root->parent); printf(" to NULL\n");
+			root->parent->rChild = NULL;
+		}
+		printf("Setting the parent of "); printMatch(root); printf(" to NULL\n");
 		root->parent = NULL;
 	}
 
-	/* make a copy of lChild and rChild and cut off connections */			//think error is happening somewhere around here
+	/* save addresses of lChild and rChild and cut off connections */
 	Match * lChild = root->lChild;
 	Match * rChild = root->rChild;
+	printf("Nulling the children of	"); printMatch(root); printf(":\n");
+	printf("  "); printMatch(root->lChild); printf("\n  "); printMatch(root->rChild); printf("\n");
 	root->lChild = NULL;
 	root->rChild = NULL;
 

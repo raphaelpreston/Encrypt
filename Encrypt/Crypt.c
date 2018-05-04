@@ -67,8 +67,8 @@ int main()
 	
 	// print out optimum matches
 	printf("Optimum matches:\n");
-	int numMatches = printOptimumMatches(matches);
-	printf("\nThe entire body can be covered with %i matches.\n", numMatches);
+	//int numMatches = printOptimumMatches(matches);
+	//printf("\nThe entire body can be covered with %i matches.\n", numMatches);
 	
 	// Testing modified length
 
