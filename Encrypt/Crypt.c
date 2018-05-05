@@ -40,7 +40,7 @@ int main()
 	
 	 /* find matchings */
 	printf("Finding matches...\n");
-	int matches_size = 16;
+	int matches_size = 3;
 	Matches * matches = newMatches(matches_size);
 	
 	printf("Performing Range Analysis... \n");
@@ -64,7 +64,8 @@ int main()
 	printf("\n"); printHeap(matches->heap);
 	printf("\n");
 	checkHeap(matches);
-	
+	printMatches(matches);
+
 	// print out optimum matches
 	printf("Optimum matches:\n");
 	int numMatches = printOptimumMatches(matches);

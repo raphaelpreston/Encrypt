@@ -6,7 +6,7 @@
 
 #include "IntArray.h"
 
-#define UPLE_CONSTANT 2	//how much to multiply the new memory by each time it runs out of space
+#define UPLE_CONSTANT 2	//how much to multiply the new memory by each time it runs out of space //check this method for efficieny improvement
 
 IntArr * newIntArr(int max) {
 	IntArr * intArr = (IntArr *)malloc(sizeof(IntArr));

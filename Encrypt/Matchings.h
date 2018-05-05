@@ -26,6 +26,7 @@ typedef struct Matches {
 	struct Match ** end_arr;	//array of match objects indexed by where the match ends
 	struct MatchHeap * heap;	//heap used to store the max length matches and map where they are relative to eachother
 	int size;			//size of each array, (designates upper and lower limits of matches), set to the number of bits that are read
+	int bits_covered;	//an integer that keeps track of the biggest ending number of a match (used in optimum functions)
 	int num_matches;
 	bool * used;		//1 if the bit is already matched, 0 if the bit is not
 } Matches;

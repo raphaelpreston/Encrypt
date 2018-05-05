@@ -5,6 +5,7 @@
 
 
 #define PRINT 0
+#define UPLE_CONSTANT 2		//check this method for efficieny improvement
 
 Match * newMatch(int b, int c, int l, int type) {
 	/* allocate space for match boye */
@@ -42,10 +43,10 @@ Matches * newMatches(int num_bits) {
 		/* make both arrays */
 		Match ** start;
 		Match ** end;
-		start = (Match **)calloc(num_bits, sizeof(Match *));	//technically we can remove 1 because there are no endings at 0 
+		start = (Match **)calloc(num_bits, sizeof(Match *));	//technically we can remove 1 because there are no endings at 0 <-- not correct i think
 		end = (Match **)calloc(num_bits, sizeof(Match *));	// use calloc to initialize each match * to 0
 
-															/* make the array to keep track of matched bits */
+		/* make the array to keep track of matched bits */
 		bool * used = (bool *)calloc(num_bits, sizeof(bool));
 
 		if (start && end) {
@@ -80,17 +81,44 @@ void addMatch(Matches * matches, Match * m) {
 	Match * curr;
 
 	/* error check for exceeding limit of arrays */
-	if (m->end >= matches->size || m->start < 0) {
-		printf("\nMatch "); printMatch(m); printf(" out of bounds of matches arrays.\n");
+	if (m->start < 0) printf("\n\nERROR: Start of match was less than 0...\n\n\n\n");
+
+	if (m->end >= matches->size) {	//reallocate mems
+		int newSize = matches->size;
+
+		while (newSize < m->end) newSize *= UPLE_CONSTANT;
+		//newSize is new number of bits to hold
+
+		Match ** newStart;
+		Match ** newEnd;
+		newStart = (Match **)calloc(newSize, sizeof(Match *));
+		newEnd = (Match **)calloc(newSize, sizeof(Match *));	// use calloc to initialize each match * to 0
+
+		if (!newStart || !newEnd) printf("Error mallocing %i bit spots in the array for matches.\n", newSize);
+
+		//fill it with old content
+		if (matches->size != 0) {
+			memcpy(newStart, matches->start_arr, matches->size * sizeof(Match *));
+			memcpy(newEnd, matches->end_arr, matches->size * sizeof(Match *));
+		}
+
+
+		//free old memory, reasign buffer
+		free(matches->start_arr);
+		free(matches->end_arr);
+
+		matches->start_arr = newStart;
+		matches->end_arr = newEnd;
+
+		//update size
+		matches->size = newSize;
 	}
 
 
 	/* get the max compatable match from all max matches that start in range m_start to m_end + 1 and all that end in start - 1 to end (that match in both crypt and body)*/
 
 	if (!matches->num_matches == 0) {	//only look for max matches if the arrays are not empty
-										//printf("\nStart_arr: ");
 		Match * max_start = maxMatchInRange(matches->start_arr, m, m->start, m->end + 1 >= matches->size ? m->end : m->end + 1);	//make sure the upper limit is in bounds
-																																	//printf("\nEnd arr:");
 		Match * max_end = maxMatchInRange(matches->end_arr, m, m->start - 1 < 0 ? m->start : m->start - 1, m->end);		//make sure the lower limit is in bounds
 
 		if (max_start != NULL) {
@@ -191,6 +219,7 @@ void addMatch(Matches * matches, Match * m) {
 	}
 
 	matches->num_matches++;			//added one match to the matches
+	if(m->end > matches->bits_covered) matches->bits_covered = m->end;	//update bits_covered to the end of the match if it's bigger
 
 	if (PRINT == 1) printf("Match adding process was completed (attempted).\n");
 }
@@ -271,6 +300,8 @@ void printMatches(Matches * m) {
 		}
 	}
 	printf("Num matches: %i\n", m->num_matches);
+	printf("Size of matches: %i\n", m->size);
+	printf("Bits covered: %i\n", m->bits_covered);
 }
 
 Match * maxMatchInRange(Match ** arr, Match * m, int start, int end) {
@@ -658,7 +689,7 @@ void checkHeap(Matches * matches) {
 	bool conflict;
 	bool left;
 	bool right;
-	for (int i = 0; i < matches->size; i++) {
+	for (int i = 0; i < matches->bits_covered; i++) {
 		m = matches->start_arr[i];
 		if (m) {
 			conflict = false;
@@ -710,7 +741,7 @@ int printOptimumMatches(Matches * matches) {
 	printMatch(matches->heap->root); printf("\n");
 
 	int a = matches->heap->root->start != 0 ? printOptimumRecurse(0, matches->heap->root->start, matches->heap->root->lChild, 1) : 1;
-	int b = matches->heap->root->end != matches->size - 1 ? printOptimumRecurse(matches->heap->root->end, matches->size - 1, matches->heap->root->rChild, a) : a;
+	int b = matches->heap->root->end != matches->bits_covered ? printOptimumRecurse(matches->heap->root->end, matches->bits_covered, matches->heap->root->rChild, a) : a;
 
 	return b;
 }
