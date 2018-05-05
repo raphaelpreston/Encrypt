@@ -36,7 +36,7 @@ int main()
 	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
 	 /* print binary */
-	printBinaryHandle(binary);
+	// printBinaryHandle(binary);
 	
 	 /* find matchings */
 	printf("Finding matches...\n");
