@@ -44,7 +44,7 @@ void compareRange(Binary * binary, Matches * matches, int b_start, int c_start, 
 			if (i - m_start >= 2) {	//add match
 				Match * match = newMatch(b_start + m_start, c_start + m_start, i - m_start, mode);
 				//printf(" Adding new %s match: ", mode==0?"NULL":mode==1?"POS":"NEG"); printMatch(match); printf("\n");
-				addMatch(matches, match);
+				addMatch(binary, matches, match);
 			}
 			//else printf(" Match not sufficient length (%i).\n", i-m_start);
 			m_start = i;	//starting looking at new match
@@ -55,18 +55,18 @@ void compareRange(Binary * binary, Matches * matches, int b_start, int c_start, 
 	if (l - m_start >= 2) {	//add match
 		Match * match = newMatch(b_start + m_start, c_start + m_start, l - m_start, m);
 		//printf(" Adding new %s match: ", mode == 0 ? "NULL" : mode == 1 ? "POS" : "NEG"); printMatch(match); printf("\n");
-		addMatch(matches, match);
+		addMatch(binary, matches, match);
 	}
 	//else printf(" Match not sufficient length (%i).\n", l - m_start);
 }
 
 void printBinaryHandle(Binary * b) {
 	printf("B: ");
-	printIntArr(b->body);
-	printf("\n");
+	//printIntArr(b->body);
+	printf("\nSize: %i, Used: %i\n", b->body->max, b->body->size);
 	printf("C: ");
-	printIntArr(b->crypt);
-	printf("\n\n");
+	//printIntArr(b->crypt);
+	printf("\Size: %i, Used: %i\n", b->crypt->max, b->crypt->size);
 }
 
 void bodyCryptAnalysis(Binary * binary, Matches * matches) {

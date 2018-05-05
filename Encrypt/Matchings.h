@@ -56,13 +56,13 @@ Matches * newMatches(int num_bits);
 int matchLength(Match *);
 
 /* adds the match to a matches */
-void addMatch(Matches * matches, Match * m);
+// void addMatch(Binary * binary, Matches * matches, Match * m);
 
 /* prints a specific match */
 void printMatch(Match * m);
 
-/* prints a match and tests validity */
-//void printValidity(Match * m, struct Binary * binary);
+/* returns if a match has valid memory matches */
+//void isValid(Match * m, struct Binary * binary);
 
 /* test whether a set of matches is valid */
 //void printMatchesValidity(Matches * m, struct Binary * b);

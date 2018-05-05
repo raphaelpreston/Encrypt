@@ -5,13 +5,14 @@
 
 #define BUFFER_SIZE 1
 #define MAX_BINARY_SIZE 2
+#define MATCHES_SIZE 10
 
 int main()
 {
 
 	 /* create file pointers for body and crypt */
-	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/body";
-	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/crypt";
+	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishbody";
+	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishcrypt";
 	FILE * body = fopen(body_loc, "rb");
 	FILE * crypt = fopen(crypt_loc, "rb");
 	if (body == NULL || crypt == NULL) return 1;
@@ -36,37 +37,35 @@ int main()
 	if (ferror(body) || ferror(crypt)) return 2;	//error checking
 
 	 /* print binary */
-	// printBinaryHandle(binary);
+	printBinaryHandle(binary);
 	
 	 /* find matchings */
 	printf("Finding matches...\n");
-	int matches_size = 3;
-	Matches * matches = newMatches(matches_size);
-	
-	printf("Performing Range Analysis... \n");
+	Matches * matches = newMatches(MATCHES_SIZE);
 	bodyCryptAnalysis(binary, matches);
 
+	printf("Matches found...\n");
 	printMatchesValidity(matches, binary);
 	
 	//HAVE TO CHANGE: INSTEAD OF DELETING A MATCH, JUST SWAP THE VALUES AND THEN UPATE IT'S SPOT IN THE START_ARR, END_ARR, AND THE HEAP
 
-	printMatches(matches);
+	// printMatches(matches);
 	/* print out most efficient matches using the MatchHeap */
 	//for now putting each match into the heap, then later we will implement it in addmatch and update the stuff
 	// in future, make the heap take into account the overlapping size of the node above it
-
+	printf("\nAdding to matchHeap...\n");
 	for (int i = 0; i < matches->size; i++) {
 		Match * m = matches->start_arr[i];
 		if (m) heap_insertMatch(matches, m);
 	}
 
-	/* */
-	printf("\n"); printHeap(matches->heap);
-	printf("\n");
+	///* */
+	//printf("\n"); printHeap(matches->heap);
+	//printf("\n");
 	checkHeap(matches);
-	printMatches(matches);
+	//// printMatches(matches);
 
-	// print out optimum matches
+	//// print out optimum matches							//FOR SOME REASON WE ARE GETTING HUGE NOT VALID MATCHES
 	printf("Optimum matches:\n");
 	int numMatches = printOptimumMatches(matches);
 	printf("\nThe entire body can be covered with %i matches.\n", numMatches);
