@@ -639,7 +639,12 @@ void printNodeRecurse(Match * match) {
 	for (int i = 0; i < middle(match); i++) {
 		printf(" ");
 	}
-	printMatch(match); printf("\n");//printf("(P: %p, LC: %p, RC: %p)\n", match->parent, match->lChild, match->rChild);
+	if (match->parent) {
+		printMatch(match); printf("%i\n", modifiedMatchLength(match, match->parent->start, match->parent->end));
+	}
+	else {
+		printMatch(match); printf("\n");
+	}
 
 	printNodeRecurse(match->lChild);
 	printNodeRecurse(match->rChild);
@@ -715,8 +720,8 @@ int printOptimumRecurse(int lower, int upper, Match * root, int i) {
 	printMatch(root); printf("\n");
 	i++;
 
-	int a = root->start > lower ? printOptimumRecurse(lower, root->start, root->lChild, i) : i;
-	int b = root->end < upper ? printOptimumRecurse(root->end, upper, root->rChild, a) : a;
+	int a = root->start > lower + 1? printOptimumRecurse(lower, root->start, root->lChild, i) : i;
+	int b = root->end < upper - 1? printOptimumRecurse(root->end, upper, root->rChild, a) : a;
 
 	return b;
 }
