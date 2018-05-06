@@ -215,14 +215,14 @@ void addMatch(Binary * binary, Matches * matches, Match * m) {
 
 		/* keep max length in front */
 		curr = matches->start_arr[start];	//the max
-		if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, replace it and free the old one
-			// free(curr);
+		if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, change the values of the current one to match the new one
+			//assignVals(m, matches->start_arr[start]);
 			matches->start_arr[start] = m;
 			// used = true;
 		}
 	}
 
-	/* repeat with end_arr*/
+	/* repeat with end_arr*/ // should be 
 	int end = m->end;
 	if (matches->end_arr[end] == NULL) {	//first match * in this linked list
 		matches->end_arr[end] = m;
@@ -234,6 +234,7 @@ void addMatch(Binary * binary, Matches * matches, Match * m) {
 		if ((curr->end - curr->start + 1) < length) {	//if the match to add is bigger than the first one, replace it and free old one
 			// free(curr);
 			matches->end_arr[end] = m;
+			// assignVals(m, matches->end_arr[end]);
 		}
 		else {
 			//if (!used) free(m);	//wasn't used in start array so we can trash it
@@ -487,6 +488,18 @@ void swapValues(Match * a, Match * b) {
 	//printf("Post swap:         "); printMatch(a); printf(" and "); printMatch(b); printf("\n");
 }
 
+void assignVals(Match * a, Match * b) {
+	Match temp = *a;
+
+	//assign all a stuff to b
+	b->start = temp.start;
+	b->end = temp.end;
+	b->cindex = temp.cindex;
+	b->type = temp.type;
+	//b->lChild = temp.lChild;
+	//b->rChild = temp.rChild;
+	//b->parent = temp.parent;
+}
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {
 //

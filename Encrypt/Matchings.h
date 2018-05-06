@@ -91,6 +91,9 @@ double middle(Match * match);
 /* swaps all values of both matches */
 void swapValues(Match * a, Match * b);
 
+/* assigns the values of a to b */
+void assignVals(Match * a, Match * b);
+
 /* returns the match length modified by start and end limits */
 int modifiedMatchLength(Match * m, int start, int end);
 

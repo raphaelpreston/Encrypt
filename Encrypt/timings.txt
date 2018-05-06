@@ -1,0 +1,4 @@
+Longish body and crypt:
+
+Finding matches to optimum matches (printing only optimum matches to stdout): 11.185
+
