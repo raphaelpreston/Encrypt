@@ -832,7 +832,7 @@ void testOptimum(Match ** optArr, int optSize, Matches * matches) {
 	int tot1 = 0;
 	int tot2 = 0;
 	int tot3 = 0;
-	for (int i = 0; i < matches->bits_covered; i++) {
+	for (int i = 0; i < matches->bits_covered + 1; i++) {
 		int n = 0;
 		for (int k = 0; k < optSize; k++) {
 			if (i <= optArr[k]->end && i >= optArr[k]->start) {
