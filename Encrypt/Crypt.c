@@ -56,10 +56,10 @@ int main()
 	//for now putting each match into the heap, then later we will implement it in addmatch and update the stuff
 	// in future, make the heap take into account the overlapping size of the node above it
 	// printf("\nAdding to matchHeap...\n");
-	for (int i = 0; i < matches->size; i++) {
+	/*for (int i = 0; i < matches->size; i++) {
 		Match * m = matches->start_arr[i];
 		if (m) heap_insertMatch(matches, m);
-	}
+	}*/
 
 	///* */
 	//printf("\n"); printHeap(matches->heap);
@@ -71,14 +71,13 @@ int main()
 	printf("Optimum matches:\n");
 	Match ** optArr = (Match **)calloc(502, sizeof(Match *));
 
-	//int numMatches = printOptimumMatchesDan(matches, optArr);
-	int numMatches = printOptimumMatches(matches);
+	int numMatches = printOptimumMatchesDan(matches, optArr);
 	//end = clock();
 	//double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 	//printf("Elapsed: %f\n", time_spent);
 	printf("\nThe entire body can be covered with %i matches.\n", numMatches);
 
-	// testOptimum(optArr, 502, matches);
+	testOptimum(optArr, 502, matches);
 
 	// Testing modified length
 
