@@ -825,3 +825,24 @@ int findOptimumLeft(Matches * matches, Match * center, int i, Match ** optArr) {
 
 	return n;
 }
+
+void testOptimum(Match ** optArr, int optSize, Matches * matches) {
+	printf("Testing the optimum matches...\n");
+	int tot0 = 0;
+	int tot1 = 0;
+	int tot2 = 0;
+	int tot3 = 0;
+	for (int i = 0; i < matches->bits_covered; i++) {
+		int n = 0;
+		for (int k = 0; k < optSize; k++) {
+			if (i <= optArr[k]->end && i >= optArr[k]->start) {
+				n++;
+			}
+		}
+		if (n == 0) tot0++;
+		else if (n == 1) tot1++;
+		else if (n == 2) tot2++;
+		else if (n == 3) tot3++;
+	}
+	printf("Covered by 0: %i\nCovered by 1: %i\nCovered by 2: %i\nCovered by 3: %i\nTotal: %i\n", tot0, tot1, tot2, tot3, tot0 + tot1 + tot2 + tot3);
+}

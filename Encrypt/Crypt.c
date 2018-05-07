@@ -76,21 +76,8 @@ int main()
 	//double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 	//printf("Elapsed: %f\n", time_spent);
 	printf("\nThe entire body can be covered with %i matches.\n", numMatches);
-	int tot0 = 0;
-	int tot1 = 0;
-	int tot2 = 0;
-	int tot3 = 0;
-	for (int i = 0; i < 6872; i++) {
-		int n = 0;
-		for (int k = 0; k < 502; k++) {
-			if (i <= optArr[k]->end && i >= optArr[k]->start) {
-				n++;
-			}
-		}
-		if (n == 0) tot0++;				//do tot1,2,3
-	}
-	printf("There were .\n");
-	
+
+	testOptimum(optArr, 502, matches);
 
 	// Testing modified length
 
