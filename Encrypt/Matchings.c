@@ -500,6 +500,7 @@ void assignVals(Match * a, Match * b) {
 	//b->rChild = temp.rChild;
 	//b->parent = temp.parent;
 }
+
 //void deleteMatches(matches * m, int num_bits) {
 //	for (int i = 0; i < num_bits; i++) {
 //
@@ -772,4 +773,55 @@ int printOptimumRecurse(int lower, int upper, Match * root, int i) {
 	int b = root->end < upper - 1? printOptimumRecurse(root->end, upper, root->rChild, a) : a;
 
 	return b;
+}
+
+int printOptimumMatchesDan(Matches * matches, Match ** optArr) {
+	/* print out a match near the center */
+	Match * center = matches->start_arr[matches->bits_covered / 2];
+	printMatch(center); printf("\n");
+	optArr[0] = center;
+
+	int a = center->start != 0 ? findOptimumLeft(matches, center, 1, optArr) : 1;
+	int b = center->end != matches->bits_covered ? findOptimumRight(matches, center, a, optArr) : a;
+
+	return b;
+}
+
+int findOptimumRight(Matches * matches, Match * center, int i, Match ** optArr) {
+	/* find the match contained within 1 to the right of the end that ends furthest to the right */
+	Match * furthest = center;
+	Match * curr;
+	int end = center->end + 1;
+	for (int k = center->start; k <= end; k++) {
+		curr = matches->start_arr[k];
+		if (curr->end > furthest->end) furthest = curr;
+	}	//furthest is now the match that ends furthest to the right and can connect with center
+
+	printMatch(furthest); printf("\n");
+	if (optArr[i] != NULL) printf("ERROR IT WAS ALREADY FILLED\n\n\n\n\n\n\n");
+	optArr[i] = furthest;
+	i++;
+
+	int n = furthest->end < matches->bits_covered - 1 ? findOptimumRight(matches, furthest, i, optArr) : i;
+
+	return n;
+}
+
+int findOptimumLeft(Matches * matches, Match * center, int i, Match ** optArr) {
+	/* find the match contained within 1 to the left of the start that starts furthest to the left */
+	Match * furthest = center;
+	Match * curr;
+	for (int k = center->start - 1; k <= center->end; k++) {
+		curr = matches->end_arr[k];
+		if (curr->start < furthest->start) furthest = curr;
+	}	//furthest is now the match that starts furthest to the left and can connect with center
+
+	printMatch(furthest); printf("\n");
+	if (optArr[i] != NULL) printf("ERROR IT WAS ALREADY FILLED\n\n\n\n\n\n\n");
+	optArr[i] = furthest;
+	i++;
+
+	int n = furthest->start != 0 ? findOptimumLeft(matches, furthest, i, optArr) : i;
+
+	return n;
 }

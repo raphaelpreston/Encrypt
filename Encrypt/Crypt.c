@@ -12,8 +12,8 @@ int main()
 {
 
 	 /* create file pointers for body and crypt */
-	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/body";
-	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/crypt";
+	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishbody";
+	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishcrypt";
 	FILE * body = fopen(body_loc, "rb");
 	FILE * crypt = fopen(crypt_loc, "rb");
 	if (body == NULL || crypt == NULL) return 1;
@@ -47,33 +47,49 @@ int main()
 	bodyCryptAnalysis(binary, matches);
 
 	printf("Matches found...\n");
-	printMatches(matches);
-	printMatchesValidity(matches, binary);
+	//printMatches(matches);
+	//printMatchesValidity(matches, binary);
 	
 	//HAVE TO CHANGE: INSTEAD OF DELETING A MATCH, JUST SWAP THE VALUES AND THEN UPATE IT'S SPOT IN THE START_ARR, END_ARR, AND THE HEAP
 
 	/* print out most efficient matches using the MatchHeap */
 	//for now putting each match into the heap, then later we will implement it in addmatch and update the stuff
 	// in future, make the heap take into account the overlapping size of the node above it
-	printf("\nAdding to matchHeap...\n");
-	for (int i = 0; i < matches->size; i++) {
+	// printf("\nAdding to matchHeap...\n");
+	/*for (int i = 0; i < matches->size; i++) {
 		Match * m = matches->start_arr[i];
 		if (m) heap_insertMatch(matches, m);
-	}
+	}*/
 
 	///* */
 	//printf("\n"); printHeap(matches->heap);
 	//printf("\n");
-	checkHeap(matches);
-	printMatches(matches);
+	//checkHeap(matches);
+	//printMatches(matches);
 
-	// print out optimum matches							//FOR SOME REASON WE ARE GETTING HUGE NOT VALID MATCHES
+	// print out optimum matches
 	printf("Optimum matches:\n");
-	int numMatches = printOptimumMatches(matches);
+	Match ** optArr = (Match **)calloc(502, sizeof(Match *));
+
+	int numMatches = printOptimumMatchesDan(matches, optArr);
 	//end = clock();
 	//double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 	//printf("Elapsed: %f\n", time_spent);
 	printf("\nThe entire body can be covered with %i matches.\n", numMatches);
+	int tot0 = 0;
+	int tot1 = 0;
+	int tot2 = 0;
+	int tot3 = 0;
+	for (int i = 0; i < 6872; i++) {
+		int n = 0;
+		for (int k = 0; k < 502; k++) {
+			if (i <= optArr[k]->end && i >= optArr[k]->start) {
+				n++;
+			}
+		}
+		if (n == 0) tot0++;				//do tot1,2,3
+	}
+	printf("There were .\n");
 	
 
 	// Testing modified length
