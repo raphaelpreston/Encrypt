@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+#include <stdint.h>
+ 
 #include "Matchings.h"
 #include "Binary.h"
 
@@ -845,4 +846,24 @@ void testOptimum(Match ** optArr, int optSize, Matches * matches) {
 		else if (n == 3) tot3++;
 	}
 	printf("Covered by 0: %i\nCovered by 1: %i\nCovered by 2: %i\nCovered by 3: %i\nTotal: %i\n", tot0, tot1, tot2, tot3, tot0 + tot1 + tot2 + tot3);
+}
+
+int numDecDigits(unsigned int num) {
+	if (num < 10) return 1;
+	else if (num < 100) return 2;
+	else if (num < 1000) return 3;
+	else if (num < 10000) return 4;
+	else if (num < 100000) return 5;
+	else if (num < 1000000) return 6;
+	else if (num < 10000000) return 7;
+	else if (num < 100000000) return 8;
+	else if (num < 1000000000) return 9;
+	else if (num < INT_MAX) return 10;
+	else return 0;
+}
+
+int numBinDigits(unsigned int num) {
+	int digits;
+	for (digits = 0; num > 0; num >>= 1) digits++;
+	return digits;
 }

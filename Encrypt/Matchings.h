@@ -134,4 +134,8 @@ int printOptimumMatches(Matches * matches);
 
 int printOptimumRecurse(int lower, int upper, Match * root, int i);
 
+/* returns the number of digits in the number */
+int numDecDigits(unsigned int num);
+
+int numBinDigits(unsigned int num);
 #endif
