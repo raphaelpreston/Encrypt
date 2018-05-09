@@ -518,16 +518,33 @@ void checkHeaders(Matches * matches, Match * m) {
 }
 
 void printOptimumMatches(FILE * map, Matches * matches, Match ** optArr, int size) {
-	BitPrinter * printer = newBitPrinter(map);		//WORKING HERE WORKING HERE WORKING HERE WORKING HERE WORKING HERE
+	BitPrinter * printer = newBitPrinter(map);
 
-	int maxBindex = matches->max_body_start;
-	int maxCindex = matches->max_crypt_start;
-	int maxLength = matches->max_length;
+	int digMaxBindex = numBinDigits(matches->max_body_start);
+	int digMaxCindex = numBinDigits(matches->max_crypt_start);
+	int digMaxLength = numBinDigits(matches->max_length);
 
-	/* first print out a 1 for */
-	for (int i = 0; i < size; i++) {
+	/* print headers */
 
-	}
+	for (int i = 0; i < digMaxBindex; i++) printBit(printer, 1);	//digits needed for bindex
+
+	printBit(printer, 0);	//spacer
+
+	for (int i = 0; i < digMaxCindex; i++) printBit(printer, 1);	//digits needed for cindex
+
+	printBit(printer, 0);	//spacer
+
+	for (int i = 0; i < digMaxLength; i++) printBit(printer, 1);	//digits needed for cindex
+
+	printBit(printer, 0);	//spacer
+
+
+	/* start printing out actual matches */
+	/*for (int i = 0; i < size; i++) {
+
+	}*/
+
+	flushPrinter(printer);
 }
 
 

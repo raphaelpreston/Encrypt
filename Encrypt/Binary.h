@@ -52,4 +52,7 @@ void resetBool(BitPrinter * printer);
 /* converts a boolean area of size 8 to an unsigned char */
 unsigned char boolArrToChar(bool * arr);
 
+/* queueus up a bit and prints it if necessary */
+void printBit(BitPrinter * printer, bool bit);
+
 #endif
