@@ -2,6 +2,7 @@
 #define BINARY_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "Matchings.h"
 #include "IntArray.h"
@@ -30,4 +31,6 @@ void printBinaryHandle(Binary * b);
 /* analyzes the entire body/crypt and adds all matches to the given Matches object */
 void bodyCryptAnalysis(Binary * binary, struct Matches * matches);
 
+/* converts a boolean area of size 8 to an unsigned char */
+unsigned char boolArrToChar(bool arr[]);
 #endif

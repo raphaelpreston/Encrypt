@@ -3,6 +3,15 @@
 #include "Binary.h"
 #include "Matchings.h"
 #include "IntArray.h"
+#define ONE 1				// 00000001
+#define TWO 1<<1			// 00000010	
+#define FOUR 1<<2			// 00000100
+#define EIGHT 1<<3			// 00001000
+#define SIXTEEN 1<<4		// 00010000
+#define THIRTYTWO 1<<5		// 00100000
+#define SIXTYFOUR 1<<6		// 01000000
+#define ONETWENTYEIGHT 1<<7 // 10000000
+
 
 
 
@@ -66,7 +75,7 @@ void printBinaryHandle(Binary * b) {
 	printf("\nSize: %i, Used: %i\n", b->body->max, b->body->size);
 	printf("C: ");
 	//printIntArr(b->crypt);
-	printf("\Size: %i, Used: %i\n", b->crypt->max, b->crypt->size);
+	printf("Size: %i, Used: %i\n", b->crypt->max, b->crypt->size);
 }
 
 void bodyCryptAnalysis(Binary * binary, Matches * matches) {
@@ -111,6 +120,16 @@ void bodyCryptAnalysis(Binary * binary, Matches * matches) {
 		c_start++;
 	}
 
+}
+
+//printing binary
+
+unsigned char boolArrToChar(bool arr[]) {
+	unsigned char byte = 0;
+	for (int i = 0; i < 8; i++) {
+		if (arr[7 - i]) byte = byte | (1 << i);
+	}
+	return byte;
 }
 
 //void deleteBinaryHandle(Binary * b) {

@@ -10,20 +10,27 @@
 
 int main()
 {
+	
+	//testing bool to byte
+
+	bool arr[8] = { 0,0,1,0,1,1,1,0 };
+	unsigned char byte = boolArrToChar(arr);
+	printf("Character: %c\n", byte);
+
 	//testing efficiency
-	//n is size of file in bits
-	FILE * file = fopen("C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/memoryEfficiency.txt", "w+");
-	fprintf(file, "Bytes\tBits\tCharBits\tBinBits\tChar/Bin\n");
-	float lastOne = 0;
-	for (unsigned int n = 8; n < UINT_MAX; n += 8) {
-		int bytes = n / 8;
-		int charBit = numDecDigits(n) * 8;
-		int binBit = numBinDigits(n);
-		float eff = (float)charBit / (float)binBit;
-		if(lastOne != eff) fprintf(file, "%i\t%i\t%i\t%f\n", bytes, charBit, binBit, eff);
-		lastOne = eff;
-	}
-	fclose(file);
+	////n is size of file in bits
+	//FILE * file = fopen("C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/memoryEfficiency.txt", "w+");
+	//fprintf(file, "Bytes\tBits\tCharBits\tBinBits\tChar/Bin\n");
+	//float lastOne = 0;
+	//for (unsigned int n = 8; n < UINT_MAX; n += 8) {
+	//	int bytes = n / 8;
+	//	int charBit = numDecDigits(n) * 8;
+	//	int binBit = numBinDigits(n);
+	//	float eff = (float)charBit / (float)binBit;
+	//	if(lastOne != eff) fprintf(file, "%i\t%i\t%i\t%f\n", bytes, charBit, binBit, eff);
+	//	lastOne = eff;
+	//}
+	// fclose(file);
 	////////// /* create file pointers for body and crypt */
 	//////////char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishbody";
 	//////////char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishcrypt";
