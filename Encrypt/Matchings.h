@@ -14,9 +14,6 @@ typedef struct Match {
 	int start;
 	int end;
 	int cindex;
-	struct Match * lChild;		//for the MatchHeap
-	struct Match * rChild;
-	struct Match * parent;
 	int type;					//1 for a positive match, 2 for a negative match
 } Match;
 
@@ -24,11 +21,14 @@ typedef struct Match {
 typedef struct Matches {
 	struct Match ** start_arr;	//array of match objects indexed by where the match starts
 	struct Match ** end_arr;	//array of match objects indexed by where the match ends
-	struct MatchHeap * heap;	//heap used to store the max length matches and map where they are relative to eachother
 	int size;			//size of each array, (designates upper and lower limits of matches), set to the number of bits that are read
 	int bits_covered;	//an integer that keeps track of the biggest ending number of a match (used in optimum functions)
 	int num_matches;
 	bool * used;		//1 if the bit is already matched, 0 if the bit is not
+
+	int max_body_start;
+	int max_crypt_start;
+	int max_length;		//used as a header
 } Matches;
 
 
@@ -97,45 +97,19 @@ void assignVals(Match * a, Match * b);
 /* returns the match length modified by start and end limits */
 int modifiedMatchLength(Match * m, int start, int end);
 
-/* MATCHHEAP */
+/* OPTIMUM STUFF */
+/* appropriately replaces the headers for printing in the matches object depending on the match */
+void checkHeaders(Matches * matches, Match * m);
 
+/* prints the optimum matches to a file */
+void printOptimumMatches(FILE * map, Matches * matches, Match ** optArr, int size);
 
-MatchHeap * newMatchHeap();
-
-/* percolate down */
-void heap_insertMatch(Matches * matches, Match * match);
-
-/* helper function for insertNode */
-void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match);
-
-/* recursively print out the heap (in a very cryptic annoying way) */
-void printHeap(MatchHeap * heap);
-
-void printNodeRecurse(Match * match);
-
-void checkHeap(Matches * matches);
-
-bool maxCheck(Match * match);
-
-bool maxRecurse(Match * m, int max);
-
-/* basically inserts match as the new root of a minitree.  Returns true if the root and the mini tree went to the left of the match, false otherwise */
-bool rootReplace(Match * root, Match * match);
-
-/* returns true if child belongs to the left of parent, false otherwise	*/
-bool goesToLeft(Match * child, Match * parent);
-
-/* reAdds all branches starting with root to the destination match (don't readd at a heap's root cus the heap won't have it's root pointer updated 
-   Note: could make this faster by not adding every single thing below the node, just the ones that have to be readded */
-void reAdd(Match * root, Match * dest);
-
-/* prints the minimum amount of matches needed to cover the entire body, returns the number of matches needed */
-int printOptimumMatches(Matches * matches);
-
-int printOptimumRecurse(int lower, int upper, Match * root, int i);
+/* finds optimum matches and sends them to optArr.  Also sets the appropriate heaaders in the matches object. */
+int findOptimumMatches(Matches * matches, Match ** optArr);
 
 /* returns the number of digits in the number */
 int numDecDigits(unsigned int num);
 
+/* returns the number of digits that a binary storage of the number would take up */
 int numBinDigits(unsigned int num);
 #endif

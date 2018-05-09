@@ -18,9 +18,6 @@ Match * newMatch(int b, int c, int l, int type) {
 		m->start = b;
 		m->end = b + l - 1;
 		m->cindex = c;
-		m->lChild = NULL;
-		m->rChild = NULL;
-		m->parent = NULL;
 		m->type = type;
 
 		if (l < 2) {
@@ -58,7 +55,10 @@ Matches * newMatches(int num_bits) {
 			m->size = num_bits;
 			m->num_matches = 0;
 			m->used = used;
-			m->heap = newMatchHeap();
+
+			m->max_body_start = 0;		//headers for map file
+			m->max_crypt_start = 0;
+			m->max_length = 0;
 		}
 		else {
 			printf("Failed to calloc space for begin and end array with %i bits each", num_bits);
@@ -249,7 +249,7 @@ void addMatch(Binary * binary, Matches * matches, Match * m) {
 }
 
 void printMatch(Match * m){
-	if(m) printf("(%i-%i,%i-%i [%i,%s] - %.1f - %p [P: %p, LC: %p, RC: %p])", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", middle(m), m, m->parent, m->lChild, m->rChild);
+	if(m) printf("(%i-%i,%i-%i [%i,%s] - %.1f - %p)", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", middle(m), m);
 }
 
 void printMatchesValidity(Matches * m, Binary * b) {
@@ -473,18 +473,12 @@ void swapValues(Match * a, Match * b) {
 	a->end = b->end;
 	a->cindex = b->cindex;
 	a->type = b->type;
-	a->lChild = b->lChild;
-	a->rChild = b->rChild;
-	a->parent = b->parent;
 
 	//assign all a stuff to b
 	b->start = temp.start;
 	b->end = temp.end;
 	b->cindex = temp.cindex;
 	b->type = temp.type;
-	b->lChild = temp.lChild;
-	b->rChild = temp.rChild;
-	b->parent = temp.parent;
 
 	//printf("Post swap:         "); printMatch(a); printf(" and "); printMatch(b); printf("\n");
 }
@@ -511,276 +505,38 @@ void assignVals(Match * a, Match * b) {
 //}
 
 
-/* MATCHHEAP */
+//optimum matches
 
-MatchHeap * newMatchHeap() {
-	MatchHeap * heap = (MatchHeap *)malloc(sizeof(MatchHeap));
-	heap->size = 0;
-	heap->root = NULL;
+void checkHeaders(Matches * matches, Match * m) {
+	int length = matchLength(m);
 
-	return heap;
-}
-
-void heap_insertMatch(Matches * matches, Match * match) {
-	if (match == NULL) printf("ERROR: MATCH WAS NULL\n\n.");
-	// printf("\nInserting: "); printMatch(match); printf("\n");
-
-	/* first time adding a node */
-	if (matches->heap->root == NULL) {
-		// printf("Heap root is NULL so adding "); printMatch(match); printf(" as the root.\n");
-		match->parent = NULL;
-		matches->heap->root = match;
-	}
-	else {
-		// printf("Heap wasn't null so calling percolating down, starting at root: "); printMatch(matches->heap->root); printf("\n");
-		heap_insertRecurse(matches->heap, matches->heap->root, match);
-	}
-	// printf("Post insert: \n"); printHeap(matches->heap); printf("\n\n");
-	// checkHeap(matches);
-}
-
-void heap_insertRecurse(MatchHeap * heap, Match * root, Match * match) {	//have to send heap in case we are replacing the root, send it as null if it's not needed to check
-
-	/* if it's bigger than the current one, taking into account the parents length insert it in as a new root of the mini tree */
-	bool isRoot = root->parent == NULL;
-	int modifiedLengthMatch = isRoot ? matchLength(match) : modifiedMatchLength(match, root->parent->start, root->parent->end);
-	int modifiedLengthRoot = isRoot ? matchLength(root) : modifiedMatchLength(root, root->parent->start, root->parent->end);		//save time by storing these in match?
-
-	if (modifiedLengthMatch > modifiedLengthRoot) {
-		/* reassign root of matches heap if neccesary */
-		if (heap && heap->root == root) heap->root = match;
-
-		// printf("Modified length of match: "); printMatch(match); printf(" (%i) is bigger than root: ", modifiedLengthMatch); printMatch(root); printf(" (%i) ...  commencing root replacement.\n", modifiedLengthRoot);
-		
-		/* make the match become the root of the new mini tree */
-		bool wentToLeft = rootReplace(root, match);
-		
-		/* if the root went to the left of the new match, have to re-add stuff to the right of the old root	starting at the new root (match) & vice versa */
-		/*if (wentToLeft) {
-			if(root->rChild) reAdd(root->rChild, match);
-		}
-		else {
-			if (root->lChild) reAdd(root->lChild, match);
-		}*/
-
-		/* have to reset entire tree below becuase now the parent has changed and length is dependent on that */
-
-		if (match->rChild) {	//changed this part to match->child... it works but not 100% sure why
-			// printf("Re-adding rchild: "); printMatch(match->rChild); printf("\n");
-			reAdd(match->rChild, match);
-		}
-		if (match->lChild) {
-			reAdd(match->lChild, match);
-			// printf("Re-adding lchild: "); printMatch(match->lChild); printf("\n");
-		}
-
-		return;
-	}
-	
-	/* assign match or continue percolating down */
-
-	if (goesToLeft(match, root)) {
-		if (!root->lChild) {	//no left child yet, assign
-			root->lChild = match;
-			match->parent = root;
-			// printf("Assigned "); printMatch(match); printf(" as lchild to "); printMatch(root); printf("\n");
-			return;
-		}
-		else {	//has a left child
-			heap_insertRecurse(NULL, root->lChild, match);	//send it further down the tree to the left
-		}
-	}
-	else {	//goes to the right
-		if (!root->rChild) {	//no right chid yet, assign
-			root->rChild = match;
-			match->parent = root;
-			// printf("Assigned "); printMatch(match); printf(" as rchild to "); printMatch(root); printf("\n");
-			return;
-		}
-		else {	//has a right child
-			heap_insertRecurse(NULL, root->rChild, match); //send it further down the tree to the right
-		}
-	}
-}
-
-bool rootReplace(Match * root, Match * match) {	//returns true if root went to left of match, false otherwise
-
-	/* reassign the old root's parent's child pointer */
-	if (root->parent) {	//true root won't have a parent
-		if (root == root->parent->lChild) root->parent->lChild = match;
-		else root->parent->rChild = match;
-	}
-
-	/* make new match's parent the old root's parent */
-	match->parent = root->parent;
-
-	/* update the old root's parent to the new match */
-	root->parent = match;
-
-	
-	/* appropriately assign the old root as the child of the new match */
-	if (goesToLeft(root, match)) {
-		match->lChild = root;
-		return true;
-	} else {
-		match->rChild = root;
-		return false;
-	}
-}
-
-bool goesToLeft(Match * child, Match * parent) {
-	if (middle(child) < middle(parent)) {
-		// printf("Middle of match "); printMatch(child); printf(" was to the left of the middle of the root "); printMatch(parent); printf("\n");
-		return true;	//goes to left
-	}
-	else if (middle(child) > middle(parent)) {
-		// printf("Middle of match "); printMatch(child); printf(" was to the right of the middle of the root "); printMatch(parent); printf("\n");
-		return false;	//goes to right
-	}
-	else {
-		// printf("Middle of match "); printMatch(child); printf(" was to the left of the middle of the root "); printMatch(parent); printf("\n");
-		return true;	//ties go left
-	}
-}
-
-void reAdd(Match * root, Match * dest) {
-
-	/* cut off the connection to the parent */
-	if (root->parent) {	//true root won't have a parent
-		if (root == root->parent->lChild) {
-			// printf("Setting the lchild of "); printMatch(root->parent); printf(" to NULL\n");
-			root->parent->lChild = NULL;
-		}
-		else if (root == root->parent->rChild) {
-			// printf("Setting the rchild of "); printMatch(root->parent); printf(" to NULL\n");
-			root->parent->rChild = NULL;
-		}
-		// printf("Setting the parent of "); printMatch(root); printf(" to NULL\n");
-		root->parent = NULL;
-	}
-
-	/* save addresses of lChild and rChild and cut off connections */
-	Match * lChild = root->lChild;
-	Match * rChild = root->rChild;
-	// printf("Nulling the children of	"); printMatch(root); printf(":\n");
-	// printf("  "); printMatch(root->lChild); printf("\n  "); printMatch(root->rChild); printf("\n");
-	root->lChild = NULL;
-	root->rChild = NULL;
-
-	/* insert the newly cut off root to the destination */
-	heap_insertRecurse(NULL, dest, root);
-
-	/* readd rest of minitree */
-	if (lChild) reAdd(lChild, dest);
-	if (rChild) reAdd(rChild, dest);
+	if (m->start > matches->max_body_start) matches->max_body_start = m->start;
+	if (m->cindex > matches->max_crypt_start) matches->max_crypt_start = m->cindex;
+	if (length > matches->max_length) matches->max_length = length;
 
 	return;
 }
 
-void printHeap(MatchHeap * heap) {
-	if (heap == NULL || heap->root == NULL) return;
-	printNodeRecurse(heap->root);
-}
+void printOptimumMatches(FILE * map, Matches * matches, Match ** optArr, int size) {
+	BitPrinter * printer = newBitPrinter(map);		//WORKING HERE WORKING HERE WORKING HERE WORKING HERE WORKING HERE
 
-void printNodeRecurse(Match * match) {
-	if (!match) return;
+	int maxBindex = matches->max_body_start;
+	int maxCindex = matches->max_crypt_start;
+	int maxLength = matches->max_length;
 
-	for (int i = 0; i < middle(match); i++) {
-		printf(" ");
+	/* first print out a 1 for */
+	for (int i = 0; i < size; i++) {
+
 	}
-	if (match->parent) {
-		printMatch(match); printf("%i\n", modifiedMatchLength(match, match->parent->start, match->parent->end));
-	}
-	else {
-		printMatch(match); printf("\n");
-	}
-
-	printNodeRecurse(match->lChild);
-	printNodeRecurse(match->rChild);
-
 }
 
-void checkHeap(Matches * matches) {
-	printf("Checking heap starting at root "); printMatch(matches->heap->root); printf("...\n");
-	int numErr = 0;
-	Match * m;
-	bool conflict;
-	bool left;
-	bool right;
-	for (int i = 0; i < matches->bits_covered; i++) {
-		m = matches->start_arr[i];
-		if (m) {
-			conflict = false;
-			left = true;
-			right = true;;
-			/* check with parent/children conflict */
-			/* check its children */
-			if (m->lChild && m->lChild->parent != m) conflict = true;
-			if (m->rChild && m->rChild->parent != m) conflict = true;
 
-			/* check its parent */
-			if (m->parent && m->parent->lChild != m && m->parent->rChild != m) conflict = true;
-
-			/* check with max in its branch conflict */
-			bool maxPass = maxCheck(m);
-
-			/* check that its child to the left is to the left and same with right. */
-			if (m->lChild && middle(m->lChild) > middle(m)) left = false;
-			if (m->rChild && middle(m->rChild) <= middle(m)) right = false;
-
-			printf("(%i-%i,%i-%i [%i,%s] ... parents: %s, maxCheck: %s, lrCheck: %s <> %s)\n", m->start, m->end, m->cindex, m->cindex + m->end - m->start, matchLength(m), m->type == 1 ? "+" : "-", conflict ? "CONFLICTED" : "NO CONFLICT", maxPass ? "PASS" : "FAIL", left ? "PASS" : "FAIL", right ? "PASS" : "FAIL");
-			if (conflict) {
-				printf("Parent: "); printMatch(m->parent); printf("\n");
-			}
-			if (conflict || !maxPass || !left || !right) numErr++;
-		}
-	}
-	printf("\n\nHeap check completed with %i errors. %s\n\n", numErr, numErr == 0 ? "CONGRATS!!!" : "aw :*(");
-}
-
-bool maxCheck(Match * m) {
-	int max_right = m->rChild ? modifiedMatchLength(m->rChild, m->start, m->end) : 0;
-	int max_left = m->lChild ? modifiedMatchLength(m->lChild, m->start, m->end) : 0;
-
-	bool l = m->lChild ? maxRecurse(m->lChild, max_left, m->start, m->end) : true;
-	bool r = m->rChild ? maxRecurse(m->rChild, max_right, m->start, m->end) : true;
-	return l && r;
-}
-
-bool maxRecurse(Match * m, int max, int start, int end) {
-	if (modifiedMatchLength(m, start, end) > max) return false;
-
-	bool l = m->lChild ? maxRecurse(m->lChild, max, start, end) : true;
-	bool r = m->rChild ? maxRecurse(m->rChild, max, start, end) : true;
-	return l && r;
-}
-
-int printOptimumMatches(Matches * matches) {
-	/* print out the root */
-	printMatch(matches->heap->root); printf("\n");
-
-	int a = matches->heap->root->start != 0 ? printOptimumRecurse(0, matches->heap->root->start, matches->heap->root->lChild, 1) : 1;
-	int b = matches->heap->root->end != matches->bits_covered ? printOptimumRecurse(matches->heap->root->end, matches->bits_covered, matches->heap->root->rChild, a) : a;
-
-	return b;
-}
-
-int printOptimumRecurse(int lower, int upper, Match * root, int i) {
-	/* print out the root */
-	printMatch(root); printf("\n");
-	i++;
-
-	int a = root->start > lower + 1? printOptimumRecurse(lower, root->start, root->lChild, i) : i;
-	int b = root->end < upper - 1? printOptimumRecurse(root->end, upper, root->rChild, a) : a;
-
-	return b;
-}
-
-int printOptimumMatchesDan(Matches * matches, Match ** optArr) {
+int findOptimumMatches(Matches * matches, Match ** optArr) {
 	/* print out a match near the center */
 	Match * center = matches->start_arr[matches->bits_covered / 2];
 	printMatch(center); printf("\n");
 	optArr[0] = center;
+	checkHeaders(matches, center);
 
 	int a = center->start != 0 ? findOptimumLeft(matches, center, 1, optArr) : 1;
 	int b = center->end != matches->bits_covered ? findOptimumRight(matches, center, a, optArr) : a;
@@ -799,6 +555,7 @@ int findOptimumRight(Matches * matches, Match * center, int i, Match ** optArr) 
 	}	//furthest is now the match that ends furthest to the right and can connect with center
 
 	printMatch(furthest); printf("\n");
+	checkHeaders(matches, furthest);
 	if (optArr[i] != NULL) printf("ERROR IT WAS ALREADY FILLED\n\n\n\n\n\n\n");
 	optArr[i] = furthest;
 	i++;
@@ -818,6 +575,7 @@ int findOptimumLeft(Matches * matches, Match * center, int i, Match ** optArr) {
 	}	//furthest is now the match that starts furthest to the left and can connect with center
 
 	printMatch(furthest); printf("\n");
+	checkHeaders(matches, furthest);
 	if (optArr[i] != NULL) printf("ERROR IT WAS ALREADY FILLED\n\n\n\n\n\n\n");
 	optArr[i] = furthest;
 	i++;

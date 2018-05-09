@@ -3,16 +3,8 @@
 #include "Binary.h"
 #include "Matchings.h"
 #include "IntArray.h"
-#define ONE 1				// 00000001
-#define TWO 1<<1			// 00000010	
-#define FOUR 1<<2			// 00000100
-#define EIGHT 1<<3			// 00001000
-#define SIXTEEN 1<<4		// 00010000
-#define THIRTYTWO 1<<5		// 00100000
-#define SIXTYFOUR 1<<6		// 01000000
-#define ONETWENTYEIGHT 1<<7 // 10000000
 
-
+//efficiency in resetBool
 
 
 Binary * newBinary(int max) {
@@ -25,6 +17,21 @@ Binary * newBinary(int max) {
 	}
 	else {
 		printf("Failed to malloc space for new binary object.");
+		return NULL;
+	}
+}
+
+BitPrinter * newBitPrinter(FILE * map) {
+	/* allocate space */
+	BitPrinter * b = (BitPrinter *)malloc(sizeof(BitPrinter));
+	if (b) {
+		b->map = map;
+		b->boolArr = (bool *)calloc(8, sizeof(bool));
+		b->next = 0;
+		return b;
+	}
+	else {
+		printf("Failed to malloc space for new BinaryPrinter object.");
 		return NULL;
 	}
 }
@@ -75,7 +82,7 @@ void printBinaryHandle(Binary * b) {
 	printf("\nSize: %i, Used: %i\n", b->body->max, b->body->size);
 	printf("C: ");
 	//printIntArr(b->crypt);
-	printf("Size: %i, Used: %i\n", b->crypt->max, b->crypt->size);
+	printf("\nSize: %i, Used: %i\n", b->crypt->max, b->crypt->size);
 }
 
 void bodyCryptAnalysis(Binary * binary, Matches * matches) {
@@ -124,13 +131,51 @@ void bodyCryptAnalysis(Binary * binary, Matches * matches) {
 
 //printing binary
 
-unsigned char boolArrToChar(bool arr[]) {
+unsigned char boolArrToChar(bool * arr) {
 	unsigned char byte = 0;
 	for (int i = 0; i < 8; i++) {
 		if (arr[7 - i]) byte = byte | (1 << i);
 	}
 	return byte;
 }
+
+void resetBool(BitPrinter * printer) {
+	//make this more efficient by just wiping pure memory
+	printer->boolArr[0] = 0;
+	printer->boolArr[1] = 0;
+	printer->boolArr[2] = 0;
+	printer->boolArr[3] = 0;
+	printer->boolArr[4] = 0;
+	printer->boolArr[5] = 0;
+	printer->boolArr[6] = 0;
+	printer->boolArr[7] = 0;
+
+	printer->next = 0;
+}
+
+void flushPrinter(BitPrinter * printer) {
+	fputc(boolArrToChar(printer->boolArr), printer->map);	//flush it
+	resetBool(printer);
+}
+
+void printBit(BitPrinter * printer, bool bit) {
+	/* add the bit to the boolean array at proper index */
+	printer->boolArr[printer->next] = bit;
+
+	/* if we've made a byte, flush it to the file as a character and reset the bool */
+	if (printer->next == 7) {
+		flushPrinter(printer);
+	}
+	else if(printer->next < 7){	//didn't make a byte yet
+		printer->next++;
+	}
+	else {
+		printf("SOMETHING MESSED UP IN THE PRINTER\n\n\n\n\n");
+	}
+
+	return;
+}
+
 
 //void deleteBinaryHandle(Binary * b) {
 //	free(b_binary);

@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "Matchings.h"
 #include "IntArray.h"
@@ -14,8 +15,17 @@ typedef struct Binary_Handler{
 	struct IntArray * crypt;
 } Binary;
 
+typedef struct Bit_Printer {	//send this individual bits or chars to write
+	bool * boolArr;	//going to be size 8 ALWAYS
+	int next;		//less than / equal to 8 always (index of last modified bit)
+	FILE * map;
+} BitPrinter;
+
 /* returns a new binary object */
 Binary * newBinary(int max);
+
+/* returns a new bitprinter */
+BitPrinter * newBitPrinter(FILE * map);
 
 /* reads in a buffer of body into the binary object (converts to integer array) */
 void readInBody(Binary * b, unsigned char b_buffer[], int b_bytes_read);
@@ -31,6 +41,15 @@ void printBinaryHandle(Binary * b);
 /* analyzes the entire body/crypt and adds all matches to the given Matches object */
 void bodyCryptAnalysis(Binary * binary, struct Matches * matches);
 
+// printing
+
+/* flushes and resets a printer */
+void flushPrinter(BitPrinter * printer);
+
+/* resets a printers boolean array */
+void resetBool(BitPrinter * printer);
+
 /* converts a boolean area of size 8 to an unsigned char */
-unsigned char boolArrToChar(bool arr[]);
+unsigned char boolArrToChar(bool * arr);
+
 #endif
