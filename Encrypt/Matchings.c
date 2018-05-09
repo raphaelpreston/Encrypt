@@ -538,7 +538,7 @@ void printOptimumMatches(FILE * map, Matches * matches, Match ** optArr, int siz
 
 	printBit(printer, 0);	//spacer
 
-
+	 
 	/* start printing out actual matches */
 	/*for (int i = 0; i < size; i++) {
 
