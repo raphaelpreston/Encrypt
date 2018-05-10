@@ -208,16 +208,31 @@ bool readBit(BitPrinter * reader) {
 	return bit && true;	//ummmm
 }
 
+readInMatch(BitPrinter * reader, Matches * matches) {
+	if (matches->max_body_start == 0 || matches->max_crypt_start == 0 || matches->max_length == 0) printf("Can't read in a match with 0 data.\n\n\n");
+
+	int b = matches->max_body_start;
+	int c = matches->max_crypt_start;
+	int l = matches->max_length;
+
+	int bindex = 0;
+	int cindex = 0;
+	int length = 0;
+
+	/* read in the match */
+	for (int i = b; i > 0; i--) if (readBit(reader)) bindex += 1 << (i - 1);
+	for (int i = c; i > 0; i--) if (readBit(reader)) cindex += 1 << (i - 1);
+	for (int i = l; i > 0; i--) if (readBit(reader)) length += 1 << (i - 1);
+
+	printMatch(newMatch(bindex, cindex, length, 1)); printf("\n");
+}
 
 void readInMatches(FILE * file, Matches * matches) {
 	BitPrinter * reader = newBitPrinter(file);
 
 	/* read in headers */
 	int b = 0;
-	while (readBit(reader)) {
-		b++;
-		if (reader->byte == EOF) printf("end of file\n");
-	}
+	while (readBit(reader)) b++;
 	matches->max_body_start = b;
 
 	int c = 0;
@@ -231,7 +246,13 @@ void readInMatches(FILE * file, Matches * matches) {
 	printf("b: %i, c: %i, l: %i\n", matches->max_body_start, matches->max_crypt_start, matches->max_length);
 
 	/* read in matches */
-
-
+	int num = 0;
+	while (reader->byte != EOF) {	//read in one match at a time					//test this by making maps that end directly on the eof
+		readInMatch(reader, matches);
+		num++;
+	}
+	
+	printf("%i matches read in.\n", num);
+	return;
 }
 
