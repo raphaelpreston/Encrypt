@@ -8,6 +8,7 @@
 #include "Matchings.h"
 #include "IntArray.h"
 
+
 //typedef struct Matches Matches;		//forward definition (what the heck is this i dunno but it works)
 
 typedef struct Binary_Handler{
@@ -19,6 +20,7 @@ typedef struct Bit_Printer {	//send this individual bits or chars to write
 	bool * boolArr;	//going to be size 8 ALWAYS
 	int next;		//less than / equal to 8 always (index of last modified bit)
 	FILE * map;
+	int byte; //used for reading
 } BitPrinter;
 
 /* returns a new binary object */

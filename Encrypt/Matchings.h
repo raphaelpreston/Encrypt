@@ -8,6 +8,7 @@
 // see reAdd for more optimization
 // see modifiedMatchLength and optimize it
 // change everything to unsigned int ?
+// change int arr to use bools, smaller
 
 /* structs */
 
@@ -113,4 +114,12 @@ int numDecDigits(unsigned int num);
 
 /* returns the number of digits that a binary storage of the number would take up */
 int numBinDigits(unsigned int num);
+
+// reading In
+
+void readInMatches(FILE * map, Matches * readIn);
+
+
+
+
 #endif

@@ -133,9 +133,7 @@ void bodyCryptAnalysis(Binary * binary, Matches * matches) {
 
 unsigned char boolArrToChar(bool * arr) {
 	unsigned char byte = 0;
-	for (int i = 0; i < 8; i++) {
-		if (arr[7 - i]) byte = byte | (1 << i);
-	}
+	for (int i = 0; i < 8; i++) if (arr[7 - i]) byte = byte | (1 << i);
 	return byte;
 }
 
@@ -190,4 +188,33 @@ void printInt(BitPrinter * printer, int num, int max) {
 //	free(b_binary);
 //	free(c_binary);
 //}
+
+// reading
+
+bool readBit(BitPrinter * reader) {
+	bool bit;
+
+	/* get fresh byte if needed */
+	if (reader->next == 0) {
+		reader->byte = fgetc(reader->map);
+	}
+
+	/* identify the next bit */
+	bit = reader->byte & (1 << (7 - reader->next));
+	//printf("Anded %i with %i to get %i\n", reader->byte, 1 << (7-reader->next), bit);
+	
+	/* increment or reset to 0 */
+	reader->next = reader->next == 7 ? 0 : reader->next + 1;
+	
+	//printf("returning %s\n", bit ? "1" : "0");
+	return bit && true;
+}
+
+
+void readInMatches(FILE * file, Matches * readIn) {
+	BitPrinter * reader = newBitPrinter(file);
+
+
+
+}
 
