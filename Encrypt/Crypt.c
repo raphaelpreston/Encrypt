@@ -4,7 +4,7 @@
 #include "Matchings.h"
 #include "MatchHeap.h"
 #include "IntArray.h"
-
+//add file not found errors and stuff to fopens
 #define BUFFER_SIZE 1
 #define MAX_BINARY_SIZE 2
 #define MATCHES_SIZE 10
@@ -12,115 +12,116 @@
 int main()
 {
 	//testing bit reading
-	char map_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/MAP.txt";
+	/*char map_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/MAP.txt";
 	FILE * map = fopen(map_loc, "rb");
 	BitPrinter * reader = newBitPrinter(map);
 
-	for (int i = 0; i < 8; i++) {
-		bool bit = readBit(reader);
-		printf("%s\n", bit ? "1" : "0");
+	int i = 0;
+	while (readBit(reader)) i++;
+	printf("I: %i\n", i);
+
+	fclose(map);*/
+	 /* create file pointers for body and crypt */
+	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishbody";
+	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishcrypt";
+	char map_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/MAP.txt";
+
+	FILE * body = fopen(body_loc, "rb");
+	FILE * crypt = fopen(crypt_loc, "rb");
+	FILE * map = fopen(map_loc, "w+");
+
+	if (body == NULL || crypt == NULL) return 1;
+
+	/* create a binary handle object */
+	Binary * binary = newBinary(MAX_BINARY_SIZE);
+	
+
+	 /* read files in buffer by buffer */
+	unsigned char b_buffer[BUFFER_SIZE * sizeof(unsigned char)];
+	unsigned char c_buffer[BUFFER_SIZE * sizeof(unsigned char)];
+	int b_bytes_read;
+	int c_bytes_read;
+	
+	while (b_bytes_read = fread(b_buffer, sizeof(unsigned char), BUFFER_SIZE, body)) {	//for the body
+		readInBody(binary, b_buffer, b_bytes_read);	//this finds the matchings too
+	}
+	while (c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt)) {	//for the crypt
+		readInCrypt(binary, c_buffer, c_bytes_read);
 	}
 
+	if (ferror(body) || ferror(crypt)) return 2;	//error checking
+
+	 /* print binary */
+	printBinaryHandle(binary);
+	// clock_t begin, end;
+	// begin = clock();
+
+	 /* find matchings */
+	printf("Finding matches...\n");
+	Matches * matches = newMatches(MATCHES_SIZE);
+	bodyCryptAnalysis(binary, matches);
+
+	printf("Matches found...\n");
+	//printMatches(matches);
+	//printMatchesValidity(matches, binary);
+
+	// print out optimum matches
+	printf("Optimum matches:\n");
+	Match ** optArr = (Match **)calloc(502, sizeof(Match *));
+
+
+	// now we have all matches from ALL FILES, time to find the optimum ones
+
+	int numMatches = findOptimumMatches(matches, optArr);	//find the optimum matches, also sets matches header objects
+
+	printf("\nThe entire body can be covered with %i matches.\n", numMatches);
+	testOptimum(optArr, 502, matches);
+
+	// now print them
+	printOptimumMatches(map, matches, optArr, 502);	//eventually encorporate optArr into matches object
+	printf("Matches Headers:\nMax Bindex: %i [%i]\nMax Cindex: %i [%i]\nMax Length: %i [%i]\n", matches->max_body_start, numBinDigits(matches->max_body_start), matches->max_crypt_start, numBinDigits(matches->max_crypt_start), matches->max_length, numBinDigits(matches->max_length));
+
+	// end = clock();
+	//double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+	//printf("Elapsed: %f\n", time_spent);
+
+	
+	/* checking that it worked */
 	fclose(map);
-	//////// /* create file pointers for body and crypt */
-	////////char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishbody";
-	////////char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishcrypt";
-	////////char map_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/MAP.txt";
+	fopen(map_loc, "rb");
+	/* create a binary handle object */
+	IntArr * intArr = newIntArr(1000);
 
-	////////FILE * body = fopen(body_loc, "rb");
-	////////FILE * crypt = fopen(crypt_loc, "rb");
-	////////FILE * map = fopen(map_loc, "w+");
+	unsigned char map_buffer[BUFFER_SIZE * sizeof(unsigned char)];
+	int map_bytes_read;
 
-	////////if (body == NULL || crypt == NULL) return 1;
+	while (map_bytes_read = fread(map_buffer, sizeof(unsigned char), BUFFER_SIZE, map)) {
+		IntArr_readInBuffer(intArr, map_buffer, map_bytes_read);
+	}
 
-	/////////* create a binary handle object */
-	////////Binary * binary = newBinary(MAX_BINARY_SIZE);
-	////////
+	printIntArr(intArr);
+	printf("\n");
 
-	//////// /* read files in buffer by buffer */
-	////////unsigned char b_buffer[BUFFER_SIZE * sizeof(unsigned char)];
-	////////unsigned char c_buffer[BUFFER_SIZE * sizeof(unsigned char)];
-	////////int b_bytes_read;
-	////////int c_bytes_read;
-	////////
-	////////while (b_bytes_read = fread(b_buffer, sizeof(unsigned char), BUFFER_SIZE, body)) {	//for the body
-	////////	readInBody(binary, b_buffer, b_bytes_read);	//this finds the matchings too
-	////////}
-	////////while (c_bytes_read = fread(c_buffer, sizeof(unsigned char), BUFFER_SIZE, crypt)) {	//for the crypt
-	////////	readInCrypt(binary, c_buffer, c_bytes_read);
-	////////}
+	 /* close files and free memory */
+	//deleteBinaryHandle(binary);
+	//deleteMatches(matches)
+	fclose(body);
+	fclose(crypt);
+	fclose(map);
 
-	////////if (ferror(body) || ferror(crypt)) return 2;	//error checking
+	// testing by reading back in 
+	FILE * file = fopen(map_loc, "rb");
+	if (!file) printf("Error opening file.\n");
 
-	//////// /* print binary */
-	////////printBinaryHandle(binary);
-	////////// clock_t begin, end;
-	////////// begin = clock();
+	/* read back in to a new matches object */
+	Matches * matchesIn = newMatches(MATCHES_SIZE);
 
-	//////// /* find matchings */
-	////////printf("Finding matches...\n");
-	////////Matches * matches = newMatches(MATCHES_SIZE);
-	////////bodyCryptAnalysis(binary, matches);
-
-	////////printf("Matches found...\n");
-	//////////printMatches(matches);
-	//////////printMatchesValidity(matches, binary);
-
-	////////// print out optimum matches
-	////////printf("Optimum matches:\n");
-	////////Match ** optArr = (Match **)calloc(502, sizeof(Match *));
-
-
-	////////// now we have all matches from ALL FILES, time to find the optimum ones
-
-	////////int numMatches = findOptimumMatches(matches, optArr);	//find the optimum matches, also sets matches header objects
-
-	////////printf("\nThe entire body can be covered with %i matches.\n", numMatches);
-	////////testOptimum(optArr, 502, matches);
-
-	////////// now print them
-	////////printOptimumMatches(map, matches, optArr, 502);	//eventually encorporate optArr into matches object
-	////////printf("Matches Headers:\nMax Bindex: %i [%i]\nMax Cindex: %i [%i]\nMax Length: %i [%i]\n", matches->max_body_start, numBinDigits(matches->max_body_start), matches->max_crypt_start, numBinDigits(matches->max_crypt_start), matches->max_length, numBinDigits(matches->max_length));
-
-	////////// end = clock();
-	//////////double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-	//////////printf("Elapsed: %f\n", time_spent);
-
-	////////
-	/////////* checking that it worked */
-	////////fclose(map);
-	////////fopen(map_loc, "rb");
-	/////////* create a binary handle object */
-	////////IntArr * intArr = newIntArr(1000);
-
-	////////unsigned char map_buffer[BUFFER_SIZE * sizeof(unsigned char)];
-	////////int map_bytes_read;
-
-	////////while (map_bytes_read = fread(map_buffer, sizeof(unsigned char), BUFFER_SIZE, map)) {
-	////////	IntArr_readInBuffer(intArr, map_buffer, map_bytes_read);
-	////////}
-
-	////////printIntArr(intArr);
-	////////printf("\n");
-
-	//////// /* close files and free memory */
-	//////////deleteBinaryHandle(binary);
-	//////////deleteMatches(matches)
-	////////fclose(body);
-	////////fclose(crypt);
-	////////fclose(map);
-
-
-
-	/////////* read back in to a new matches object */
-	////////Matches * readIn = newMatches(MATCHES_SIZE);
-
-	////////readInMatches(map, readIn);
+	readInMatches(file, matchesIn);
 
 
 
 
 
 
- ////////   return 0;
+	return 0;
 }

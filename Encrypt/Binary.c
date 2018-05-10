@@ -201,19 +201,36 @@ bool readBit(BitPrinter * reader) {
 
 	/* identify the next bit */
 	bit = reader->byte & (1 << (7 - reader->next));
-	//printf("Anded %i with %i to get %i\n", reader->byte, 1 << (7-reader->next), bit);
 	
 	/* increment or reset to 0 */
 	reader->next = reader->next == 7 ? 0 : reader->next + 1;
 	
-	//printf("returning %s\n", bit ? "1" : "0");
-	return bit && true;
+	return bit && true;	//ummmm
 }
 
 
-void readInMatches(FILE * file, Matches * readIn) {
+void readInMatches(FILE * file, Matches * matches) {
 	BitPrinter * reader = newBitPrinter(file);
 
+	/* read in headers */
+	int b = 0;
+	while (readBit(reader)) {
+		b++;
+		if (reader->byte == EOF) printf("end of file\n");
+	}
+	matches->max_body_start = b;
+
+	int c = 0;
+	while (readBit(reader)) c++;
+	matches->max_crypt_start = c;
+
+	int l = 0;
+	while (readBit(reader)) l++;
+	matches->max_length = l;
+
+	printf("b: %i, c: %i, l: %i\n", matches->max_body_start, matches->max_crypt_start, matches->max_length);
+
+	/* read in matches */
 
 
 }
