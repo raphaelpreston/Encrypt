@@ -527,15 +527,10 @@ void printOptimumMatches(FILE * map, Matches * matches, Match ** optArr, int siz
 	/* print headers */
 
 	for (int i = 0; i < digMaxBindex; i++) printBit(printer, 1);	//digits needed for bindex
-
 	printBit(printer, 0);	//spacer
-
 	for (int i = 0; i < digMaxCindex; i++) printBit(printer, 1);	//digits needed for cindex
-
 	printBit(printer, 0);	//spacer
-
 	for (int i = 0; i < digMaxLength; i++) printBit(printer, 1);	//digits needed for cindex
-
 	printBit(printer, 0);	//spacer
 
 	/* start printing out actual matches */
@@ -543,8 +538,9 @@ void printOptimumMatches(FILE * map, Matches * matches, Match ** optArr, int siz
 	for (int i = 0; i < size; i++) {
 		curr = optArr[i];
 		printInt(printer, curr->start, digMaxBindex);
+		printInt(printer, curr->cindex, digMaxCindex);
+		printInt(printer, matchLength(curr), digMaxLength);	//print out the 3 items that define a match
 	}
-
 	flushPrinter(printer);
 }
 
