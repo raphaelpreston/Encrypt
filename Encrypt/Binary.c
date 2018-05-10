@@ -177,10 +177,13 @@ void printBit(BitPrinter * printer, bool bit) {
 }
 
 void printInt(BitPrinter * printer, int num, int max) {
+	if (max > 32) {
+		printf("Error: Max greater than 32.\n"); return;
+	}
 	for (int i = max - 1; i >= 0; i--) {
 		int shift = 1 << i;	//and with this, if result is 0, the bit is 0
-		printBit(printer, shift & num == 0 ? 0 : 1);
-		printf("Left-shifted %i times and printed a %i\n", i, shift & num == 0 ? 0 : 1);
+		printBit(printer, shift & num);
+		// printf("Left-shifted %i times to get %i & %i and printed a %i\n", i, shift, num, shift & num == 0 ? 0 : 1);
 	}
 }
 

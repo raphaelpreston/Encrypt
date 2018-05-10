@@ -16,8 +16,8 @@ int main()
 	FILE * map = fopen(map_loc, "w+");
 
 	BitPrinter * printer = newBitPrinter(map);
-
-	printInt(printer, 1, 8);
+	int num = ((1<<10) + 1);
+	printInt(printer, num, numBinDigits(num));
 
 	flushPrinter(printer);
 	
