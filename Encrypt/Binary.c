@@ -154,7 +154,7 @@ void resetBool(BitPrinter * printer) {
 }
 
 void flushPrinter(BitPrinter * printer) {
-	fputc(boolArrToChar(printer->boolArr), printer->map);	//flush it
+	if(printer->next != 0) fputc(boolArrToChar(printer->boolArr), printer->map);	//flush it
 	resetBool(printer);
 }
 
@@ -176,6 +176,13 @@ void printBit(BitPrinter * printer, bool bit) {
 	return;
 }
 
+void printInt(BitPrinter * printer, int num, int max) {
+	for (int i = max - 1; i >= 0; i--) {
+		int shift = 1 << i;	//and with this, if result is 0, the bit is 0
+		printBit(printer, shift & num == 0 ? 0 : 1);
+		printf("Left-shifted %i times and printed a %i\n", i, shift & num == 0 ? 0 : 1);
+	}
+}
 
 //void deleteBinaryHandle(Binary * b) {
 //	free(b_binary);

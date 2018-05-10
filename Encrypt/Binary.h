@@ -55,4 +55,6 @@ unsigned char boolArrToChar(bool * arr);
 /* queueus up a bit and prints it if necessary */
 void printBit(BitPrinter * printer, bool bit);
 
+/* prints an integer using the number of binary digits specified by max */
+void printInt(BitPrinter * printer, int num, int max);
 #endif
