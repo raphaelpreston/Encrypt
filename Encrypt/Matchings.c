@@ -537,7 +537,7 @@ void printOptimumMatches(FILE * map, Matches * matches, Match ** optArr, int siz
 	printBit(printer, 0);	//spacer
 
 	/* print out header pt 2 */
-	printInt(printer, size, digMaxLength);	//# of matches in the file
+	printInt(printer, size, digMaxMatchNum);	//# of matches in the file
 
 	/* start printing out actual matches */
 	Match * curr;
