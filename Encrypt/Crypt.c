@@ -20,8 +20,8 @@ int main()
 
 	fclose(map);*/
 	 /* create file pointers for body and crypt */
-	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/body";
-	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/crypt";
+	char body_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishbody";
+	char crypt_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/longishcrypt";
 	char map_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/MAP.txt";
 
 	FILE * body = fopen(body_loc, "rb");
@@ -65,7 +65,7 @@ int main()
 
 	// print out optimum matches
 	printf("Optimum matches:\n");
-	Match ** optArr = (Match **)calloc(3, sizeof(Match *));
+	Match ** optArr = (Match **)calloc(502, sizeof(Match *));
 
 
 	// now we have all matches from ALL FILES, time to find the optimum ones
@@ -73,10 +73,10 @@ int main()
 	int numMatches = findOptimumMatches(matches, optArr);	//find the optimum matches, also sets matches header objects
 
 	printf("\nThe entire body can be covered with %i matches.\n", numMatches);
-	testOptimum(optArr, 3, matches);
+	testOptimum(optArr, 502, matches);
 
 	// now print them
-	printOptimumMatches(map, matches, optArr, 3);	//eventually encorporate optArr into matches object
+	printOptimumMatches(map, matches, optArr, 502);	//eventually encorporate optArr into matches object
 	printf("Matches Headers:\nMax Bindex: %i [%i]\nMax Cindex: %i [%i]\nMax Length: %i [%i]\n", matches->max_body_start, numBinDigits(matches->max_body_start), matches->max_crypt_start, numBinDigits(matches->max_crypt_start), matches->max_length, numBinDigits(matches->max_length));
 
 	// end = clock();
@@ -96,9 +96,9 @@ int main()
 	while (map_bytes_read = fread(map_buffer, sizeof(unsigned char), BUFFER_SIZE, map)) {
 		IntArr_readInBuffer(intArr, map_buffer, map_bytes_read);
 	}
-	printf("File contents:\n");
+	/*printf("File contents:\n");
 	printIntArr(intArr);
-	printf("\n");
+	printf("\n");*/
 
 	// /* close files and free memory */
 	////deleteBinaryHandle(binary);

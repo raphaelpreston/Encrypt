@@ -540,15 +540,24 @@ void printOptimumMatches(FILE * map, Matches * matches, Match ** optArr, int siz
 	printInt(printer, size, digMaxMatchNum);	//# of matches in the file
 
 	/* start printing out actual matches */
+	printf("\nPrinting out actual matches...\n");
 	Match * curr;
 	for (int i = 0; i < size; i++) {
 		curr = optArr[i];
+
 		printInt(printer, curr->start, digMaxBindex);
+		printf(" ");
 		printInt(printer, curr->cindex, digMaxCindex);
+		printf(" ");
 		printInt(printer, matchLength(curr), digMaxLength);	//print out the 4 items that define a match
+		printf(" ");
 		if (curr->type == 1)printBit(printer, 0);	//zero for positive, 1 for negative
 		else if (curr->type == 2)printBit(printer, 1);
 		else printf("Error: incorrect type encountered.\n\n\n");
+		
+		printf("\n");
+		printMatch(curr);
+		printf("\n");
 	}
 	flushPrinter(printer);
 }
