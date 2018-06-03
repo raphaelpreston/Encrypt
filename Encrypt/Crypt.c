@@ -88,8 +88,8 @@ int main()
 	
 	/* checking that it worked */
 	fclose(map);
-	fopen(map_loc, "rb");
-	/* create a binary handle object */
+	map = fopen(map_loc, "rb");
+	/* read in match binary and print it out */
 	IntArr * intArr = newIntArr(1000);
 
 	unsigned char map_buffer[BUFFER_SIZE * sizeof(unsigned char)];
@@ -98,16 +98,19 @@ int main()
 	while (map_bytes_read = fread(map_buffer, sizeof(unsigned char), BUFFER_SIZE, map)) {
 		IntArr_readInBuffer(intArr, map_buffer, map_bytes_read);
 	}
+	printf("File contents:\n");
+	printIntArr(intArr);
 	printf("\n");
 
-	 /* close files and free memory */
-	//deleteBinaryHandle(binary);
-	//deleteMatches(matches)
+	// /* close files and free memory */
+	////deleteBinaryHandle(binary);
+	////deleteMatches(matches)
 	fclose(body);
 	fclose(crypt);
 	fclose(map);
 
 	// testing by reading back in 
+	printf("\n\nReading in...\n");
 	FILE * file = fopen(map_loc, "rb");
 	if (!file) printf("Error opening file.\n");
 
@@ -115,9 +118,6 @@ int main()
 	Matches * matchesIn = newMatches(MATCHES_SIZE);
 
 	readInMatches(file, matchesIn);
-
-
-
 
 
 

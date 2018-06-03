@@ -218,36 +218,82 @@ readInMatch(BitPrinter * reader, Matches * matches) {
 	int bindex = 0;
 	int cindex = 0;
 	int length = 0;
+	int type;	//1 for positive, 2 for negative
 
 	/* read in the match */
-	for (int i = b; i > 0; i--) if (readBit(reader)) bindex += 1 << (i - 1);
-	for (int i = c; i > 0; i--) if (readBit(reader)) cindex += 1 << (i - 1);
-	for (int i = l; i > 0; i--) if (readBit(reader)) length += 1 << (i - 1);
+	for (int i = b; i > 0; i--) {
+		if (readBit(reader)) {
+			printf("1");
+			bindex += 1 << (i - 1);
+		}
+		else printf("0");
+	}
+	printf(" ");
+	for (int i = c; i > 0; i--) {
+		if (readBit(reader)) {
+			cindex += 1 << (i - 1);
+			printf("1");
+		}
+		else printf("0");
+	}
+	printf(" ");
+	for (int i = l; i > 0; i--) {
+		if (readBit(reader)) {
+			printf("1");
+			length += 1 << (i - 1);
+		}
+		else printf("0");
+	}
+	printf(" ");
+	if (readBit(reader)) {
+		printf("1");
+		type = 2;
+	}
+	else {
+		printf("0");
+		type = 1;
+	}
 
-	printMatch(newMatch(bindex, cindex, length, 1)); printf("\n");
+	printf("\n");
+
+	printMatch(newMatch(bindex, cindex, length, type)); printf("\n");
 }
 
 void readInMatches(FILE * file, Matches * matches) {
 	BitPrinter * reader = newBitPrinter(file);
+	int numMatches = 0;
 
-	/* read in headers */
+	printf("Reading length information...\n");
+	/* read in length information */
+	int m = 0;
+	while (readBit(reader)) m++;
 	int b = 0;
 	while (readBit(reader)) b++;
-	matches->max_body_start = b;
-
 	int c = 0;
 	while (readBit(reader)) c++;
-	matches->max_crypt_start = c;
-
 	int l = 0;
 	while (readBit(reader)) l++;
+	
+	printf("Reading integers...\n");
+	/* gather data and assign appropriately */
+	for (int i = m; i > 0; i--) {	//number of matches in the file
+		if (readBit(reader)) {
+			printf("1");
+			numMatches += 1 << (i - 1);
+		}
+		else printf("0");
+	}
+
+	matches->max_body_start = b;
+	matches->max_crypt_start = c;
 	matches->max_length = l;
 
-	printf("b: %i, c: %i, l: %i\n", matches->max_body_start, matches->max_crypt_start, matches->max_length);
+	printf("\nAll header information read.\n");
+	printf("b: %i, c: %i, l: %i, #: %i\n", matches->max_body_start, matches->max_crypt_start, matches->max_length, numMatches);
 
 	/* read in matches */
 	int num = 0;
-	while (reader->byte != EOF) {	//read in one match at a time					//test this by making maps that end directly on the eof
+	while (reader->byte != EOF) {	//read in one match at a time					//test this by making matches that end directly on the eof
 		readInMatch(reader, matches);
 		num++;
 	}

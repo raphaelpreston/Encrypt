@@ -520,18 +520,24 @@ void checkHeaders(Matches * matches, Match * m) {
 void printOptimumMatches(FILE * map, Matches * matches, Match ** optArr, int size) {
 	BitPrinter * printer = newBitPrinter(map);
 
+	int digMaxMatchNum = numBinDigits(size);
 	int digMaxBindex = numBinDigits(matches->max_body_start);
 	int digMaxCindex = numBinDigits(matches->max_crypt_start);
 	int digMaxLength = numBinDigits(matches->max_length);
 
 	/* print headers */
+	int i;
+	for (i = 0; i < digMaxMatchNum; i++) printBit(printer, 1);	//digits needed for reading in # of matches
+	printBit(printer, 0);	//spacer
+	for (i = 0; i < digMaxBindex; i++) printBit(printer, 1);	//digits needed for bindex
+	printBit(printer, 0);	//spacer
+	for (i = 0; i < digMaxCindex; i++) printBit(printer, 1);	//digits needed for cindex
+	printBit(printer, 0);	//spacer
+	for (i = 0; i < digMaxLength; i++) printBit(printer, 1);	//digits needed for cindex
+	printBit(printer, 0);	//spacer
 
-	for (int i = 0; i < digMaxBindex; i++) printBit(printer, 1);	//digits needed for bindex
-	printBit(printer, 0);	//spacer
-	for (int i = 0; i < digMaxCindex; i++) printBit(printer, 1);	//digits needed for cindex
-	printBit(printer, 0);	//spacer
-	for (int i = 0; i < digMaxLength; i++) printBit(printer, 1);	//digits needed for cindex
-	printBit(printer, 0);	//spacer
+	/* print out header pt 2 */
+	printInt(printer, size, digMaxLength);	//# of matches in the file
 
 	/* start printing out actual matches */
 	Match * curr;
@@ -539,7 +545,10 @@ void printOptimumMatches(FILE * map, Matches * matches, Match ** optArr, int siz
 		curr = optArr[i];
 		printInt(printer, curr->start, digMaxBindex);
 		printInt(printer, curr->cindex, digMaxCindex);
-		printInt(printer, matchLength(curr), digMaxLength);	//print out the 3 items that define a match
+		printInt(printer, matchLength(curr), digMaxLength);	//print out the 4 items that define a match
+		if (curr->type == 1)printBit(printer, 0);	//zero for positive, 1 for negative
+		else if (curr->type == 2)printBit(printer, 1);
+		else printf("Error: incorrect type encountered.\n\n\n");
 	}
 	flushPrinter(printer);
 }
