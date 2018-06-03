@@ -159,6 +159,7 @@ void flushPrinter(BitPrinter * printer) {
 void printBit(BitPrinter * printer, bool bit) {
 	/* add the bit to the boolean array at proper index */
 	printer->boolArr[printer->next] = bit;
+	printf("%s", bit ? "1" : "0");
 
 	/* if we've made a byte, flush it to the file as a character and reset the bool */
 	if (printer->next == 7) {
