@@ -278,23 +278,19 @@ void readInMatches(FILE * file, Matches * matches) {
 	printf("Reading integers...\n");
 	/* gather data and assign appropriately */
 	for (int i = m; i > 0; i--) {	//number of matches in the file
-		if (readBit(reader)) {
-			printf("1");
-			numMatches += 1 << (i - 1);
-		}
-		else printf("0");
+		if (readBit(reader)) numMatches += 1 << (i - 1);
 	}
 
 	matches->max_body_start = b;
 	matches->max_crypt_start = c;
 	matches->max_length = l;
 
-	printf("\nAll header information read.\n");
+	printf("All header information read.\n");
 	printf("b: %i, c: %i, l: %i, #: %i\n", matches->max_body_start, matches->max_crypt_start, matches->max_length, numMatches);
 
 	/* read in matches */
 	int num = 0;
-	while (reader->byte != EOF) {	//read in one match at a time					//test this by making matches that end directly on the eof
+	while (num < numMatches) {	//read in one match at a time
 		readInMatch(reader, matches);
 		num++;
 	}
