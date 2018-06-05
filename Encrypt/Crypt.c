@@ -9,7 +9,7 @@
 #define MAX_BINARY_SIZE 2
 #define MATCHES_SIZE 10
 
-int main()
+int main()			//home comp check here
 {
 	//testing bit printing and reading
 	/*char map_loc[] = "C:/Users/IAMFRANK/source/repos/Encrypt2/Encrypt/MAP.txt";
